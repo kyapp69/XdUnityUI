@@ -5,7 +5,7 @@
 ## 概要
 
 - AdobeXD のアートボードを Unity 用 UI Prefab にコンバートします。
-- ![GitHub](https://github.com/itouh2-i0plus/XdUnityUI)
+- [GitHub](https://github.com/itouh2-i0plus/XdUnityUI)
 
 ## インストール
 
@@ -145,15 +145,20 @@ README.md 修正
 - 説明
     - テキストレイヤーに上記のような名前をつけることで Unity 上でも TextMeshPro コンポーネントが 付与 されます。
 - 注意
-    - Project Settings > Player > Scripting Define SymbolsにTMP_PRESENTが必要です 
-    - AdobeXD で使用したフォントが Unity プロジェクト内、Assets/I0plus/XdUnityUI/Fonts/以下、TextMeshPro フォントアセット が必要です
+    - Project Settings > Player > Scripting Define SymbolsにTMP_PRESENTが必要です。
+    - AdobeXD で使用したフォントが Unity プロジェクト内、Assets/I0plus/XdUnityUI/Fonts/以下、TextMeshPro フォントアセット が必要です。
         - 例: AdobeXD で Open Sans フォント Regular を使用している場合
-            - TextMeshPro フォント、ファイル名「Open Sans-Regular SDF.asset」を探します
+            - TextMeshPro フォント、ファイル名「Open Sans-Regular SDF.asset」を探します。
     - AdobeXD と Unity では、デザイン上の差異があります。(例：カーニング)
 
+#### .vierpot-layout-y
+- 説明
+    - スクロールできる縦方向レイアウト。
+    - samples.xd VerticalListSample アートボードを参考にしてください。(スクロールバー 付き)
+    - <img src="https://user-images.githubusercontent.com/20549024/75763061-ff608700-5d7e-11ea-985c-88feb3a2de70.png" width="30%">
+    - 追記予定
+
 - 追記予定
-    - layout
-    - viewport
     - scrollbar
     - toggle
 
