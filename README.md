@@ -2,95 +2,101 @@
 
 ![introduction](https://user-images.githubusercontent.com/20549024/75539439-8e0e9480-5a5d-11ea-8f92-520e6f7b0b3e.gif)
 
-## 概要
+## Language
+- [日本語](README_JP.md)
+- [English (Machine Translation)](README.md)
 
-- AdobeXD のアートボードを Unity 用 UI Prefab にコンバートします。
+## Overview
+
+- Convert AdobeXD artboards to UI Prefab for Unity.
 - [GitHub](https://github.com/itouh2-i0plus/XdUnityUI)
 
-## インストール
+## Installation
 
-1. インストール
-     - ダウンロードする場合
+1. Installation
+     - When downloading
          1. https://github.com/itouh2-i0plus/XdUnityUI/releases
-         1. 最新バージョンの 「▶Assets」をクリックし XdUnityUI.unitypackage をダウンロードします。
-         1. XdUnityUI.unitypackage を Unity にインポートしてください。
-         1. /Assets/I0plus/XdUnityUI フォルダが作成されます
-         1. AdobeXDプラグインをインストール
-            - /Assets/I0plus/XdUnityUI/ForAdobeXD/XdUnityUIExport.xdx をダブルクリックします。
-     - Git リポジトリからクローンする場合
-         1. Git リポジトリをクローン
-                - https://github.com/itouh2-i0plus/XdUnityUI
-                    - LFS を利用しています。Git クライアントによっては設定が必要となります。
-         1. (クローンフォルダ)/UnityProject を Unity で開きます
-                - Assets/I0plus/XdUnityUI 以下が、プラグインフォルダになっています
-                - 現在 Unity2019.3、UniversalRenderPipeline のプロジェクトとなっています。
-         1. AdobeXDプラグインをインストール
-            - /Assets/I0plus/XdUnityUI/ForAdobeXD/XdUnityUIExport.xdx をダブルクリックします。
+         1. Click the latest version of “▶ Assets” to download XdUnityUI.unitypackage.
+         1. Import XdUnityUI.unitypackage into Unity.
+         1. /Assets/I0plus/XdUnityUI folder is created
+         1. Install AdobeXD plugin
+            - Double-click /Assets/I0plus/XdUnityUI/ForAdobeXD/XdUnityUIExport.xdx.
+     - When cloning from a Git repository
+         1. Clone the Git repository
+            - https://github.com/itouh2-i0plus/XdUnityUI
+                 - LFS is used. Some Git clients require configuration.
+         1. Open (Clone folder)/UnityProject in Unity
+                - Plug-in folder below Assets/I0plus/XdUnityUI
+                - Currently a Unity2019.3, UniversalRenderPipeline project.
+         1. Install AdobeXD plugin
+            - Double-click /Assets/I0plus/XdUnityUI/ForAdobeXD/XdUnityUIExport.xdx.
 
-## クイックスタート
+## Quick Start
 
-1. AdobeXD サンプルを 開く
-     - /Assets/I0plus/XdUnityUI/ForAdobeXD/samples.xd にあります。
+1. Open AdobeXD sample
+     - Located in /Assets/I0plus/XdUnityUI/ForAdobeXD/samples.xd.
 
-1. AdobeXD プラグイン起動
-     1. アートボード TestButton 内、ルート直下のレイヤー(例えば yellow-button)を選択状態にします。 - 当プラグインは出力時にこの操作が必ず必要になります。 - 参考：[Edit Context rules · Adobe XD Plugin Reference](https://adobexdplatform.com/plugin-docs/reference/core/edit-context.html)
-     1. プラグインメニューから、「XdUnityUI export plugin」をクリック、起動します。
-     1. 「Folder」の項目が出力フォルダ先指定です。(クローンしたフォルダ)/UnityProject/I0plus/XdUnityUI/Import フォルダを選択。
-     1. 「Export」をクリック。 - 出力時にエラーで止まるケースについて、当記事「問題が起こったとき」を参考にしてください。
+1. Launch AdobeXD plugin
+     1. In the artboard TestButton, select the layer immediately below the root (for example, yellow-button).
+        - This operation is always required for this plugin.
+        - Reference: [Edit Context rules · Adobe XD Plugin Reference](https://adobexdplatform.com/plugin-docs/reference/core/edit-context.html)
+     1. From the plugin menu, click "XdUnityUI export plugin" to launch.
+     1. "Folder" is the output folder. Select (Cloned folder)/UnityProject/I0plus/XdUnityUI/Import folder.
+     1. Click Export. -Please refer to this article "When a problem occurs" regarding the case where an error occurs during output.
 
-1. Unity コンバート
-     - Unity ウィンドウをアクティブにするとコンバートが開始されます。
-     - 作成された Prefab は Assets/I0plus/CreatedPrefabs に配置されます。
-     - 作成された UI 画像は Assets/I0plus/CreatedSprites に配置されます。
-         - Slice 処理されています。
-     - できた Prefab を Canvas 以下に配置します。
+1. Unity conversion
+     - The conversion will start when the Unity window is activated.
+     - The created Prefab is placed in Assets/I0plus/CreatedPrefabs.
+     - The created UI image is placed in Assets/I0plus/CreatedSprites.
+         - Slice processing.
+     - Place the resulting Prefab under Canvas.
 
 ## ChangeLog
 
-### [v0.3.2] - 2020-03-02
+### [v0.3.2]-2020-03-02
 
-サンプル修正
-README.md 修正・追記
-XdPlugin/main.js コメント修正
+Sample modification
+README.md Correction/addition
+XdPlugin/main.js comment correction
 
-### [v0.3.1] - 2020-03-02
+### [v0.3.1]-2020-03-02
 
-TextMeshPro サンプル追加、説明修正
-Button サンプル追加
-Toggle サンプル追加
-README.md 修正
+TextMeshPro sample added, description modified
+Button sample added
+Toggle Add Sample
+README.md modified
 
-### [v0.3] - 2020-03-01
+### [v0.3]-2020-03-01
 
-- unitypackage の作成
-- unitypackage からのインストール方法追記
+- Create unitypackage
+- Added installation method from unitypackage
 
-## 動作条件
+## Operating conditions
 
-- Windows で開発しています。
-    - Mac での動作確認は現在不十分です。
-- Unity2019.3 で開発しています。
-- AdobeXD は最新版でテストしています。
-    - バージョン：27.1.12.4
+- Developed on Windows.
+    - Operation verification on Mac is currently insufficient.
+- Developed on Unity2019.3.
+- AdobeXD has been tested with the latest version.
+    - Version: 27.1.12.4
 
-## コンバートについて
+## About conversion
 
-### 概要
+### Overview
 
-- AdobeXD レイヤー名に対して、コンバートルールが適応されます。
-    - コンバートルールは CSS の記述によって定義されています。
-    - json ファイルと画像ファイルが出力されます。
-    - 出力画像は、指定が無い限りスライス処理されます。
-- 出力ファイルを Unity プロジェクト、XdUnityUI/Import フォルダに書き込むことで Unity でのコンバート処理が行われます。
-- 指定されたフォルダに Prefab と Sprite が出力されます。
+- Conversion rules are applied to AdobeXD layer names.
+    - Conversion rules are defined by CSS.
+    - A json file and an image file are output.
+    - The output image is sliced ​​unless otherwise specified.
+- The conversion process in Unity is performed by writing the output file to the Unity project, XdUnityUI/Import folder.
+- Prefab and Sprite are output to the specified folder.
 
-### ルール説明
+### Rule description
 
-- AdobeXD レイヤー名で、Unity 上での機能が決まります。
+- The function on Unity is determined by the AdobeXD layer name.
 
 #### image
 
-- 例
+- Examples
 
     ```
     image
@@ -98,27 +104,27 @@ README.md 修正
     icon-image
     ```
 
-- 説明
-    - レイヤー、グループレイヤーに上記のような名前が付いていた場合、そのレイヤーと子レイヤーを合成した画像を生成し、Unity 上で Image コンポーネントが付与されます。
-- 注意
-    - 子レイヤーも画像としてしまうため、子レイヤーのコンバート処理はされません。
+- Description
+    - If a layer or group layer has the above name, an image is created by combining the layer and the child layer, and an Image component is added on Unity.
+- Note
+    - The child layer is converted to an image, so the child layer is not converted.
 
 #### button
 
-- 例
+- Examples
     ```
     button
     start-button
     back-button
     ```
-- 説明
-    - Unity 上で button コンポーネントが付与されます。
-- 注意
-    - 子レイヤーに image レイヤーが必要です。
+- Description
+    - A button component is added on Unity.
+- Note
+    - The child layer needs an image layer.
 
 #### text
 
-- 例
+- Examples
 
     ```
     text
@@ -126,15 +132,15 @@ README.md 修正
     name-text
     ```
 
-- 説明
-    - テキストレイヤーに上記のような名前をつけることで Unity 上でも Text コンポーネントが 付与 されます。
-- 注意
-    - AdobeXD で使用したフォントが Unity プロジェクト内、Assets/I0plus/XdUnityUI/Fonts/以下、.ttf か.otf で存在する必要があります。
-    - AdobeXD と Unity では、デザイン上の差異があります。(例：カーニング)
+- Description
+    - By giving the text layer a name like the above, a text component will be added on Unity.
+- Note
+    - The font used in AdobeXD must exist in the Unity project, under Assets/I0plus/XdUnityUI/Fonts /, in .ttf or .otf.
+    - There is a design difference between AdobeXD and Unity. (Example: kerning)
 
 #### textmp
 
-- 例
+- Examples
 
     ```
     textmp
@@ -142,148 +148,148 @@ README.md 修正
     name-textmp
     ```
 
-- 説明
-    - テキストレイヤーに上記のような名前をつけることで Unity 上でも TextMeshPro コンポーネントが 付与 されます。
-- 注意
-    - Project Settings > Player > Scripting Define SymbolsにTMP_PRESENTが必要です。
-    - AdobeXD で使用したフォントが Unity プロジェクト内、Assets/I0plus/XdUnityUI/Fonts/以下、TextMeshPro フォントアセット が必要です。
-        - 例: AdobeXD で Open Sans フォント Regular を使用している場合
-            - TextMeshPro フォント、ファイル名「Open Sans-Regular SDF.asset」を探します。
-    - AdobeXD と Unity では、デザイン上の差異があります。(例：カーニング)
+- Description
+    - TextMeshPro component is added on Unity by giving the text layer the name as above.
+- Note
+    - TMP_PRESENT is required in Project Settings> Player> Scripting Define Symbols.
+    - The font used in AdobeXD must be in the Unity project, under Assets/I0plus/XdUnityUI/Fonts /, and a TextMeshPro font asset is required.
+        - Example: AdobeXD uses Open Sans font Regular
+            - Find the TextMeshPro font, file name "Open Sans-Regular SDF.asset".
+    - There is a design difference between AdobeXD and Unity. (Example: kerning)
 
 #### .vierpot-layout-y
-- 説明
-    - スクロールできる縦方向レイアウト。
-    - samples.xd VerticalListSample アートボードを参考にしてください。(スクロールバー 付き)
-    - <img src="https://user-images.githubusercontent.com/20549024/75763061-ff608700-5d7e-11ea-985c-88feb3a2de70.png" width="30%">
-    - 追記予定
+- Description
+    - Scrollable vertical layout.
+    - Refer to samples.xd VerticalListSample artboard. (With scroll bar)
+    - <img src = "https://user-images.githubusercontent.com/20549024/75763061-ff608700-5d7e-11ea-985c-88feb3a2de70.png" width = "30%">
+    - Will be added
 
-- 追記予定
+- Will be added
     - scrollbar
     - toggle
 
-## 問題が起こったとき
+## When a problem occurs
 
-### AdobeXD プラグイン実行中
+### Running AdobeXD plugin
 
-#### 画像の書き出しに失敗する
+#### Image export fails
 
-- 原因
-    - AdobeXD 上の問題かもしれません。調査中です。
-- 対策
-    1. レイヤーを選択し画像出力の操作をする。
-    2. 出力先に XdUnityUI/Import フォルダを選択すると、出力不可になっているか確認。
-    3. フォルダを変えて画像出力。
-    4. 再度 Import フォルダに出力する。
-    5. 上記が成功した場合、プラグインからの出力も成功するようになります。
+- Cause
+    - It may be a problem on AdobeXD. under investigation.
+- Countermeasures
+    1. Select a layer and operate the image output.
+    2. Select the XdUnityUI/Import folder as the output destination, and check if the output is disabled.
+    3. Change the folder and output images.
+    4. Output to the Import folder again.
+    5. If the above is successful, the output from the plugin will also be successful.
 
-### Unity コンバート実行中
+### Unity conversion in progress
 
-#### コンバート処理が実行されない
+#### Conversion process is not executed
 
-- 原因
+- Cause
 
-    - 失敗後のファイルへの上書きでは、Unity 側がファイルの更新を検知できないため。
+    - When overwriting the file after the failure, Unity cannot detect the file update.
 
-- 対応
-    - XdUnityUI/Import 内の\_XdUnityUIImport、\_XdUnityUIImport.meta ファイル以外を削除する。
-    - もう一度エキスポートする。
+- Correspondence
+    - Delete files other than \_XdUnityUIImport and \_XdUnityUIImport.meta files in XdUnityUI/Import.
+    - Export again.
 
 
-#### 文字(Text、TextMeshPro)を扱おうとするとコンバートに失敗する
+#### Conversion fails when trying to handle characters (Text, TextMeshPro)
 
-- 原因
-    - フォントが無い可能性があります。
-- 対策
-    - Console に探そうとして見つからなかったフォントファイル名が出力されます。
-    - フォントファイルを場合によってはリネームして、XdUnityUI/Fonts ディレクトリ(\_XdUnityUIFonts ファイルがおいてあるディレクトリ)にコピーしてください。
+- Cause
+    - There may be no font.
+- Countermeasures
+    - The name of the font file that could not be found while trying to find it in the Console is output.
+    - If necessary, rename the font file and copy it to the XdUnityUI/Fonts directory (the directory where the \_XdUnityUIFonts file is located).
     
-#### TextMeshProのエラーが出力される
-- 原因
-    - Scripting Define SymbolsにTMP_PRESENTが無い
-- 対策
-    - Project Settings > Player > Scripting Define SymbolsにTMP_PRESENTを追記します。
-        - TextMeshProパッケージをインストールしてもTMP_PRESENTが追記されない場合があるそうです。(v3.0?未確認)
+#### TextMeshPro error is output
+- Cause
+    - Missing TMP_PRESENT in Scripting Define Symbols
+- Countermeasures
+    - Add TMP_PRESENT to Project Settings> Player> Scripting Define Symbols.
+        - TMP_PRESENT may not be added even after installing TextMeshPro package. (v3.0? unconfirmed)
 
-### コンバート結果
+### Conversion result
 
-#### レスポンシブパラメータが正確にコンバートされない
+#### Responsive parameters are not converted correctly
 
-- 原因1
-    - アートボードの「レスポンシブサイズを変更」がONになっていない
-- 対策1
-    - アートボードを選択し、「レイアウト」>「レスポンシブサイズを変更」をONにしてください。
-- 原因2
-    - AdobeXD プラグイン実行時、アートボードのサイズを変更しレイヤーのサイズの変化をみてレスポンシブパラメータを取得しています。その際、リピードグリッド内レイヤー等、サイズが変わらないものはレスポンシブパラメータが確定できません。
-- 対策2
-    - margin-fix プロパティをつかい、明示的に指定してください。
-        - 例: start-button {margin-fix: t b l r}
-    - AdobeXD Plugin API で、レスポンシブパラメータが取得できるようになりましたら対応します。
+- Cause 1
+    - "Change responsive size" on the artboard is not ON
+- Measure 1
+    - Select the artboard and turn on "Layout"> "Change responsive size".
+- Cause 2
+    - When executing the AdobeXD plug-in, the size of the artboard is changed and the responsive parameter is obtained by checking the change in the size of the layer. At that time, the responsive parameter cannot be determined for those whose size does not change, such as the layer in the repeated grid.
+- Measure 2
+    - Use the margin-fix property and specify it explicitly.
+        - Example: start-button {margin-fix: t b l r}
+    - AdobeXD Plugin API will support if responsive parameters can be obtained.
 
-#### 背景のイメージコンポーネントがいらない
-- 原因
-    - アートボードの背景が設定してある
-- 対策
-    - アートボードを選択し、「アピアランス」>「塗り」のチェックを外してください。
+#### I don't need the background image component
+- Cause
+    - Artboard background set
+- Countermeasures
+    - Select the artboard and uncheck "Appearance"> "Fill".
 
-## より使いこなすために
+## For better use
 
-### オリジナル変換ルール
+### Original conversion rules
 
-- 変換ルール CSS の編集
-    - XDXファイルを変更する場合
-        1. XdUnityUIExport.xdx を XdUnityUIExport.zip とリネーム
-        1. 解凍し xd-unity.css ファイルを編集する
-        1. 再び ZIP 圧縮、拡張子を xdx に変更
-        1. プラグイン再インストール
-    - AdobeXD 開発フォルダに展開する場合
-        1. XdUnityUIExport.xdx を XdUnityUIExport.zip とリネーム
-        1. 解凍しフォルダをAdobeXD開発フォルダ(プラグイン>開発版>開発フォルダーを表示)にコピーする
-        1. xd-unity.cssを編集
-        1. プラグイン再読み込み(プラグイン>開発版>再読み込み)
-- 変換ルール CSS の説明
-    - 追記予定
-- アートボード毎の変換ルール
-    - 追記予定
+- Edit conversion rule CSS
+    - When changing the XDX file
+        1. Rename XdUnityUIExport.xdx to XdUnityUIExport.zip
+        1. Unzip and edit xd-unity.css file
+        1. Zip again, change the extension to xdx
+        1. Reinstall plugin
+    - When deploying to the AdobeXD development folder
+        1. Rename XdUnityUIExport.xdx to XdUnityUIExport.zip
+        1. Unzip and copy the folder to the AdobeXD development folder (Plug-in> Development version> Display development folder)
+        1. Edit xd-unity.css
+        1. Reload the plugin (Plugin> Development> Reload)
+- Explanation of conversion rule CSS
+    - Will be added
+- Conversion rules for each artboard
+    - Will be added
 
-### コンバート時に自作コンポーネントを追加する
+### Add your own components when converting
 
-- 追記予定
+- Will be added
 
 ### 9Slice
 
-- 追記予定
+- Will be added
 
-## 今後進む方向について
+## Future directions
 
-- 目標
-    - リリースまで AdobeXD で UI デザインできるようにする。
-- メリット
-    - デザイナの手に最終版をもたせる。
-    - CCLibrary を使い、各種ツールとの連携ができる。
-- 課題
-    - コンバートでの Prefab 上書きによって、Prefab に対して行った作業(Unity 上で行ったコンポーネント追加、パラメータ調整)が消えてしまう
-        - 対応策
-            - コピーして使用する。
-            - Prefab Variant で、追加作業の退避。
-                - 名前の変更で作業が消えてしまう。
-                - Variant ファイル内には作業分残っている模様(これを復帰できないか調査中)。
-    - 同じ Sprite 画像が大量にできてしまう。
-        - 対応中
-            - Sprite 画像を比較して、同じであれば結合するツールを開発中。
+- Goal
+    - Enable UI design with AdobeXD until release.
+- merit
+    - Hold the final version in the hands of the designer.
+    - Use CCLibrary to link with various tools.
+- Task
+    - Work done on Prefabs (adding components and adjusting parameters on Unity) is overwritten by overwriting Prefabs during conversion.
+        - counter-measure
+            - Copy and use.
+            - Evacuation of additional work in Prefab Variant.
+                - Work disappears due to name change.
+                - Some work remains in the Variant file (we are investigating whether it can be restored).
+    - Too many same Sprite images.
+        - During correspondence
+            - We are developing a tool to compare Sprite images and combine them if they are the same.
     - 9Slice
-        - 対応中
-    - コンポーネントのステート
+        - During correspondence
+    - Component state
         - https://helpx.adobe.com/jp/xd/help/create-component-states.html
-        - AdobeXD Plugin API で取得できるようになりましたら、対応します。
-- その他
-    - 調査中
-        - UXML へコンバートできないか。
-        - DOTS モード用 UI が作成できないか。
+        - If it can be obtained by AdobeXD Plugin API, it will be supported.
+- Other
+    - investigating
+        - Can you convert to UXML?
+        - Can the UI for DOTS mode be created?
 
-## 謝辞
+## Acknowledgments
 
-- @kyubuns 様 (https://kyubuns.dev)
+- @kyubuns (https://kyubuns.dev)
 - Baum2 (https://github.com/kyubuns/Baum2)
 
-### お世話になっております ありがとうございます
+### Thank you very much
