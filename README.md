@@ -3,7 +3,7 @@
 ![introduction](https://user-images.githubusercontent.com/20549024/75539439-8e0e9480-5a5d-11ea-8f92-520e6f7b0b3e.gif)
 
 ## Language
-- [Japanese](README_JP.md)
+- [日本語](README_JP.md)
 - [English (Machine Translation)](README.md)
 
 ## Overview

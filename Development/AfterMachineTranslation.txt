@@ -34,3 +34,7 @@ Google翻訳したあとの置換
      1. In the artboard Tes
 
 ○ イメージリンクの修正(最後にやると表示がおもくならなくて良い)
+
+○ Japaneseを日本語に
+\[Japanese\]
+\[日本語\]
