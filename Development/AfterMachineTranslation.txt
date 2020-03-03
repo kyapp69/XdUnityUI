@@ -1,0 +1,40 @@
+https://translate.google.co.jp/?#view=home&op=translate&sl=ja&tl=en
+Google翻訳したあとの置換
+
+○ -の後ろのスペース修正
+(^ *-)(\S)
+^ *- $1
+
+○ ]と(の間、スペースが入ってしまう
+\] \(
+\]\(
+
+○ スラッシュ前後、スペースがある
+ / 
+/
+
+○ コード範囲の修正
+`` `
+```
+
+○ バックスラッシュとアンダーバーの間にスペースがある
+\\ _
+\\_
+
+○ リンクの修正
+1.https: //github.com/itouh2-i0plus/XdUnityUI/releases
+1.　https://github.com/itouh2-i0plus/XdUnityUI/releases
+
+○ Theの削除
+         1. ###### The/Assets/I0plus/XdUnityUI folder is created
+         1. /Assets/I0plus/XdUnityUI folder is created
+
+○ 改行の修正
+1. Launch AdobeXD plugin
+     1. In the artboard Tes
+
+○ イメージリンクの修正(最後にやると表示がおもくならなくて良い)
+
+○ Japaneseを日本語に
+\[Japanese\]
+\[日本語\]
