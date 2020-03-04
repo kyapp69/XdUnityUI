@@ -3531,8 +3531,10 @@ async function exportXdUnityUI(roots, outputFolder) {
       .catch(error => {
         //console.log(renditions)
         console.log('画像ファイル出力エラー:' + error)
-        // 出力失敗に関して参考サイト
+        // 出力失敗に関しての参考サイト
         // https://forums.adobexdplatform.com/t/details-for-io-failed/1185/14
+        // Adobe ファイルのインポート・エキスポートについて
+        // https://helpx.adobe.com/xd/kb/import-export-issues.html
         console.log(
           '1)access denied (disk permission)\n2)readonly folder\n3)not enough disk space\n4)maximum path\n5)image size 0px',
         )
