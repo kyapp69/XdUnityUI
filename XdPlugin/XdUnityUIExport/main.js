@@ -20,6 +20,7 @@ const {
 const application = require('application')
 const fs = require('uxp').storage.localFileSystem
 const commands = require('commands')
+const strings = require('./strings.json')
 
 // 全体にかけるスケール
 let globalScale = 1.0
@@ -155,6 +156,29 @@ const STYLE_VIEWPORT = 'viewport'
 const STYLE_VIEWPORT_CREATE_CONTENT = 'viewport-create-content'
 const STYLE_V_ALIGN = 'v-align' //テキストの縦方向のアライメント XDの設定に追記される
 const STYLE_ADD_COMPONENT = 'add-component'
+
+const appLanguage = application.appLanguage
+//const appLanguage = "en"
+
+/**
+ *
+ * @param {} id
+ * @returns {string}
+ */
+function getString(multilangStr) {
+  /**
+   * @type {string[]}
+   */
+  if (!multilangStr) {
+    return 'no text(strings.json problem)'
+  }
+  let str = multilangStr[appLanguage]
+  if (str) return str
+  // 日本語にフォールする
+  str = multilangStr['ja']
+  if (str) return str
+  return 'no text(strings.json problem)'
+}
 
 /**
  * @param {storage.Folder} currentFolder
@@ -3510,11 +3534,9 @@ async function exportXdUnityUI(roots, outputFolder) {
         // 出力失敗に関して参考サイト
         // https://forums.adobexdplatform.com/t/details-for-io-failed/1185/14
         console.log(
-          '1)access denied (disk permission)\n2)readonly folder\n3)not enough disk space\n4)maximum path(I think it’s 256 currently on both platform)\n5)image size 0px',
+          '1)access denied (disk permission)\n2)readonly folder\n3)not enough disk space\n4)maximum path\n5)image size 0px',
         )
-        alert(
-          '画像の出力に失敗しました\n以下のような可能性があります\n・書き込み先の問題\n・パス名が流すぎる\n・イメージサイズが0px',
-        )
+        alert(getString(strings.ExportError), 'Export error')
       })
   } else {
     // 画像出力の必要がなければ終了
@@ -3724,7 +3746,7 @@ async function exportXdUnityUICommand(selection, root) {
         (checkAllArtboard = h('input', {
           type: 'checkbox',
         })),
-        h('span', '全てのアートボードを対象とする'),
+        h('span', getString(strings.ExportDialogOptionAllArtboard)),
       ),
       h(
         'label',
@@ -3737,7 +3759,7 @@ async function exportXdUnityUICommand(selection, root) {
         (checkCheckMarkedForExport = h('input', {
           type: 'checkbox',
         })),
-        h('span', 'エキスポートマークがついているもののみ出力する'),
+        h('span', getString(strings.ExportDialogOptionCheckExportMark)),
       ),
       h(
         'label',
@@ -3750,7 +3772,7 @@ async function exportXdUnityUICommand(selection, root) {
         (checkImageNoExport = h('input', {
           type: 'checkbox',
         })),
-        h('span', 'イメージは出力しない'),
+        h('span', getString(strings.ExportDialogOptionNotExportImage)),
       ),
       h(
         'label',
@@ -3763,7 +3785,7 @@ async function exportXdUnityUICommand(selection, root) {
         (checkChangeContentOnly = h('input', {
           type: 'checkbox',
         })),
-        h('span', 'CSSによるコンテンツの変更のみ実行'),
+        h('span', getString(strings.ExportDialogOptionOnlyCssChangeContent)),
       ),
       (errorLabel = h(
         'label',
