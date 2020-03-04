@@ -1,6 +1,6 @@
 {
   "ExportError": {
-    "en": "Image output failed.- Write destination problem (security etc.)\n- Path name is too long\n- Image size is 0px\n- XD Status,Image cannot be output.(try export image.)",
+    "en": "Image output failed.\n- Write destination problem (security etc.)\n- Path name is too long\n- Image size is 0px\n- XD Status,Image cannot be output.(try export image.)",
     "ja": "画像の出力に失敗しました\n以下のような可能性があります\n・書き込み先の問題(セキュリティ等)\n・パス名が長すぎる\n・イメージサイズが0px\n・画像出力ができない状態(参考:https://bit.ly/38mU9vY)"
   },
   "ExportDialogOptionAllArtboard": {
