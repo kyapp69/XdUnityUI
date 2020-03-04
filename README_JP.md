@@ -13,23 +13,22 @@
 
 ## インストール
 
-1. インストール
-     - ダウンロードする場合
-         1. https://github.com/itouh2-i0plus/XdUnityUI/releases
-         1. 最新バージョンの 「▶Assets」をクリックし XdUnityUI.unitypackage をダウンロードします。
-         1. XdUnityUI.unitypackage を Unity にインポートしてください。
-         1. /Assets/I0plus/XdUnityUI フォルダが作成されます
-         1. AdobeXDプラグインをインストール
-            - /Assets/I0plus/XdUnityUI/ForAdobeXD/XdUnityUIExport.xdx をダブルクリックします。
-     - Git リポジトリからクローンする場合
-         1. Git リポジトリをクローン
-                - https://github.com/itouh2-i0plus/XdUnityUI
-                    - LFS を利用しています。Git クライアントによっては設定が必要となります。
-         1. (クローンフォルダ)/UnityProject を Unity で開きます
-                - Assets/I0plus/XdUnityUI 以下が、プラグインフォルダになっています
-                - 現在 Unity2019.3、UniversalRenderPipeline のプロジェクトとなっています。
-         1. AdobeXDプラグインをインストール
-            - /Assets/I0plus/XdUnityUI/ForAdobeXD/XdUnityUIExport.xdx をダブルクリックします。
+ - ダウンロードする場合
+     1. https://github.com/itouh2-i0plus/XdUnityUI/releases
+     1. 最新バージョンの 「▶Assets」をクリックし XdUnityUI.unitypackage をダウンロードします。
+     1. XdUnityUI.unitypackage を Unity にインポートしてください。
+     1. /Assets/I0plus/XdUnityUI フォルダが作成されます
+     1. AdobeXDプラグインをインストール
+        - /Assets/I0plus/XdUnityUI/ForAdobeXD/XdUnityUIExport.xdx をダブルクリックします。
+ - Git リポジトリからクローンする場合
+     1. Git リポジトリをクローン
+            - https://github.com/itouh2-i0plus/XdUnityUI
+                - LFS を利用しています。Git クライアントによっては設定が必要となります。
+     1. (クローンフォルダ)/UnityProject を Unity で開きます
+            - Assets/I0plus/XdUnityUI 以下が、プラグインフォルダになっています
+            - 現在 Unity2019.3、UniversalRenderPipeline のプロジェクトとなっています。
+     1. AdobeXDプラグインをインストール
+        - /Assets/I0plus/XdUnityUI/ForAdobeXD/XdUnityUIExport.xdx をダブルクリックします。
 
 ## クイックスタート
 
@@ -51,18 +50,22 @@
 
 ## ChangeLog
 
-### [v0.3.2] - 2020-03-02
+### [v0.4] - 2020-03-04 
+- README.md 英語化
+- XDプラグイン 英語対応
 
-サンプル修正
-README.md 修正・追記
-XdPlugin/main.js コメント修正
+### [v0.3.2] - 2020-03-03
+
+- サンプル修正
+- README.md 修正・追記
+- XdPlugin/main.js コメント修正
 
 ### [v0.3.1] - 2020-03-02
 
-TextMeshPro サンプル追加、説明修正
-Button サンプル追加
-Toggle サンプル追加
-README.md 修正
+- TextMeshPro サンプル追加、説明修正
+- Button サンプル追加
+- Toggle サンプル追加
+- README.md 修正
 
 ### [v0.3] - 2020-03-01
 
@@ -155,7 +158,7 @@ README.md 修正
             - TextMeshPro フォント、ファイル名「Open Sans-Regular SDF.asset」を探します。
     - AdobeXD と Unity では、デザイン上の差異があります。(例：カーニング)
 
-#### .vierpot-layout-y
+#### .viewport-layout-y
 - 説明
     - スクロールできる縦方向レイアウト。
     - samples.xd VerticalListSample アートボードを参考にしてください。(スクロールバー 付き)
@@ -176,10 +179,10 @@ README.md 修正
     - AdobeXD 上の問題かもしれません。調査中です。
 - 対策
     1. レイヤーを選択し画像出力の操作をする。
-    2. 出力先に XdUnityUI/Import フォルダを選択すると、出力不可になっているか確認。
-    3. フォルダを変えて画像出力。
-    4. 再度 Import フォルダに出力する。
-    5. 上記が成功した場合、プラグインからの出力も成功するようになります。
+    1. 出力先に XdUnityUI/Import フォルダを選択すると、出力不可になっているか確認。
+    1. フォルダを変えて画像出力。
+    1. 再度 Import フォルダに出力する。
+    1. 上記が成功した場合、プラグインからの出力も成功するようになります。
 
 ### Unity コンバート実行中
 
@@ -204,7 +207,7 @@ README.md 修正
     
 #### TextMeshProのエラーが出力される
 - 原因
-    - Scripting Define SymbolsにTMP_PRESENTが無い
+    - Scripting Define SymbolsにTMP_PRESENTが無い。
 - 対策
     - Project Settings > Player > Scripting Define SymbolsにTMP_PRESENTを追記します。
         - TextMeshProパッケージをインストールしてもTMP_PRESENTが追記されない場合があるそうです。(v3.0?未確認)
@@ -214,7 +217,7 @@ README.md 修正
 #### レスポンシブパラメータが正確にコンバートされない
 
 - 原因1
-    - アートボードの「レスポンシブサイズを変更」がONになっていない
+    - アートボードの「レスポンシブサイズを変更」がONになっていない。
 - 対策1
     - アートボードを選択し、「レイアウト」>「レスポンシブサイズを変更」をONにしてください。
 - 原因2
@@ -226,7 +229,7 @@ README.md 修正
 
 #### 背景のイメージコンポーネントがいらない
 - 原因
-    - アートボードの背景が設定してある
+    - アートボードの背景が設定してある。
 - 対策
     - アートボードを選択し、「アピアランス」>「塗り」のチェックを外してください。
 
@@ -241,6 +244,7 @@ README.md 修正
         1. 再び ZIP 圧縮、拡張子を xdx に変更
         1. プラグイン再インストール
     - AdobeXD 開発フォルダに展開する場合
+        1. XdUnityUI exportプラグインをアンイストール
         1. XdUnityUIExport.xdx を XdUnityUIExport.zip とリネーム
         1. 解凍しフォルダをAdobeXD開発フォルダ(プラグイン>開発版>開発フォルダーを表示)にコピーする
         1. xd-unity.cssを編集
@@ -266,7 +270,7 @@ README.md 修正
     - デザイナの手に最終版をもたせる。
     - CCLibrary を使い、各種ツールとの連携ができる。
 - 課題
-    - コンバートでの Prefab 上書きによって、Prefab に対して行った作業(Unity 上で行ったコンポーネント追加、パラメータ調整)が消えてしまう
+    - コンバートでの Prefab 上書きによって、Prefab に対して行った作業(Unity 上で行ったコンポーネント追加、パラメータ調整)が消えてしまう。
         - 対応策
             - コピーして使用する。
             - Prefab Variant で、追加作業の退避。
