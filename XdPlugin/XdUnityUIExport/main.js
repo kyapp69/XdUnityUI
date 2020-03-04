@@ -1312,13 +1312,7 @@ function getStyleFix(styleFix) {
  * @param calcDrawBounds
  * @return {{offset_max: {x: null, y: null}, fix: {top: (boolean|number), left: (boolean|number), bottom: (boolean|number), width: boolean, right: (boolean|number), height: boolean}, anchor_min: {x: null, y: null}, anchor_max: {x: null, y: null}, offset_min: {x: null, y: null}}|null}
  */
-function calcRectTransform(node, hashBounds, calcDrawBounds) {
-  // 2020/03/04 itouh2
-  // Padding機能をつかったNodeで、サイズをFIXしていても
-  // リサイズの前後で、サイズがかわってしまう現象がおきる
-  // 対応
-  // レスポンシブパラメータの判定は GlobalBounds
-  // サイズの計算は　GlobalDrawBounds
+function calcRectTransform(node, hashBounds, calcDrawBounds = true) {
   if (!node || !node.parent) return null
 
   const bounds = hashBounds[node.guid]
@@ -1334,11 +1328,11 @@ function calcRectTransform(node, hashBounds, calcDrawBounds) {
   if (!parentBounds || !parentBounds.before || !parentBounds.after) return null
   //virtual_global_boundsは、親がマスク持ちグループである場合、グループ全体のBoundsになる
   const parentBeforeBounds = calcDrawBounds
-    ? parentBounds.before.virtual_global_bounds
-    : parentBounds.before.virtual_global_draw_bounds
+    ? parentBounds.before.virtual_global_draw_bounds
+    : parentBounds.before.virtual_global_bounds
   const parentAfterBounds = calcDrawBounds
-    ? parentBounds.after.virtual_global_bounds
-    : parentBounds.after.virtual_global_draw_bounds
+    ? parentBounds.after.virtual_global_draw_bounds
+    : parentBounds.after.virtual_global_bounds
 
   // fix を取得するため
   // TODO: anchor スタイルのパラメータはとるべきでは
