@@ -12,10 +12,12 @@ namespace XdUnityUI.Editor
     public sealed class ButtonElement : GroupElement
     {
         private Dictionary<string, object> _button;
-
+        private Dictionary<string, object> _layoutElement;
+        
         public ButtonElement(Dictionary<string, object> json, Element parent) : base(json, parent)
         {
             _button = json.GetDic("button");
+            _layoutElement = json.GetDic("layout_element");
         }
 
         public override GameObject Render(Renderer renderer, GameObject parentObject)
@@ -27,11 +29,9 @@ namespace XdUnityUI.Editor
                 //親のパラメータがある場合､親にする 後のAnchor定義のため
                 rect.SetParent(parentObject.transform);
             }
-
             var children = RenderChildren(renderer, go);
 
             var button = go.AddComponent<Button>();
-
             if (_button != null)
             {
                 var type = _button.Get("transition");
@@ -112,6 +112,7 @@ namespace XdUnityUI.Editor
             }
 
             SetAnchor(go, renderer);
+            SetupLayoutElement(go, _layoutElement);
             SetupComponents(go, componentsJson);
             return go;
         }

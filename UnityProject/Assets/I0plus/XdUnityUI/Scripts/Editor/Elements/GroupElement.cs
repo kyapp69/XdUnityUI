@@ -396,6 +396,27 @@ namespace XdUnityUI.Editor
             });
             return image;
         }
+        
+        
+        protected static T FindByClassName<T>(
+            List<Tuple<GameObject, Element>> children,
+            string className
+        )
+        {
+            T component = default(T);
+            var found = children.Find(child =>
+            {
+                // StateNameがNULLなら、ClassNameチェックなし
+                if (className == null || child.Item2.HasClassName(className))
+                {
+                    component = child.Item1.GetComponent<T>();
+                    if (component != null) return true;
+                }
+
+                return false;
+            });
+            return component;
+        }
 
         public static HorizontalOrVerticalLayoutGroup SetupLayoutGroupParam(GameObject go,
             Dictionary<string, object> layoutJson)
