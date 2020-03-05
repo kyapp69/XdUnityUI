@@ -104,7 +104,6 @@ const STYLE_IMAGE = 'image'
 const STYLE_IMAGE_SCALE = 'image-scale'
 const STYLE_IMAGE_SLICE = 'image-slice' // 9スライス ドット数を指定する
 const STYLE_IMAGE_TYPE = 'image-type' // sliced tiled simple filled
-const STYLE_INPUT = 'input'
 const STYLE_LAYER = 'layer'
 const STYLE_LAYOUT_ELEMENT = 'layout-element'
 const STYLE_LAYOUT_GROUP = 'layout-group' //子供を自動的にどうならべるかのオプション
@@ -152,6 +151,20 @@ const STYLE_TOGGLE_TRANSITION_SELECTED_SPRITE_CLASS =
 const STYLE_TOGGLE_TRANSITION_DISABLED_SPRITE_CLASS =
   'toggle-transition-disabled-sprite-class'
 const STYLE_TOGGLE_GROUP = 'toggle-group'
+const STYLE_INPUT = 'input'
+const STYLE_INPUT_TRANSITION = 'input-transition'
+const STYLE_INPUT_GRAPHIC_CLASS = 'input-graphic-class'
+const STYLE_INPUT_TARGET_GRAPHIC_CLASS = 'input-transition-target-graphic-class'
+const STYLE_INPUT_TRANSITION_HIGHLIGHTED_SPRITE_CLASS =
+  'input-transition-highlighted-sprite-class'
+const STYLE_INPUT_TRANSITION_PRESSED_SPRITE_CLASS =
+  'input-transition-pressed-sprite-class'
+const STYLE_INPUT_TRANSITION_SELECTED_SPRITE_CLASS =
+  'input-transition-selected-sprite-class'
+const STYLE_INPUT_TRANSITION_DISABLED_SPRITE_CLASS =
+  'input-transition-disabled-sprite-class'
+const STYLE_INPUT_TEXT_COMPONENT_CLASS = 'input-text-component-class'
+const STYLE_INPUT_PLACEHOLDER_CLASS = 'input-placeholder-class'
 const STYLE_VIEWPORT = 'viewport'
 const STYLE_VIEWPORT_CREATE_CONTENT = 'viewport-create-content'
 const STYLE_V_ALIGN = 'v-align' //テキストの縦方向のアライメント XDの設定に追記される
@@ -1538,16 +1551,16 @@ function calcRectTransform(node, hashBounds, calcDrawBounds = true) {
 
   if (
     style.hasValue(STYLE_MARGIN_FIX, 'c', 'center') ||
-    (styleFixWidth === true && styleFixLeft !== true && styleFixRight !== true)
+    (styleFixWidth === true && styleFixLeft === true && styleFixRight === true)
   ) {
     const beforeCenter = beforeBounds.x + beforeBounds.width / 2
     const parentBeforeCenter =
       parentBeforeBounds.x + parentBeforeBounds.width / 2
     anchorMin.x = anchorMax.x =
-      (beforeCenter - parentBeforeCenter) / (parentBeforeBounds.width / 2) + 0.5
+      (beforeCenter - parentBeforeCenter) / parentBeforeBounds.width + 0.5
     // サイズを設定　センターからの両端サイズ
-    offsetMin.x = beforeCenter - parentBeforeCenter - beforeBounds.width / 2
-    offsetMax.x = beforeCenter - parentBeforeCenter + beforeBounds.width / 2
+    offsetMin.x = -beforeBounds.width / 2
+    offsetMax.x = +beforeBounds.width / 2
   }
 
   if (
@@ -2808,6 +2821,40 @@ function SetGlobalBounds(node, newGlobalBounds) {
   node.resize(newGlobalBounds.width, newGlobalBounds.height)
 }
 
+async function createInput(json, node, root, funcForEachChild) {
+  let { style } = getNodeNameAndStyle(node)
+
+  const type = 'Input'
+  let boundsCM = getDrawBoundsCMInBase(node, root)
+  Object.assign(json, {
+    type: type,
+    name: getUnityName(node),
+    x: boundsCM.cx, // XdUnityUIでは使わないが､　VGroupなど､レイアウトの情報としてもつ
+    y: boundsCM.cy, // XdUnityUIでは使わないが､ VGroupなど､レイアウトの情報としてもつ
+    w: boundsCM.width, // XdUnityUIではつかわないが､情報としていれる RectElementで使用
+    h: boundsCM.height, // XdUnityUIではつかわないが､情報としていれる RectElementで使用
+    elements: [], // Groupは空でもelementsをもっていないといけない
+  })
+  await funcForEachChild()
+  let target_graphic_class = style.first(STYLE_INPUT_TARGET_GRAPHIC_CLASS)
+  let text_component_class = style.first(STYLE_INPUT_TEXT_COMPONENT_CLASS)
+  let placeholder_class = style.first(STYLE_INPUT_PLACEHOLDER_CLASS)
+  Object.assign(json, {
+    input: {
+      target_graphic_class,
+      text_component_class,
+      placeholder_class,
+    },
+  })
+  // 基本
+  addActive(json, style)
+  addRectTransformDraw(json, node)
+  addRectTransformAnchorOffsetXY(json, style) // anchor設定を上書きする
+  addLayer(json, style)
+  addState(json, style)
+  addClassNames(json, node)
+}
+
 /**
  *
  * @param json
@@ -3192,7 +3239,7 @@ async function createRoot(layoutJson, node, funcForEachChild) {
  * TextNodeの処理
  * 画像になるか、Textコンポーネントをもつ
  * @param {*} json
- * @param {SceneNode} node
+ * @param {SceneNodeClass} node
  * @param {Artboard} artboard
  * @param {*} outputFolder
  * @param {[]} renditions
@@ -3232,11 +3279,7 @@ async function nodeText(json, node, artboard, outputFolder, renditions) {
     return
   }
 
-  if (
-    !style.checkBool(STYLE_TEXT) &&
-    !style.checkBool(STYLE_INPUT) &&
-    !style.checkBool(STYLE_TEXTMP)
-  ) {
+  if (!style.checkBool(STYLE_TEXT) && !style.checkBool(STYLE_TEXTMP)) {
     await createImage(json, node, artboard, outputFolder, renditions)
     return
   }
@@ -3246,9 +3289,6 @@ async function nodeText(json, node, artboard, outputFolder, renditions) {
   let type = 'Text'
   if (style.checkBool(STYLE_TEXTMP)) {
     type = 'TextMeshPro'
-  }
-  if (style.checkBool(STYLE_INPUT)) {
-    type = 'Input'
   }
 
   let textType = 'point'
@@ -3443,6 +3483,10 @@ async function nodeRoot(renditions, outputFolder, root) {
           }
           if (style.checkBool(STYLE_VIEWPORT)) {
             await createViewport(layoutJson, node, root, funcForEachChild)
+            return
+          }
+          if (style.checkBool(STYLE_INPUT)) {
+            await createInput(layoutJson, node, root, funcForEachChild)
             return
           }
           // 通常のグループ
