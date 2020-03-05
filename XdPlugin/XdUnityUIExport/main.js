@@ -158,6 +158,7 @@ const STYLE_V_ALIGN = 'v-align' //テキストの縦方向のアライメント 
 const STYLE_ADD_COMPONENT = 'add-component'
 
 const appLanguage = application.appLanguage
+
 //const appLanguage = "en"
 
 /**
@@ -503,7 +504,10 @@ class GlobalBounds {
    */
   constructor(node) {
     this.visible = node.visible
-    this.bounds = getGlobalDrawBounds(node)
+    this.bounds = getGlobalDrawBounds(node) // TODO: あいまいに使用されているため削除する
+    this.virtual_global_draw_bounds = this.global_draw_bounds = getGlobalDrawBounds(
+      node,
+    )
     this.virtual_global_bounds = this.global_bounds = getGlobalBounds(node)
     if (node.mask) {
       //** @type {Group}
@@ -512,14 +516,17 @@ class GlobalBounds {
       // マスクを持っている場合、マスクされているノード全体のGlobalBoundsを取得する
       //TODO: 以下が必要なのは、.contentを作成するものだけ
       let childrenCalcBounds = new CalcBounds()
+      let childrenCalcDrawBounds = new CalcBounds()
       // セルサイズを決めるため最大サイズを取得する
       group.children.forEach(node => {
         const { style } = getNodeNameAndStyle(node)
         // コンポーネントにする場合は除く
         if (style.first(STYLE_COMPONENT)) return
         childrenCalcBounds.addBounds(node.globalBounds)
+        childrenCalcDrawBounds.addBounds(node.globalDrawBounds)
       })
       this.virtual_global_bounds = childrenCalcBounds.bounds
+      this.virtual_global_draw_bounds = childrenCalcDrawBounds.bounds
     }
   }
 }
@@ -1308,18 +1315,24 @@ function getStyleFix(styleFix) {
 function calcRectTransform(node, hashBounds, calcDrawBounds = true) {
   if (!node || !node.parent) return null
 
-  const boundsParameterName = calcDrawBounds ? 'bounds' : 'global_bounds'
-
   const bounds = hashBounds[node.guid]
   if (!bounds || !bounds.before || !bounds.after) return null
-  const beforeBounds = bounds.before[boundsParameterName]
-  const afterBounds = bounds.after[boundsParameterName]
+  const beforeBounds = calcDrawBounds
+    ? bounds.before.global_draw_bounds
+    : bounds.before.global_bounds
+  const afterBounds = calcDrawBounds
+    ? bounds.after.global_draw_bounds
+    : bounds.after.global_bounds
 
   const parentBounds = hashBounds[node.parent.guid]
   if (!parentBounds || !parentBounds.before || !parentBounds.after) return null
-  //virtual_global_boundsは、親がマスク持ちグループで会った場合、グループ全体のBoundsになる
-  const parentBeforeBounds = parentBounds.before.virtual_global_bounds
-  const parentAfterBounds = parentBounds.after.virtual_global_bounds
+  //virtual_global_boundsは、親がマスク持ちグループである場合、グループ全体のBoundsになる
+  const parentBeforeBounds = calcDrawBounds
+    ? parentBounds.before.virtual_global_draw_bounds
+    : parentBounds.before.virtual_global_bounds
+  const parentAfterBounds = calcDrawBounds
+    ? parentBounds.after.virtual_global_draw_bounds
+    : parentBounds.after.virtual_global_bounds
 
   // fix を取得するため
   // TODO: anchor スタイルのパラメータはとるべきでは
@@ -1349,7 +1362,10 @@ function calcRectTransform(node, hashBounds, calcDrawBounds = true) {
   // X座標
   // console.log(beforeBounds.width, afterBounds.width)
   if (styleFixWidth == null) {
-    styleFixWidth = approxEqual(beforeBounds.width, afterBounds.width, 0.0005)
+    styleFixWidth = approxEqual(beforeBounds.width, afterBounds.width, 0.001)
+    console.log('-----------width----------------', calcDrawBounds)
+    console.log(node.name)
+    console.log(beforeBounds.width, afterBounds.width)
   }
 
   if (styleFixLeft == null) {
@@ -1480,7 +1496,7 @@ function calcRectTransform(node, hashBounds, calcDrawBounds = true) {
       offsetMin.x = offsetMax.x - beforeBounds.width
     }
     if (styleFixLeft !== true && styleFixRight !== true) {
-      //両方共ロックされていない
+      //左右共ロックされていない
       anchorMin.x = anchorMax.x = (styleFixLeft + 1 - styleFixRight) / 2
       offsetMin.x = -beforeBounds.width / 2
       offsetMax.x = beforeBounds.width / 2
@@ -1520,20 +1536,28 @@ function calcRectTransform(node, hashBounds, calcDrawBounds = true) {
     }
   }
 
-  if (style.hasValue(STYLE_MARGIN_FIX, 'c', 'center')) {
-    anchorMin.x = 0.5
-    anchorMax.x = 0.5
-    const center = beforeBounds.x + beforeBounds.width / 2
-    const parentCenter = parentBeforeBounds.x + parentBeforeBounds.width / 2
-    offsetMin.x = center - parentCenter - beforeBounds.width / 2
-    offsetMax.x = center - parentCenter + beforeBounds.width / 2
+  if (
+    style.hasValue(STYLE_MARGIN_FIX, 'c', 'center') ||
+    (styleFixWidth === true && styleFixLeft !== true && styleFixRight !== true)
+  ) {
+    const beforeCenter = beforeBounds.x + beforeBounds.width / 2
+    const parentBeforeCenter =
+      parentBeforeBounds.x + parentBeforeBounds.width / 2
+    anchorMin.x = anchorMax.x =
+      (beforeCenter - parentBeforeCenter) / (parentBeforeBounds.width / 2) + 0.5
+    // サイズを設定　センターからの両端サイズ
+    offsetMin.x = beforeCenter - parentBeforeCenter - beforeBounds.width / 2
+    offsetMax.x = beforeCenter - parentBeforeCenter + beforeBounds.width / 2
   }
 
-  if (style.hasValue(STYLE_MARGIN_FIX, 'm', 'middle')) {
-    anchorMin.y = 0.5
-    anchorMax.y = 0.5
+  if (
+    style.hasValue(STYLE_MARGIN_FIX, 'm', 'middle')
+    //|| (styleFixHeight === true && styleFixTop === true && styleFixBottom === true)
+  ) {
     const middle = beforeBounds.y + beforeBounds.height / 2
     const parentMiddle = parentBeforeBounds.y + parentBeforeBounds.height / 2
+    anchorMin.y = anchorMax.y =
+      (middle - parentMiddle) / (parentBeforeBounds.height / 2) + 0.5
     offsetMin.y = -(middle - parentMiddle) - beforeBounds.height / 2
     offsetMax.y = -(middle - parentMiddle) + beforeBounds.height / 2
   }
@@ -2075,12 +2099,35 @@ function addRectTransformAnchorOffsetXY(json, style) {
   }
 }
 
+/*
+function anchorChange(json,style)
+{
+  if (style.hasValue(STYLE_MARGIN_FIX, 'c', 'center')) {
+    anchorMin.x = 0.5
+    anchorMax.x = 0.5
+    const center = beforeBounds.x + beforeBounds.width / 2
+    const parentCenter = parentBeforeBounds.x + parentBeforeBounds.width / 2
+    offsetMin.x = center - parentCenter - beforeBounds.width / 2
+    offsetMax.x = center - parentCenter + beforeBounds.width / 2
+  }
+
+  if (style.hasValue(STYLE_MARGIN_FIX, 'm', 'middle')) {
+    anchorMin.y = 0.5
+    anchorMax.y = 0.5
+    const middle = beforeBounds.y + beforeBounds.height / 2
+    const parentMiddle = parentBeforeBounds.y + parentBeforeBounds.height / 2
+    offsetMin.y = -(middle - parentMiddle) - beforeBounds.height / 2
+    offsetMax.y = -(middle - parentMiddle) + beforeBounds.height / 2
+  }
+}
+*/
+
 /**
  * オプションにpivot､stretchがあれば上書き
  * @param {*} json
  * @param {SceneNodeClass} node
  */
-function addDrawRectTransform(json, node) {
+function addRectTransformDraw(json, node) {
   let param = getRectTransformDraw(node)
   if (param) {
     Object.assign(json, param)
@@ -2228,7 +2275,7 @@ async function addImage(json, node, root, outputFolder, renditions) {
     opacity: 100,
   })
 
-  addDrawRectTransform(json, node)
+  addRectTransformDraw(json, node)
 
   Object.assign(json, {
     image: {},
@@ -2715,7 +2762,7 @@ async function createViewport(json, node, root, funcForEachChild) {
 
   // 基本
   addActive(json, style)
-  addDrawRectTransform(json, node)
+  addRectTransformDraw(json, node)
   addLayer(json, style)
   addState(json, style)
   addClassNames(json, node)
@@ -2803,7 +2850,7 @@ async function createGroup(json, node, root, funcForEachChild) {
 
   // 基本
   addActive(json, style)
-  addDrawRectTransform(json, node)
+  addRectTransformDraw(json, node)
   addRectTransformAnchorOffsetXY(json, style) // anchor設定を上書きする
   addLayer(json, style)
   addState(json, style)
@@ -2871,7 +2918,7 @@ async function createScrollbar(json, node, funcForEachChild) {
 
   // 基本
   addActive(json, style)
-  addDrawRectTransform(json, node)
+  addRectTransformDraw(json, node)
   addLayer(json, style)
   addState(json, style)
   addClassNames(json, node)
@@ -2951,7 +2998,7 @@ async function createToggle(json, node, root, funcForEachChild) {
 
   // 基本パラメータ・コンポーネント
   addActive(json, style)
-  addDrawRectTransform(json, node)
+  addRectTransformDraw(json, node)
   addLayer(json, style)
   addState(json, style)
   addClassNames(json, node)
@@ -3012,11 +3059,12 @@ async function createButton(json, node, root, funcForEachChild) {
 
   // 基本パラメータ
   addActive(json, style)
-  addDrawRectTransform(json, node)
+  addRectTransformDraw(json, node)
   addLayer(json, style)
   addState(json, style)
   addClassNames(json, node)
   addComponents(json, style)
+  addLayoutElement(json, node, style)
 }
 
 /**
@@ -3065,7 +3113,7 @@ async function createImage(json, node, root, outputFolder, renditions) {
     })
     // 基本パラメータ
     addActive(json, style)
-    addDrawRectTransform(json, node)
+    addRectTransformDraw(json, node)
     addLayer(json, style)
     addState(json, style)
     addClassNames(json, node)
@@ -3247,7 +3295,8 @@ async function nodeText(json, node, artboard, outputFolder, renditions) {
 
   // 基本パラメータ
   addActive(json, style)
-  addRectTransform(json, node) // Drawではなく、通常のレスポンシブパラメータを渡す　シャドウ等のエフェクトは自前でやる必要があるため
+  // Drawではなく、通常のレスポンシブパラメータを渡す　シャドウ等のエフェクトは自前でやる必要があるため
+  addRectTransformDraw(json, node)
   addLayer(json, style)
   addState(json, style)
   addClassNames(json, node)
@@ -3380,7 +3429,7 @@ async function nodeRoot(renditions, outputFolder, root) {
               type: type,
               name: getUnityName(node),
             })
-            addDrawRectTransform(layoutJson, node)
+            addRectTransformDraw(layoutJson, node)
             await funcForEachChild()
             return
           }
