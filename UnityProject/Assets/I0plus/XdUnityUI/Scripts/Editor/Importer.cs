@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using OnionRing;
 using UnityEditor.U2D;
 using UnityEngine.U2D;
+using UnityEngine.UI;
 using Match = System.Text.RegularExpressions.Match;
 using Object = UnityEngine.Object;
 
@@ -58,7 +59,9 @@ namespace XdUnityUI.Editor
             string[] movedFromAssetPaths)
         {
             var importedDirectoryPath = EditorUtil.ToUnityPath(EditorUtil.GetImportDirectoryPath());
-            progressTotal = importedAssets.Length + deletedAssets.Length + movedAssets.Length;
+
+            progressTotal = importedAssets.Length + movedAssets.Length;
+            if (progressTotal == 0) return;
             progressCount = 0;
 
             var changed = false;
@@ -113,13 +116,23 @@ namespace XdUnityUI.Editor
             // Refresh後、DelayCallで画像生成することで、処理が安定した
             EditorApplication.delayCall += () =>
             {
+                // SpriteイメージのハッシュMapをクリアしたかどうかのフラグ
+                // importedAssetsに一気に全部の新規ファイルが入ってくる前提の処理
+                // 全スライス処理が走る前、最初にClearImageMapをする
+                var clearedImageMap = false;
                 // 画像コンバート　スライス処理
                 foreach (var importedAsset in importedAssets)
                 {
                     if (!importedAsset.Contains(importedDirectoryPath)) continue;
                     if (!importedAsset.EndsWith(".png", System.StringComparison.Ordinal)) continue;
+                    //
+                    if (!clearedImageMap)
+                    {
+                        TextureUtil.ClearImageMap();
+                        clearedImageMap = true;
+                    }
                     // スライス処理
-                    var message = SliceSprite(importedAsset);
+                    var message = TextureUtil.SliceSprite(importedAsset);
                     // 元画像を削除する
                     File.Delete(Path.GetFullPath(importedAsset));
                     // AssetDatabase.DeleteAsset(EditorUtil.ToUnityPath(asset));
@@ -136,7 +149,7 @@ namespace XdUnityUI.Editor
 
                 EditorApplication.delayCall += () =>
                 {
-                    // ディレクトリ削除
+                    // import ディレクトリ削除
                     foreach (var asset in importedAssets)
                     {
                         if (!asset.Contains(importedDirectoryPath)) continue;
@@ -147,7 +160,7 @@ namespace XdUnityUI.Editor
                         // 変換後削除されるため、すべて変換された場合、空になる
                         if (Directory.EnumerateFileSystemEntries(fullPath).Any()) continue;
                         // 空であれば削除
-                        Debug.LogFormat("[XdUnityUI] Delete Directory: {0}", EditorUtil.ToUnityPath(asset));
+                        // Debug.LogFormat("[XdUnityUI] Delete Directory: {0}", EditorUtil.ToUnityPath(asset));
                         AssetDatabase.DeleteAsset(EditorUtil.ToUnityPath(asset));
                     }
 
@@ -215,107 +228,6 @@ namespace XdUnityUI.Editor
                 // Debug.LogFormat("[XdUnityUI] Create Directory: {0}", EditorUtil.ToUnityPath(directoryPath) + "/" + directoryName);
                 AssetDatabase.CreateFolder(EditorUtil.ToUnityPath(directoryPath), Path.GetFileName(directoryFullPath));
             }
-        }
-
-        /// <summary>
-        /// 読み込み可能なTextureを作成する
-        /// Texture2DをC#ScriptでReadableに変更するには？ - Qiita
-        /// https://qiita.com/Katumadeyaruhiko/items/c2b9b4ccdfe51df4ad4a
-        /// </summary>
-        /// <param name="texture2d"></param>
-        /// <returns></returns>
-        private static Texture2D CreateReadabeTexture2D(Texture2D texture2d)
-        {
-            // オプションをRenderTextureReadWrite.sRGBに変更した
-            RenderTexture renderTexture = RenderTexture.GetTemporary(
-                texture2d.width,
-                texture2d.height,
-                0,
-                RenderTextureFormat.ARGB32,
-                RenderTextureReadWrite.sRGB);
-
-            Graphics.Blit(texture2d, renderTexture);
-            RenderTexture previous = RenderTexture.active;
-            RenderTexture.active = renderTexture;
-            Texture2D readableTextur2D = new Texture2D(texture2d.width, texture2d.height);
-            readableTextur2D.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
-            readableTextur2D.Apply();
-            RenderTexture.active = previous;
-            RenderTexture.ReleaseTemporary(renderTexture);
-            return readableTextur2D;
-        }
-
-        private static string SliceSprite(string asset)
-        {
-            var directoryName = Path.GetFileName(Path.GetDirectoryName(asset));
-            var directoryPath = Path.Combine(EditorUtil.GetOutputSpritesPath(), directoryName);
-            var fileName = Path.GetFileName(asset);
-            var texture = CreateReadabeTexture2D(AssetDatabase.LoadAssetAtPath<Texture2D>(asset));
-            if (PreprocessTexture.SlicedTextures == null)
-                PreprocessTexture.SlicedTextures = new Dictionary<string, SlicedTexture>();
-
-            // Textureデータの書き出し
-            // 同じファイル名の場合書き込みしない
-            string CheckWrite(string newPath, byte[] pngData)
-            {
-                if (File.Exists(newPath))
-                {
-                    var oldPngData = File.ReadAllBytes(newPath);
-                    if (oldPngData.Length == pngData.Length && pngData.SequenceEqual(oldPngData))
-                    {
-                        return "same texture";
-                    }
-                }
-
-                File.WriteAllBytes(newPath, pngData);
-                return "new texture";
-            }
-
-            var noSlice = fileName.EndsWith("-noslice.png", StringComparison.Ordinal);
-            if (noSlice)
-            {
-                var slicedTexture = new SlicedTexture(texture, new Boarder(0, 0, 0, 0));
-                fileName = fileName.Replace("-noslice.png", ".png");
-                var newPath = Path.Combine(directoryPath, fileName);
-                PreprocessTexture.SlicedTextures[fileName] = slicedTexture;
-                var pngData = texture.EncodeToPNG();
-                Object.DestroyImmediate(slicedTexture.Texture);
-
-                return CheckWrite(newPath, pngData);
-            }
-
-            const string pattern = "-9slice,([0-9]+)px,([0-9]+)px,([0-9]+)px,([0-9]+)px\\.png";
-            var matches = Regex.Match(fileName, pattern);
-            if (matches.Length > 0)
-            {
-                // 上・右・下・左の端から内側へのオフセット量
-                var top = int.Parse(matches.Groups[1].Value);
-                var right = int.Parse(matches.Groups[2].Value);
-                var bottom = int.Parse(matches.Groups[3].Value);
-                var left = int.Parse(matches.Groups[4].Value);
-
-                var slicedTexture = new SlicedTexture(texture, new Boarder(left, bottom, right, top));
-                fileName = Regex.Replace(fileName, pattern, ".png");
-                var newPath = Path.Combine(directoryPath, fileName);
-
-                PreprocessTexture.SlicedTextures[fileName] = slicedTexture;
-                var pngData = texture.EncodeToPNG();
-                Object.DestroyImmediate(slicedTexture.Texture);
-
-                return CheckWrite(newPath, pngData);
-            }
-
-            {
-                var slicedTexture = TextureSlicer.Slice(texture);
-                var newPath = Path.Combine(directoryPath, fileName);
-
-                PreprocessTexture.SlicedTextures[fileName] = slicedTexture;
-                var pngData = slicedTexture.Texture.EncodeToPNG();
-                Object.DestroyImmediate(slicedTexture.Texture);
-
-                return CheckWrite(newPath, pngData);
-            }
-            // Debug.LogFormat("[XdUnityUI] Slice: {0} -> {1}", EditorUtil.ToUnityPath(asset), EditorUtil.ToUnityPath(newPath));
         }
 
         /**
