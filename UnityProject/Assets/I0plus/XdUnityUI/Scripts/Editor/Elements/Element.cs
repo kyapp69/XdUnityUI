@@ -13,7 +13,7 @@ namespace XdUnityUI.Editor
         public string name;
         protected bool? active;
         protected string layer;
-        protected List<object> classNames;
+        protected List<object> parsedNames;
         protected string pivot;
         protected Vector2? anchorMin;
         protected Vector2? anchorMax;
@@ -35,7 +35,7 @@ namespace XdUnityUI.Editor
             name = json.Get("name");
             active = json.GetBool("active");
             layer = json.Get("layer");
-            classNames = json.Get<List<object>>("class_names");
+            parsedNames = json.Get<List<object>>("parsed_names");
 
             pivot = json.Get("pivot");
             anchorMin = json.GetDic("anchor_min").GetVector2("x", "y");
@@ -44,10 +44,10 @@ namespace XdUnityUI.Editor
             offsetMax = json.GetDic("offset_max").GetVector2("x", "y");
         }
 
-        public bool HasClassName(string className)
+        public bool HasParsedName(string parsedName)
         {
-            if (classNames == null || classNames.Count == 0) return false;
-            var found = classNames.Find(s => (string) s == className);
+            if (parsedNames == null || parsedNames.Count == 0) return false;
+            var found = parsedNames.Find(s => (string) s == parsedName);
             return found != null;
         }
 

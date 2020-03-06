@@ -82,7 +82,7 @@ namespace XdUnityUI.Editor
             var handleClassName = _scrollbar.Get("handle_class");
             if (handleClassName != null)
             {
-                var found = children.Find(child => child.Item2.HasClassName(handleClassName));
+                var found = children.Find(child => child.Item2.HasParsedName(handleClassName));
                 if (found != null)
                 {
                     scrollbar.handleRect = found.Item1.GetComponent<RectTransform>();

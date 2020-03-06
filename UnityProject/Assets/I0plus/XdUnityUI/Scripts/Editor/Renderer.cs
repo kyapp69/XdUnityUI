@@ -58,13 +58,15 @@ namespace XdUnityUI.Editor
 
         public Sprite GetSprite(string spriteName)
         {
-            var fullPath = Path.Combine(spriteRootPath, spriteName) + ".png";
+            var path = Path.Combine(spriteRootPath, spriteName) + ".png";
             // 相対パスの記述に対応した
-            var fileInfo = new System.IO.FileInfo(fullPath);
-            fullPath = EditorUtil.ToUnityPath(fileInfo.FullName);
-            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(fullPath);
+            var fileInfo = new System.IO.FileInfo(path);
+            var fullName = TextureUtil.GetSameImagePath(fileInfo.FullName);
+            // TextureUtil.SliceSprite(fullName);
+            var unityPath = EditorUtil.ToUnityPath(fullName);
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(unityPath);
             Assert.IsNotNull(sprite,
-                $"[XdUnityUI] sprite \"{spriteName}\" is not found fullPath:{fullPath}");
+                $"[XdUnityUI] sprite \"{fileInfo.FullName}\" is not found fullPath:{fullName}");
             return sprite;
         }
 
