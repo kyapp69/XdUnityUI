@@ -82,15 +82,15 @@ const STYLE_BLANK = 'blank'
 const STYLE_BUTTON = 'button'
 const STYLE_BUTTON_TRANSITION = 'button-transition'
 const STYLE_BUTTON_TRANSITION_TARGET_GRAPHIC_CLASS =
-  'button-transition-target-graphic-class'
+  'button-transition-target-graphic-name'
 const STYLE_BUTTON_TRANSITION_HIGHLIGHTED_SPRITE_CLASS =
-  'button-transition-highlighted-sprite-class'
+  'button-transition-highlighted-sprite-name'
 const STYLE_BUTTON_TRANSITION_PRESSED_SPRITE_CLASS =
-  'button-transition-pressed-sprite-class'
+  'button-transition-pressed-sprite-name'
 const STYLE_BUTTON_TRANSITION_SELECTED_SPRITE_CLASS =
-  'button-transition-selected-sprite-class'
+  'button-transition-selected-sprite-name'
 const STYLE_BUTTON_TRANSITION_DISABLED_SPRITE_CLASS =
-  'button-transition-disabled-sprite-class'
+  'button-transition-disabled-sprite-name'
 const STYLE_CANVAS_GROUP = 'canvas-group' // 削除予定
 const STYLE_COMMENT_OUT = 'comment-out'
 const STYLE_COMPONENT = 'component'
@@ -126,45 +126,45 @@ const STYLE_REPEATGRID_ATTACH_IMAGE_DATA_SERIES =
   'repeatgrid-attach-image-data-series'
 const STYLE_SCROLLBAR = 'scrollbar'
 const STYLE_SCROLLBAR_DIRECTION = 'scrollbar-direction'
-const STYLE_SCROLLBAR_HANDLE_CLASS = 'scrollbar-handle-class'
+const STYLE_SCROLLBAR_HANDLE_CLASS = 'scrollbar-handle-name'
 const STYLE_SCROLL_RECT = 'scroll-rect'
-const STYLE_SCROLL_RECT_CONTENT_CLASS = 'scroll-rect-content-class'
+const STYLE_SCROLL_RECT_CONTENT_CLASS = 'scroll-rect-content-name'
 const STYLE_SCROLL_RECT_HORIZONTAL_SCROLLBAR_CLASS =
-  'scroll-rect-horizontal-scrollbar-class'
+  'scroll-rect-horizontal-scrollbar-name'
 const STYLE_SCROLL_RECT_VERTICAL_SCROLLBAR_CLASS =
-  'scroll-rect-vertical-scrollbar-class'
+  'scroll-rect-vertical-scrollbar-name'
 const STYLE_SLIDER = 'slider'
 const STYLE_TEXT = 'text'
 const STYLE_TEXTMP = 'textmp' // textmeshpro
 const STYLE_TEXT_CONTENT = 'text-content'
 const STYLE_TOGGLE = 'toggle'
 const STYLE_TOGGLE_TRANSITION = 'toggle-transition'
-const STYLE_TOGGLE_GRAPHIC_CLASS = 'toggle-graphic-class'
+const STYLE_TOGGLE_GRAPHIC_CLASS = 'toggle-graphic-name'
 const STYLE_TOGGLE_TRANSITION_TARGET_GRAPHIC_CLASS =
-  'toggle-transition-target-graphic-class'
+  'toggle-transition-target-graphic-name'
 const STYLE_TOGGLE_TRANSITION_HIGHLIGHTED_SPRITE_CLASS =
-  'toggle-transition-highlighted-sprite-class'
+  'toggle-transition-highlighted-sprite-name'
 const STYLE_TOGGLE_TRANSITION_PRESSED_SPRITE_CLASS =
-  'toggle-transition-pressed-sprite-class'
+  'toggle-transition-pressed-sprite-name'
 const STYLE_TOGGLE_TRANSITION_SELECTED_SPRITE_CLASS =
-  'toggle-transition-selected-sprite-class'
+  'toggle-transition-selected-sprite-name'
 const STYLE_TOGGLE_TRANSITION_DISABLED_SPRITE_CLASS =
-  'toggle-transition-disabled-sprite-class'
+  'toggle-transition-disabled-sprite-name'
 const STYLE_TOGGLE_GROUP = 'toggle-group'
 const STYLE_INPUT = 'input'
 const STYLE_INPUT_TRANSITION = 'input-transition'
-const STYLE_INPUT_GRAPHIC_CLASS = 'input-graphic-class'
-const STYLE_INPUT_TARGET_GRAPHIC_CLASS = 'input-transition-target-graphic-class'
+const STYLE_INPUT_GRAPHIC_CLASS = 'input-graphic-name'
+const STYLE_INPUT_TARGET_GRAPHIC_CLASS = 'input-transition-target-graphic-name'
 const STYLE_INPUT_TRANSITION_HIGHLIGHTED_SPRITE_CLASS =
-  'input-transition-highlighted-sprite-class'
+  'input-transition-highlighted-sprite-name'
 const STYLE_INPUT_TRANSITION_PRESSED_SPRITE_CLASS =
-  'input-transition-pressed-sprite-class'
+  'input-transition-pressed-sprite-name'
 const STYLE_INPUT_TRANSITION_SELECTED_SPRITE_CLASS =
-  'input-transition-selected-sprite-class'
+  'input-transition-selected-sprite-name'
 const STYLE_INPUT_TRANSITION_DISABLED_SPRITE_CLASS =
-  'input-transition-disabled-sprite-class'
-const STYLE_INPUT_TEXT_COMPONENT_CLASS = 'input-text-component-class'
-const STYLE_INPUT_PLACEHOLDER_CLASS = 'input-placeholder-class'
+  'input-transition-disabled-sprite-name'
+const STYLE_INPUT_TEXT_COMPONENT_CLASS = 'input-text-component-name'
+const STYLE_INPUT_PLACEHOLDER_CLASS = 'input-placeholder-name'
 const STYLE_VIEWPORT = 'viewport'
 const STYLE_VIEWPORT_CREATE_CONTENT = 'viewport-create-content'
 const STYLE_V_ALIGN = 'v-align' //テキストの縦方向のアライメント XDの設定に追記される
@@ -2183,20 +2183,31 @@ function addState(json, style) {
  * @param json
  * @param {SceneNodeClass} node
  */
-function addClassNames(json, node) {
+function addParsedNames(json, node) {
   const parsedName = parseNodeName(node.name)
   // console.log(`${node.name}からクラスを書き出す`)
-  if (!parsedName || parsedName.classNames == null) return
-  // console.log(`class_names: ${parsedName}`)
+  if (!parsedName) return
 
-  const classNames = []
-  for (let className of parsedName.classNames) {
-    // クラスなので、「.」をつけるようにする
-    classNames.push('.' + className)
+  const parsed_names = []
+
+  if (parsedName.tagName) {
+    parsed_names.push(parsedName.tagName)
+  }
+
+  if (parsedName.id) {
+    parsed_names.push('#' + parsedName.id)
+  }
+
+  if (parsedName.classNames) {
+    // console.log(`parsed_names: ${parsedName}`)
+    for (let className of parsedName.classNames) {
+      // クラスなので、「.」をつけるようにする
+      parsed_names.push('.' + className)
+    }
   }
 
   Object.assign(json, {
-    class_names: classNames,
+    parsed_names,
   })
 }
 
@@ -2778,7 +2789,7 @@ async function createViewport(json, node, root, funcForEachChild) {
   addRectTransformDraw(json, node)
   addLayer(json, style)
   addState(json, style)
-  addClassNames(json, node)
+  addParsedNames(json, node)
 
   addContentSizeFitter(json, style)
   addScrollRect(json, style)
@@ -2852,7 +2863,7 @@ async function createInput(json, node, root, funcForEachChild) {
   addRectTransformAnchorOffsetXY(json, style) // anchor設定を上書きする
   addLayer(json, style)
   addState(json, style)
-  addClassNames(json, node)
+  addParsedNames(json, node)
 }
 
 /**
@@ -2901,7 +2912,7 @@ async function createGroup(json, node, root, funcForEachChild) {
   addRectTransformAnchorOffsetXY(json, style) // anchor設定を上書きする
   addLayer(json, style)
   addState(json, style)
-  addClassNames(json, node)
+  addParsedNames(json, node)
   //
   addComponents(json, style)
   addCanvasGroup(json, node, style)
@@ -2968,7 +2979,7 @@ async function createScrollbar(json, node, funcForEachChild) {
   addRectTransformDraw(json, node)
   addLayer(json, style)
   addState(json, style)
-  addClassNames(json, node)
+  addParsedNames(json, node)
   //
   addCanvasGroup(json, node, style)
   addLayoutElement(json, node, style)
@@ -3048,7 +3059,7 @@ async function createToggle(json, node, root, funcForEachChild) {
   addRectTransformDraw(json, node)
   addLayer(json, style)
   addState(json, style)
-  addClassNames(json, node)
+  addParsedNames(json, node)
   //
   addLayoutElement(json, node, style)
   addContentSizeFitter(json, style)
@@ -3109,7 +3120,7 @@ async function createButton(json, node, root, funcForEachChild) {
   addRectTransformDraw(json, node)
   addLayer(json, style)
   addState(json, style)
-  addClassNames(json, node)
+  addParsedNames(json, node)
   addComponents(json, style)
   addLayoutElement(json, node, style)
 }
@@ -3163,7 +3174,7 @@ async function createImage(json, node, root, outputFolder, renditions) {
     addRectTransformDraw(json, node)
     addLayer(json, style)
     addState(json, style)
-    addClassNames(json, node)
+    addParsedNames(json, node)
     // assignComponent
     if (style.first(STYLE_COMPONENT) != null) {
       Object.assign(json, {
@@ -3339,7 +3350,7 @@ async function nodeText(json, node, artboard, outputFolder, renditions) {
   addRectTransformDraw(json, node)
   addLayer(json, style)
   addState(json, style)
-  addClassNames(json, node)
+  addParsedNames(json, node)
 }
 
 /**
