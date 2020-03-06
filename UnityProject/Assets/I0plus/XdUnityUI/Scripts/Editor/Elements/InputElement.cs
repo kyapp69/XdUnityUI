@@ -34,17 +34,17 @@ namespace XdUnityUI.Editor
             inputField.transition = Selectable.Transition.None;
             if (_input != null)
             {
-                var textComponent = FindByClassName<Text>(children, _input.Get("text_component_class"));
+                var textComponent = ElementUtil.FindComponentByClassName<Text>(children, _input.Get("text_component_class"));
                 if (textComponent != null)
                 {
                     inputField.textComponent = textComponent;
                 }
-                var placeholderText = FindByClassName<Graphic>(children, _input.Get("placeholder_class"));
+                var placeholderText = ElementUtil.FindComponentByClassName<Graphic>(children, _input.Get("placeholder_class"));
                 if (placeholderText != null)
                 {
                     inputField.placeholder = placeholderText;
                 }
-                var targetGraphic = FindByClassName<Text>(children, _input.Get("target_graphic_class"));
+                var targetGraphic = ElementUtil.FindComponentByClassName<Text>(children, _input.Get("target_graphic_class"));
                 if (targetGraphic != null)
                 {
                     inputField.targetGraphic = targetGraphic;

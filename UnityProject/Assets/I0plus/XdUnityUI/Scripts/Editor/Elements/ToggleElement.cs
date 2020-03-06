@@ -30,13 +30,13 @@ namespace XdUnityUI.Editor
 
             var toggle = go.AddComponent<Toggle>();
 
-            var targetImage = FindImageByClassName(children, _toggleJson.Get("target_graphic_class"));
+            var targetImage = ElementUtil.FindComponentByClassName<Image>(children, _toggleJson.Get("target_graphic_class"));
             if (targetImage != null)
             {
                 toggle.targetGraphic = targetImage;
             }
 
-            var graphicImage = FindImageByClassName(children, _toggleJson.Get("graphic_class"));
+            var graphicImage = ElementUtil.FindComponentByClassName<Image>(children, _toggleJson.Get("graphic_class"));
             if (graphicImage != null)
             {
                 toggle.graphic = graphicImage;
@@ -46,28 +46,28 @@ namespace XdUnityUI.Editor
             if (spriteStateJson != null)
             {
                 var spriteState = new SpriteState();
-                var image = FindImageByClassName(children, spriteStateJson.Get("highlighted_sprite_class"));
+                var image = ElementUtil.FindComponentByClassName<Image>(children, spriteStateJson.Get("highlighted_sprite_class"));
                 if (image != null)
                 {
                     spriteState.highlightedSprite = image.sprite;
                     Object.DestroyImmediate(image.gameObject);
                 }
 
-                image = FindImageByClassName(children, spriteStateJson.Get("pressed_sprite_class"));
+                image = ElementUtil.FindComponentByClassName<Image>(children, spriteStateJson.Get("pressed_sprite_class"));
                 if (image != null)
                 {
                     spriteState.pressedSprite = image.sprite;
                     Object.DestroyImmediate(image.gameObject);
                 }
 
-                image = FindImageByClassName(children, spriteStateJson.Get("selected_sprite_class"));
+                image = ElementUtil.FindComponentByClassName<Image>(children, spriteStateJson.Get("selected_sprite_class"));
                 if (image != null)
                 {
                     spriteState.selectedSprite = image.sprite;
                     Object.DestroyImmediate(image.gameObject);
                 }
 
-                image = FindImageByClassName(children, spriteStateJson.Get("disabled_sprite_class"));
+                image = ElementUtil.FindComponentByClassName<Image>(children, spriteStateJson.Get("disabled_sprite_class"));
                 if (image != null)
                 {
                     spriteState.disabledSprite = image.sprite;
@@ -86,7 +86,7 @@ namespace XdUnityUI.Editor
                 toggle.group = toggleGroup;
             }
 
-            SetupLayoutElement(go, LayoutElementParam);
+            ElementUtil.SetupLayoutElement(go, LayoutElementParam);
             SetAnchor(go, renderer);
 
             return go;

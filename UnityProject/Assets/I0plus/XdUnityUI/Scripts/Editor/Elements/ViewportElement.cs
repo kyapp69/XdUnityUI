@@ -42,7 +42,7 @@ namespace XdUnityUI.Editor
             SetAnchor(go, renderer);
 
             // タッチイベントを取得するイメージコンポーネントになる
-            SetupFillColor(go, FillColorParam);
+            ElementUtil.SetupFillColor(go, FillColorParam);
 
             // コンテンツ部分を入れるコンテナ
             var goContent = new GameObject("$Content");
@@ -69,20 +69,20 @@ namespace XdUnityUI.Editor
                 if (_content.ContainsKey("layout"))
                 {
                     var contentLayout = _content.GetDic("layout");
-                    SetupLayoutGroup(goContent, contentLayout);
+                    ElementUtil.SetupLayoutGroup(goContent, contentLayout);
                 }
 
                 if (_content.ContainsKey("content_size_fitter"))
                 {
                     var contentSizeFitter = _content.GetDic("content_size_fitter");
-                    var compSizeFitter = SetupContentSizeFitter(goContent, contentSizeFitter);
+                    var compSizeFitter = ElementUtil.SetupContentSizeFitter(goContent, contentSizeFitter);
                 }
             }
 
             //Viewportのチャイルドはもとより、content向けのAnchor・Offsetを持っている
             RenderChildren(renderer, goContent);
 
-            SetupRectMask2D(go, RectMask2DParam);
+            ElementUtil.SetupRectMask2D(go, RectMask2DParam);
             // ScrollRectを設定した時点ではみでたContentがアジャストされる　PivotがViewport内に入っていればOK
             SetupScrollRect(go, goContent, _scrollRect);
 
