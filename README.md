@@ -9,29 +9,42 @@
 ## Overview
 
 - Convert AdobeXD artboards to UI Prefab for Unity.
+    - Convert AdobeXD responsive parameters to Unity RectTransform
 - [GitHub](https://github.com/itouh2-i0plus/XdUnityUI)
+
+### sample
+
+|| AdobeXD | Unity |
+| --- | --- | --- |
+|Image switch button| <img src = "https://user-images.githubusercontent.com/20549024/76143694-f47a5f00-60bc-11ea-885f-ec28c2f61454.PNG" width = "300" height = " auto "/> | <img src ="https://user-images.githubusercontent.com/20549024/76143630-5dada280-60bc-11ea-8121-45d24aa03601.gif" width="500" height="auto" /> |
+| Dialog| <img src = "https://user-images.githubusercontent.com/20549024/76143695-f5ab8c00-60bc-11ea-8cdb-8002f8765cd9.PNG" width = "300" height = "auto" /> | <img src = "https://user-images.githubusercontent.com/20549024/76143631-5e463900-60bc-11ea-9698-975443962aa5.gif" width = "500" height = "auto" /> |
+| Vertical scroll list| <img src = "https://user-images.githubusercontent.com/20549024/76143701-f6dcb900-60bc-11ea-98bd-0d49d8a6d77d.png" width = "300" height = " auto "/> | <img src ="https://user-images.githubusercontent.com/20549024/76143628-5d150c00-60bc-11ea-9a93-9541c55e8190.gif" width="500" height="auto" /> |
+| Character input| <img src = "https://user-images.githubusercontent.com/20549024/76143696-f5ab8c00-60bc-11ea-9d8f-9acf72188b8e.PNG" width = "300" height = "auto "/> | <img src ="https://user-images.githubusercontent.com/20549024/76143624-5ab2b200-60bc-11ea-820a-b25755c6433c.gif" width="500" height="auto" /> |
+| Toggle radio button| <img src="https://user-images.githubusercontent.com/20549024/76143700-f6dcb900-60bc-11ea-9ea3-4af279919544.PNG" width = "300" height = "auto" /> | <img src = "https://user-images.githubusercontent.com/20549024/76143627-5c7c7580-60bc-11ea-8a86-ae4890365330.gif" width = "500" height = "auto" /> |
+| Scroll| <img src = "https://user-images.githubusercontent.com/20549024/76143697-f6442280-60bc-11ea-9214-00ca42075c22.PNG" width = "300" height = "auto" /> | <img src = "https://user-images.githubusercontent.com/20549024/76143626-5be3df00-60bc-11ea-8236-0838d1e575b0.gif" width = "500" height = "auto" /> |
+| Text window| <img src = "https://user-images.githubusercontent.com/20549024/76143702-f7754f80-60bc-11ea-8c02-9cf9b46b77f2.PNG" width = "300" height = "auto "/> | <img src ="https://user-images.githubusercontent.com/20549024/76143629-5dada280-60bc-11ea-80d5-541f8d97317a.gif" width="500" height="auto" /> |
+
 
 ## Installation
 
-1. Installation
-     - When downloading
-         1. https://github.com/itouh2-i0plus/XdUnityUI/releases
-         1. Click the latest version of “▶ Assets” to download XdUnityUI.unitypackage.
-         1. Import XdUnityUI.unitypackage into Unity.
-         1. /Assets/I0plus/XdUnityUI folder is created
-         1. Install AdobeXD plugin
-            - Double-click /Assets/I0plus/XdUnityUI/ForAdobeXD/XdUnityUIExport.xdx.
-     - When cloning from a Git repository
-         1. Clone the Git repository
-            - https://github.com/itouh2-i0plus/XdUnityUI
-                 - LFS is used. Some Git clients require configuration.
-         1. Open (Clone folder)/UnityProject in Unity
-                - Plug-in folder below Assets/I0plus/XdUnityUI
-                - Currently a Unity2019.3, UniversalRenderPipeline project.
-         1. Install AdobeXD plugin
-            - Double-click /Assets/I0plus/XdUnityUI/ForAdobeXD/XdUnityUIExport.xdx.
+ - When downloading
+     1. https://github.com/itouh2-i0plus/XdUnityUI/releases
+     1. Click the latest version of “▶ Assets” to download XdUnityUI.unitypackage.
+     1. Import XdUnityUI.unitypackage into Unity.
+     1. /Assets/I0plus/XdUnityUI folder is created.
+     1. Install AdobeXD plugin.
+        - Double-click /Assets/I0plus/XdUnityUI/ForAdobeXD/XdUnityUIExport.xdx.
+ - When cloning from a Git repository
+    1. Clone the Git repository
+        - https://github.com/itouh2-i0plus/XdUnityUI
+            - LFS is used. Some Git clients require configuration.
+     1. Open (Clone folder)/UnityProject in Unity
+            - Plug-in folder below Assets/I0plus/XdUnityUI
+            - Currently a Unity2019.3, UniversalRenderPipeline project.
+     1. Install AdobeXD plugin
+        - Double-click /Assets/I0plus/XdUnityUI/ForAdobeXD/XdUnityUIExport.xdx.
 
-## Quick Start
+## quick start
 
 1. Open AdobeXD sample
      - Located in /Assets/I0plus/XdUnityUI/ForAdobeXD/samples.xd.
@@ -42,7 +55,8 @@
         - Reference: [Edit Context rules · Adobe XD Plugin Reference](https://adobexdplatform.com/plugin-docs/reference/core/edit-context.html)
      1. From the plugin menu, click "XdUnityUI export plugin" to launch.
      1. "Folder" is the output folder. Select (Cloned folder)/UnityProject/I0plus/XdUnityUI/Import folder.
-     1. Click Export. -Please refer to this article "When a problem occurs" regarding the case where an error occurs during output.
+     1. Click Export.
+        -Please refer to this article "When a problem occurs" regarding the case where an error occurs during output.
 
 1. Unity conversion
      - The conversion will start when the Unity window is activated.
@@ -53,18 +67,26 @@
 
 ## ChangeLog
 
-### [v0.3.2]-2020-03-02
+### [v0.5]-2020-03-07
+- Improved InputField conversion
+- README_JP.md sample image added
 
-Sample modification
-README.md Correction/addition
-XdPlugin/main.js comment correction
+### [v0.4]-2020-03-04
+- README.md English translation
+- XD plug-in English supported
+
+### [v0.3.2]-2020-03-03
+
+- Sample correction
+- README.md modified/appended
+- Modified XdPlugin/main.js comment
 
 ### [v0.3.1]-2020-03-02
 
-TextMeshPro sample added, description modified
-Button sample added
-Toggle Add Sample
-README.md modified
+- Added TextMeshPro sample and revised description
+- Added Button sample
+- Toggle Sample addition
+- Modified README.md
 
 ### [v0.3]-2020-03-01
 
@@ -89,6 +111,7 @@ README.md modified
     - The output image is sliced ​​unless otherwise specified.
 - The conversion process in Unity is performed by writing the output file to the Unity project, XdUnityUI/Import folder.
 - Prefab and Sprite are output to the specified folder.
+
 
 ### Rule description
 
@@ -157,7 +180,7 @@ README.md modified
             - Find the TextMeshPro font, file name "Open Sans-Regular SDF.asset".
     - There is a design difference between AdobeXD and Unity. (Example: kerning)
 
-#### .vierpot-layout-y
+#### .viewport-layout-y
 - Description
     - Scrollable vertical layout.
     - Refer to samples.xd VerticalListSample artboard. (With scroll bar)
@@ -178,10 +201,10 @@ README.md modified
     - It may be a problem on AdobeXD. under investigation.
 - Countermeasures
     1. Select a layer and operate the image output.
-    2. Select the XdUnityUI/Import folder as the output destination, and check if the output is disabled.
-    3. Change the folder and output images.
-    4. Output to the Import folder again.
-    5. If the above is successful, the output from the plugin will also be successful.
+    1. Select the XdUnityUI/Import folder as the output destination and check if the output is disabled.
+    1. Change the folder and output images.
+    1. Output to the Import folder again.
+    1. If the above is successful, the output from the plugin will also be successful.
 
 ### Unity conversion in progress
 
@@ -206,7 +229,7 @@ README.md modified
     
 #### TextMeshPro error is output
 - Cause
-    - Missing TMP_PRESENT in Scripting Define Symbols
+    - Missing TMP_PRESENT in Scripting Define Symbols.
 - Countermeasures
     - Add TMP_PRESENT to Project Settings> Player> Scripting Define Symbols.
         - TMP_PRESENT may not be added even after installing TextMeshPro package. (v3.0? unconfirmed)
@@ -216,7 +239,7 @@ README.md modified
 #### Responsive parameters are not converted correctly
 
 - Cause 1
-    - "Change responsive size" on the artboard is not ON
+    - "Change responsive size" on the artboard is not turned on.
 - Measure 1
     - Select the artboard and turn on "Layout"> "Change responsive size".
 - Cause 2
@@ -228,7 +251,7 @@ README.md modified
 
 #### I don't need the background image component
 - Cause
-    - Artboard background set
+    - Artboard background is set.
 - Countermeasures
     - Select the artboard and uncheck "Appearance"> "Fill".
 
@@ -243,6 +266,7 @@ README.md modified
         1. Zip again, change the extension to xdx
         1. Reinstall plugin
     - When deploying to the AdobeXD development folder
+        1. Uninstall XdUnityUI export plugin
         1. Rename XdUnityUIExport.xdx to XdUnityUIExport.zip
         1. Unzip and copy the folder to the AdobeXD development folder (Plug-in> Development version> Display development folder)
         1. Edit xd-unity.css
@@ -268,7 +292,7 @@ README.md modified
     - Hold the final version in the hands of the designer.
     - Use CCLibrary to link with various tools.
 - Task
-    - Work done on Prefabs (adding components and adjusting parameters on Unity) is overwritten by overwriting Prefabs during conversion.
+    - Work done on Prefabs (adding components and adjusting parameters on Unity) is lost by overwriting Prefabs during conversion.
         - counter-measure
             - Copy and use.
             - Evacuation of additional work in Prefab Variant.
