@@ -1,17 +1,29 @@
 https://translate.google.co.jp/?#view=home&op=translate&sl=ja&tl=en
 Google翻訳したあとの置換
+VisualStudioコード用
 
 ○ -の後ろのスペース修正
 (^ *-)(\S)
-^ *- $1
+$1 $2
+
+○ !と[の間、スペースが入ってしまう
+\! \[
+![
 
 ○ ]と(の間、スペースが入ってしまう
 \] \(
-\]\(
+](
 
 ○ スラッシュ前後、スペースがある
  / 
 /
+
+○ HTMLの修正
+ "width =" 500 "height =" auto "
+" width="500" height="auto" 
+
+○ToggleGroupSample手で修正
+
 
 ○ コード範囲の修正
 `` `

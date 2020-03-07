@@ -9,6 +9,7 @@
 ## 概要
 
 - AdobeXD のアートボードを Unity 用 UI Prefab にコンバートします。
+    - AdobeXDのレスポンシブパラメータをUnity RectTransformに変換します
 - [GitHub](https://github.com/itouh2-i0plus/XdUnityUI)
 
 ### サンプル
@@ -62,6 +63,10 @@
      - できた Prefab を Canvas 以下に配置します。
 
 ## ChangeLog
+
+### [v0.5] - 2020-03-07 
+- InputField 変換を整備
+- README_JP.md サンプル画像追加
 
 ### [v0.4] - 2020-03-04 
 - README.md 英語化
