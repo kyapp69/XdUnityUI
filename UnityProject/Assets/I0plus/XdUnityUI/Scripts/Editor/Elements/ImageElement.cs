@@ -71,17 +71,17 @@ namespace XdUnityUI.Editor
                         image.type = Image.Type.Simple;
                         break;
                     default:
-                        Debug.LogAssertion("[Baum2+] unknown image_type:" + imageType);
+                        Debug.LogAssertion("[XdUnityUI] unknown image_type:" + imageType);
                         break;
                 }
             }
 
             var preserveAspect = imageJson.GetBool("preserve_aspect");
-            if (preserveAspect != null)
+            if (preserveAspect != null && preserveAspect.Value )
             {
                 // アスペクト比を保つ場合はSimpleにする
                 image.type = Image.Type.Simple;
-                image.preserveAspect = preserveAspect.Value;
+                image.preserveAspect = true;
             }
 
             SetAnchor(go, renderer);

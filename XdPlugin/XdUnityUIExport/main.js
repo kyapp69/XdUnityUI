@@ -82,15 +82,15 @@ const STYLE_BLANK = 'blank'
 const STYLE_BUTTON = 'button'
 const STYLE_BUTTON_TRANSITION = 'button-transition'
 const STYLE_BUTTON_TRANSITION_TARGET_GRAPHIC_CLASS =
-  'button-transition-target-graphic-class'
+  'button-transition-target-graphic-name'
 const STYLE_BUTTON_TRANSITION_HIGHLIGHTED_SPRITE_CLASS =
-  'button-transition-highlighted-sprite-class'
+  'button-transition-highlighted-sprite-name'
 const STYLE_BUTTON_TRANSITION_PRESSED_SPRITE_CLASS =
-  'button-transition-pressed-sprite-class'
+  'button-transition-pressed-sprite-name'
 const STYLE_BUTTON_TRANSITION_SELECTED_SPRITE_CLASS =
-  'button-transition-selected-sprite-class'
+  'button-transition-selected-sprite-name'
 const STYLE_BUTTON_TRANSITION_DISABLED_SPRITE_CLASS =
-  'button-transition-disabled-sprite-class'
+  'button-transition-disabled-sprite-name'
 const STYLE_CANVAS_GROUP = 'canvas-group' // 削除予定
 const STYLE_COMMENT_OUT = 'comment-out'
 const STYLE_COMPONENT = 'component'
@@ -104,7 +104,6 @@ const STYLE_IMAGE = 'image'
 const STYLE_IMAGE_SCALE = 'image-scale'
 const STYLE_IMAGE_SLICE = 'image-slice' // 9スライス ドット数を指定する
 const STYLE_IMAGE_TYPE = 'image-type' // sliced tiled simple filled
-const STYLE_INPUT = 'input'
 const STYLE_LAYER = 'layer'
 const STYLE_LAYOUT_ELEMENT = 'layout-element'
 const STYLE_LAYOUT_GROUP = 'layout-group' //子供を自動的にどうならべるかのオプション
@@ -127,37 +126,52 @@ const STYLE_REPEATGRID_ATTACH_IMAGE_DATA_SERIES =
   'repeatgrid-attach-image-data-series'
 const STYLE_SCROLLBAR = 'scrollbar'
 const STYLE_SCROLLBAR_DIRECTION = 'scrollbar-direction'
-const STYLE_SCROLLBAR_HANDLE_CLASS = 'scrollbar-handle-class'
+const STYLE_SCROLLBAR_HANDLE_CLASS = 'scrollbar-handle-name'
 const STYLE_SCROLL_RECT = 'scroll-rect'
-const STYLE_SCROLL_RECT_CONTENT_CLASS = 'scroll-rect-content-class'
+const STYLE_SCROLL_RECT_CONTENT_CLASS = 'scroll-rect-content-name'
 const STYLE_SCROLL_RECT_HORIZONTAL_SCROLLBAR_CLASS =
-  'scroll-rect-horizontal-scrollbar-class'
+  'scroll-rect-horizontal-scrollbar-name'
 const STYLE_SCROLL_RECT_VERTICAL_SCROLLBAR_CLASS =
-  'scroll-rect-vertical-scrollbar-class'
+  'scroll-rect-vertical-scrollbar-name'
 const STYLE_SLIDER = 'slider'
 const STYLE_TEXT = 'text'
 const STYLE_TEXTMP = 'textmp' // textmeshpro
 const STYLE_TEXT_CONTENT = 'text-content'
 const STYLE_TOGGLE = 'toggle'
 const STYLE_TOGGLE_TRANSITION = 'toggle-transition'
-const STYLE_TOGGLE_GRAPHIC_CLASS = 'toggle-graphic-class'
+const STYLE_TOGGLE_GRAPHIC_CLASS = 'toggle-graphic-name'
 const STYLE_TOGGLE_TRANSITION_TARGET_GRAPHIC_CLASS =
-  'toggle-transition-target-graphic-class'
+  'toggle-transition-target-graphic-name'
 const STYLE_TOGGLE_TRANSITION_HIGHLIGHTED_SPRITE_CLASS =
-  'toggle-transition-highlighted-sprite-class'
+  'toggle-transition-highlighted-sprite-name'
 const STYLE_TOGGLE_TRANSITION_PRESSED_SPRITE_CLASS =
-  'toggle-transition-pressed-sprite-class'
+  'toggle-transition-pressed-sprite-name'
 const STYLE_TOGGLE_TRANSITION_SELECTED_SPRITE_CLASS =
-  'toggle-transition-selected-sprite-class'
+  'toggle-transition-selected-sprite-name'
 const STYLE_TOGGLE_TRANSITION_DISABLED_SPRITE_CLASS =
-  'toggle-transition-disabled-sprite-class'
+  'toggle-transition-disabled-sprite-name'
 const STYLE_TOGGLE_GROUP = 'toggle-group'
+const STYLE_INPUT = 'input'
+const STYLE_INPUT_TRANSITION = 'input-transition'
+const STYLE_INPUT_GRAPHIC_CLASS = 'input-graphic-name'
+const STYLE_INPUT_TARGET_GRAPHIC_CLASS = 'input-transition-target-graphic-name'
+const STYLE_INPUT_TRANSITION_HIGHLIGHTED_SPRITE_CLASS =
+  'input-transition-highlighted-sprite-name'
+const STYLE_INPUT_TRANSITION_PRESSED_SPRITE_CLASS =
+  'input-transition-pressed-sprite-name'
+const STYLE_INPUT_TRANSITION_SELECTED_SPRITE_CLASS =
+  'input-transition-selected-sprite-name'
+const STYLE_INPUT_TRANSITION_DISABLED_SPRITE_CLASS =
+  'input-transition-disabled-sprite-name'
+const STYLE_INPUT_TEXT_COMPONENT_CLASS = 'input-text-component-name'
+const STYLE_INPUT_PLACEHOLDER_CLASS = 'input-placeholder-name'
 const STYLE_VIEWPORT = 'viewport'
 const STYLE_VIEWPORT_CREATE_CONTENT = 'viewport-create-content'
 const STYLE_V_ALIGN = 'v-align' //テキストの縦方向のアライメント XDの設定に追記される
 const STYLE_ADD_COMPONENT = 'add-component'
 
 const appLanguage = application.appLanguage
+
 //const appLanguage = "en"
 
 /**
@@ -503,7 +517,10 @@ class GlobalBounds {
    */
   constructor(node) {
     this.visible = node.visible
-    this.bounds = getGlobalDrawBounds(node)
+    this.bounds = getGlobalDrawBounds(node) // TODO: あいまいに使用されているため削除する
+    this.virtual_global_draw_bounds = this.global_draw_bounds = getGlobalDrawBounds(
+      node,
+    )
     this.virtual_global_bounds = this.global_bounds = getGlobalBounds(node)
     if (node.mask) {
       //** @type {Group}
@@ -512,14 +529,17 @@ class GlobalBounds {
       // マスクを持っている場合、マスクされているノード全体のGlobalBoundsを取得する
       //TODO: 以下が必要なのは、.contentを作成するものだけ
       let childrenCalcBounds = new CalcBounds()
+      let childrenCalcDrawBounds = new CalcBounds()
       // セルサイズを決めるため最大サイズを取得する
       group.children.forEach(node => {
         const { style } = getNodeNameAndStyle(node)
         // コンポーネントにする場合は除く
         if (style.first(STYLE_COMPONENT)) return
         childrenCalcBounds.addBounds(node.globalBounds)
+        childrenCalcDrawBounds.addBounds(node.globalDrawBounds)
       })
       this.virtual_global_bounds = childrenCalcBounds.bounds
+      this.virtual_global_draw_bounds = childrenCalcDrawBounds.bounds
     }
   }
 }
@@ -1308,18 +1328,24 @@ function getStyleFix(styleFix) {
 function calcRectTransform(node, hashBounds, calcDrawBounds = true) {
   if (!node || !node.parent) return null
 
-  const boundsParameterName = calcDrawBounds ? 'bounds' : 'global_bounds'
-
   const bounds = hashBounds[node.guid]
   if (!bounds || !bounds.before || !bounds.after) return null
-  const beforeBounds = bounds.before[boundsParameterName]
-  const afterBounds = bounds.after[boundsParameterName]
+  const beforeBounds = calcDrawBounds
+    ? bounds.before.global_draw_bounds
+    : bounds.before.global_bounds
+  const afterBounds = calcDrawBounds
+    ? bounds.after.global_draw_bounds
+    : bounds.after.global_bounds
 
   const parentBounds = hashBounds[node.parent.guid]
   if (!parentBounds || !parentBounds.before || !parentBounds.after) return null
-  //virtual_global_boundsは、親がマスク持ちグループで会った場合、グループ全体のBoundsになる
-  const parentBeforeBounds = parentBounds.before.virtual_global_bounds
-  const parentAfterBounds = parentBounds.after.virtual_global_bounds
+  //virtual_global_boundsは、親がマスク持ちグループである場合、グループ全体のBoundsになる
+  const parentBeforeBounds = calcDrawBounds
+    ? parentBounds.before.virtual_global_draw_bounds
+    : parentBounds.before.virtual_global_bounds
+  const parentAfterBounds = calcDrawBounds
+    ? parentBounds.after.virtual_global_draw_bounds
+    : parentBounds.after.virtual_global_bounds
 
   // fix を取得するため
   // TODO: anchor スタイルのパラメータはとるべきでは
@@ -1349,7 +1375,10 @@ function calcRectTransform(node, hashBounds, calcDrawBounds = true) {
   // X座標
   // console.log(beforeBounds.width, afterBounds.width)
   if (styleFixWidth == null) {
-    styleFixWidth = approxEqual(beforeBounds.width, afterBounds.width, 0.0005)
+    styleFixWidth = approxEqual(beforeBounds.width, afterBounds.width, 0.001)
+    console.log('-----------width----------------', calcDrawBounds)
+    console.log(node.name)
+    console.log(beforeBounds.width, afterBounds.width)
   }
 
   if (styleFixLeft == null) {
@@ -1480,7 +1509,7 @@ function calcRectTransform(node, hashBounds, calcDrawBounds = true) {
       offsetMin.x = offsetMax.x - beforeBounds.width
     }
     if (styleFixLeft !== true && styleFixRight !== true) {
-      //両方共ロックされていない
+      //左右共ロックされていない
       anchorMin.x = anchorMax.x = (styleFixLeft + 1 - styleFixRight) / 2
       offsetMin.x = -beforeBounds.width / 2
       offsetMax.x = beforeBounds.width / 2
@@ -1520,20 +1549,28 @@ function calcRectTransform(node, hashBounds, calcDrawBounds = true) {
     }
   }
 
-  if (style.hasValue(STYLE_MARGIN_FIX, 'c', 'center')) {
-    anchorMin.x = 0.5
-    anchorMax.x = 0.5
-    const center = beforeBounds.x + beforeBounds.width / 2
-    const parentCenter = parentBeforeBounds.x + parentBeforeBounds.width / 2
-    offsetMin.x = center - parentCenter - beforeBounds.width / 2
-    offsetMax.x = center - parentCenter + beforeBounds.width / 2
+  if (
+    style.hasValue(STYLE_MARGIN_FIX, 'c', 'center') ||
+    (styleFixWidth === true && styleFixLeft === true && styleFixRight === true)
+  ) {
+    const beforeCenter = beforeBounds.x + beforeBounds.width / 2
+    const parentBeforeCenter =
+      parentBeforeBounds.x + parentBeforeBounds.width / 2
+    anchorMin.x = anchorMax.x =
+      (beforeCenter - parentBeforeCenter) / parentBeforeBounds.width + 0.5
+    // サイズを設定　センターからの両端サイズ
+    offsetMin.x = -beforeBounds.width / 2
+    offsetMax.x = +beforeBounds.width / 2
   }
 
-  if (style.hasValue(STYLE_MARGIN_FIX, 'm', 'middle')) {
-    anchorMin.y = 0.5
-    anchorMax.y = 0.5
+  if (
+    style.hasValue(STYLE_MARGIN_FIX, 'm', 'middle')
+    //|| (styleFixHeight === true && styleFixTop === true && styleFixBottom === true)
+  ) {
     const middle = beforeBounds.y + beforeBounds.height / 2
     const parentMiddle = parentBeforeBounds.y + parentBeforeBounds.height / 2
+    anchorMin.y = anchorMax.y =
+      (middle - parentMiddle) / (parentBeforeBounds.height / 2) + 0.5
     offsetMin.y = -(middle - parentMiddle) - beforeBounds.height / 2
     offsetMax.y = -(middle - parentMiddle) + beforeBounds.height / 2
   }
@@ -2075,12 +2112,35 @@ function addRectTransformAnchorOffsetXY(json, style) {
   }
 }
 
+/*
+function anchorChange(json,style)
+{
+  if (style.hasValue(STYLE_MARGIN_FIX, 'c', 'center')) {
+    anchorMin.x = 0.5
+    anchorMax.x = 0.5
+    const center = beforeBounds.x + beforeBounds.width / 2
+    const parentCenter = parentBeforeBounds.x + parentBeforeBounds.width / 2
+    offsetMin.x = center - parentCenter - beforeBounds.width / 2
+    offsetMax.x = center - parentCenter + beforeBounds.width / 2
+  }
+
+  if (style.hasValue(STYLE_MARGIN_FIX, 'm', 'middle')) {
+    anchorMin.y = 0.5
+    anchorMax.y = 0.5
+    const middle = beforeBounds.y + beforeBounds.height / 2
+    const parentMiddle = parentBeforeBounds.y + parentBeforeBounds.height / 2
+    offsetMin.y = -(middle - parentMiddle) - beforeBounds.height / 2
+    offsetMax.y = -(middle - parentMiddle) + beforeBounds.height / 2
+  }
+}
+*/
+
 /**
  * オプションにpivot､stretchがあれば上書き
  * @param {*} json
  * @param {SceneNodeClass} node
  */
-function addDrawRectTransform(json, node) {
+function addRectTransformDraw(json, node) {
   let param = getRectTransformDraw(node)
   if (param) {
     Object.assign(json, param)
@@ -2123,20 +2183,31 @@ function addState(json, style) {
  * @param json
  * @param {SceneNodeClass} node
  */
-function addClassNames(json, node) {
+function addParsedNames(json, node) {
   const parsedName = parseNodeName(node.name)
   // console.log(`${node.name}からクラスを書き出す`)
-  if (!parsedName || parsedName.classNames == null) return
-  // console.log(`class_names: ${parsedName}`)
+  if (!parsedName) return
 
-  const classNames = []
-  for (let className of parsedName.classNames) {
-    // クラスなので、「.」をつけるようにする
-    classNames.push('.' + className)
+  const parsed_names = []
+
+  if (parsedName.tagName) {
+    parsed_names.push(parsedName.tagName)
+  }
+
+  if (parsedName.id) {
+    parsed_names.push('#' + parsedName.id)
+  }
+
+  if (parsedName.classNames) {
+    // console.log(`parsed_names: ${parsedName}`)
+    for (let className of parsedName.classNames) {
+      // クラスなので、「.」をつけるようにする
+      parsed_names.push('.' + className)
+    }
   }
 
   Object.assign(json, {
-    class_names: classNames,
+    parsed_names,
   })
 }
 
@@ -2228,7 +2299,7 @@ async function addImage(json, node, root, outputFolder, renditions) {
     opacity: 100,
   })
 
-  addDrawRectTransform(json, node)
+  addRectTransformDraw(json, node)
 
   Object.assign(json, {
     image: {},
@@ -2715,10 +2786,10 @@ async function createViewport(json, node, root, funcForEachChild) {
 
   // 基本
   addActive(json, style)
-  addDrawRectTransform(json, node)
+  addRectTransformDraw(json, node)
   addLayer(json, style)
   addState(json, style)
-  addClassNames(json, node)
+  addParsedNames(json, node)
 
   addContentSizeFitter(json, style)
   addScrollRect(json, style)
@@ -2759,6 +2830,40 @@ function SetGlobalBounds(node, newGlobalBounds) {
   const deltaY = newGlobalBounds.y - globalBounds.y
   node.moveInParentCoordinates(deltaX, deltaY)
   node.resize(newGlobalBounds.width, newGlobalBounds.height)
+}
+
+async function createInput(json, node, root, funcForEachChild) {
+  let { style } = getNodeNameAndStyle(node)
+
+  const type = 'Input'
+  let boundsCM = getDrawBoundsCMInBase(node, root)
+  Object.assign(json, {
+    type: type,
+    name: getUnityName(node),
+    x: boundsCM.cx, // XdUnityUIでは使わないが､　VGroupなど､レイアウトの情報としてもつ
+    y: boundsCM.cy, // XdUnityUIでは使わないが､ VGroupなど､レイアウトの情報としてもつ
+    w: boundsCM.width, // XdUnityUIではつかわないが､情報としていれる RectElementで使用
+    h: boundsCM.height, // XdUnityUIではつかわないが､情報としていれる RectElementで使用
+    elements: [], // Groupは空でもelementsをもっていないといけない
+  })
+  await funcForEachChild()
+  let target_graphic_class = style.first(STYLE_INPUT_TARGET_GRAPHIC_CLASS)
+  let text_component_class = style.first(STYLE_INPUT_TEXT_COMPONENT_CLASS)
+  let placeholder_class = style.first(STYLE_INPUT_PLACEHOLDER_CLASS)
+  Object.assign(json, {
+    input: {
+      target_graphic_class,
+      text_component_class,
+      placeholder_class,
+    },
+  })
+  // 基本
+  addActive(json, style)
+  addRectTransformDraw(json, node)
+  addRectTransformAnchorOffsetXY(json, style) // anchor設定を上書きする
+  addLayer(json, style)
+  addState(json, style)
+  addParsedNames(json, node)
 }
 
 /**
@@ -2803,11 +2908,11 @@ async function createGroup(json, node, root, funcForEachChild) {
 
   // 基本
   addActive(json, style)
-  addDrawRectTransform(json, node)
+  addRectTransformDraw(json, node)
   addRectTransformAnchorOffsetXY(json, style) // anchor設定を上書きする
   addLayer(json, style)
   addState(json, style)
-  addClassNames(json, node)
+  addParsedNames(json, node)
   //
   addComponents(json, style)
   addCanvasGroup(json, node, style)
@@ -2871,10 +2976,10 @@ async function createScrollbar(json, node, funcForEachChild) {
 
   // 基本
   addActive(json, style)
-  addDrawRectTransform(json, node)
+  addRectTransformDraw(json, node)
   addLayer(json, style)
   addState(json, style)
-  addClassNames(json, node)
+  addParsedNames(json, node)
   //
   addCanvasGroup(json, node, style)
   addLayoutElement(json, node, style)
@@ -2951,10 +3056,10 @@ async function createToggle(json, node, root, funcForEachChild) {
 
   // 基本パラメータ・コンポーネント
   addActive(json, style)
-  addDrawRectTransform(json, node)
+  addRectTransformDraw(json, node)
   addLayer(json, style)
   addState(json, style)
-  addClassNames(json, node)
+  addParsedNames(json, node)
   //
   addLayoutElement(json, node, style)
   addContentSizeFitter(json, style)
@@ -3012,11 +3117,12 @@ async function createButton(json, node, root, funcForEachChild) {
 
   // 基本パラメータ
   addActive(json, style)
-  addDrawRectTransform(json, node)
+  addRectTransformDraw(json, node)
   addLayer(json, style)
   addState(json, style)
-  addClassNames(json, node)
+  addParsedNames(json, node)
   addComponents(json, style)
+  addLayoutElement(json, node, style)
 }
 
 /**
@@ -3065,10 +3171,10 @@ async function createImage(json, node, root, outputFolder, renditions) {
     })
     // 基本パラメータ
     addActive(json, style)
-    addDrawRectTransform(json, node)
+    addRectTransformDraw(json, node)
     addLayer(json, style)
     addState(json, style)
-    addClassNames(json, node)
+    addParsedNames(json, node)
     // assignComponent
     if (style.first(STYLE_COMPONENT) != null) {
       Object.assign(json, {
@@ -3144,7 +3250,7 @@ async function createRoot(layoutJson, node, funcForEachChild) {
  * TextNodeの処理
  * 画像になるか、Textコンポーネントをもつ
  * @param {*} json
- * @param {SceneNode} node
+ * @param {SceneNodeClass} node
  * @param {Artboard} artboard
  * @param {*} outputFolder
  * @param {[]} renditions
@@ -3184,11 +3290,7 @@ async function nodeText(json, node, artboard, outputFolder, renditions) {
     return
   }
 
-  if (
-    !style.checkBool(STYLE_TEXT) &&
-    !style.checkBool(STYLE_INPUT) &&
-    !style.checkBool(STYLE_TEXTMP)
-  ) {
+  if (!style.checkBool(STYLE_TEXT) && !style.checkBool(STYLE_TEXTMP)) {
     await createImage(json, node, artboard, outputFolder, renditions)
     return
   }
@@ -3198,9 +3300,6 @@ async function nodeText(json, node, artboard, outputFolder, renditions) {
   let type = 'Text'
   if (style.checkBool(STYLE_TEXTMP)) {
     type = 'TextMeshPro'
-  }
-  if (style.checkBool(STYLE_INPUT)) {
-    type = 'Input'
   }
 
   let textType = 'point'
@@ -3247,10 +3346,11 @@ async function nodeText(json, node, artboard, outputFolder, renditions) {
 
   // 基本パラメータ
   addActive(json, style)
-  addRectTransform(json, node) // Drawではなく、通常のレスポンシブパラメータを渡す　シャドウ等のエフェクトは自前でやる必要があるため
+  // Drawではなく、通常のレスポンシブパラメータを渡す　シャドウ等のエフェクトは自前でやる必要があるため
+  addRectTransformDraw(json, node)
   addLayer(json, style)
   addState(json, style)
-  addClassNames(json, node)
+  addParsedNames(json, node)
 }
 
 /**
@@ -3380,7 +3480,7 @@ async function nodeRoot(renditions, outputFolder, root) {
               type: type,
               name: getUnityName(node),
             })
-            addDrawRectTransform(layoutJson, node)
+            addRectTransformDraw(layoutJson, node)
             await funcForEachChild()
             return
           }
@@ -3394,6 +3494,10 @@ async function nodeRoot(renditions, outputFolder, root) {
           }
           if (style.checkBool(STYLE_VIEWPORT)) {
             await createViewport(layoutJson, node, root, funcForEachChild)
+            return
+          }
+          if (style.checkBool(STYLE_INPUT)) {
+            await createInput(layoutJson, node, root, funcForEachChild)
             return
           }
           // 通常のグループ

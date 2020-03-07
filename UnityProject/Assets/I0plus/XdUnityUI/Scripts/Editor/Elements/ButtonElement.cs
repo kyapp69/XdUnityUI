@@ -12,10 +12,12 @@ namespace XdUnityUI.Editor
     public sealed class ButtonElement : GroupElement
     {
         private Dictionary<string, object> _button;
-
+        private Dictionary<string, object> _layoutElement;
+        
         public ButtonElement(Dictionary<string, object> json, Element parent) : base(json, parent)
         {
             _button = json.GetDic("button");
+            _layoutElement = json.GetDic("layout_element");
         }
 
         public override GameObject Render(Renderer renderer, GameObject parentObject)
@@ -27,11 +29,9 @@ namespace XdUnityUI.Editor
                 //親のパラメータがある場合､親にする 後のAnchor定義のため
                 rect.SetParent(parentObject.transform);
             }
-
             var children = RenderChildren(renderer, go);
 
             var button = go.AddComponent<Button>();
-
             if (_button != null)
             {
                 var type = _button.Get("transition");
@@ -54,7 +54,7 @@ namespace XdUnityUI.Editor
                         break;
                 }
 
-                var targetImage = FindImageByClassName(children, _button.Get("target_graphic_class"));
+                var targetImage = ElementUtil.FindComponentByClassName<Image>(children, _button.Get("target_graphic_class"));
                 if (targetImage != null)
                 {
                     button.targetGraphic = targetImage;
@@ -64,28 +64,28 @@ namespace XdUnityUI.Editor
                 if (spriteStateJson != null)
                 {
                     var spriteState = new SpriteState();
-                    var image = FindImageByClassName(children, spriteStateJson.Get("highlighted_sprite_class"));
+                    var image = ElementUtil.FindComponentByClassName<Image>(children, spriteStateJson.Get("highlighted_sprite_class"));
                     if (image != null)
                     {
                         spriteState.highlightedSprite = image.sprite;
                         Object.DestroyImmediate(image.gameObject);
                     }
 
-                    image = FindImageByClassName(children, spriteStateJson.Get("pressed_sprite_class"));
+                    image = ElementUtil.FindComponentByClassName<Image>(children, spriteStateJson.Get("pressed_sprite_class"));
                     if (image != null)
                     {
                         spriteState.pressedSprite = image.sprite;
                         Object.DestroyImmediate(image.gameObject);
                     }
 
-                    image = FindImageByClassName(children, spriteStateJson.Get("selected_sprite_class"));
+                    image = ElementUtil.FindComponentByClassName<Image>(children, spriteStateJson.Get("selected_sprite_class"));
                     if (image != null)
                     {
                         spriteState.selectedSprite = image.sprite;
                         Object.DestroyImmediate(image.gameObject);
                     }
 
-                    image = FindImageByClassName(children, spriteStateJson.Get("disabled_sprite_class"));
+                    image = ElementUtil.FindComponentByClassName<Image>(children, spriteStateJson.Get("disabled_sprite_class"));
                     if (image != null)
                     {
                         spriteState.disabledSprite = image.sprite;
@@ -112,7 +112,8 @@ namespace XdUnityUI.Editor
             }
 
             SetAnchor(go, renderer);
-            SetupComponents(go, componentsJson);
+            ElementUtil.SetupLayoutElement(go, _layoutElement);
+            ElementUtil.SetupComponents(go, componentsJson);
             return go;
         }
     }

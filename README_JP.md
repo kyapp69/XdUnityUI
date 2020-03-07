@@ -9,7 +9,21 @@
 ## 概要
 
 - AdobeXD のアートボードを Unity 用 UI Prefab にコンバートします。
+    - AdobeXDのレスポンシブパラメータをUnity RectTransformに変換します
 - [GitHub](https://github.com/itouh2-i0plus/XdUnityUI)
+
+### サンプル
+
+||AdobeXD|Unity|
+|---|---|---|
+|画像切替ボタン<br>ButtonSwapSprite|<img src="https://user-images.githubusercontent.com/20549024/76143694-f47a5f00-60bc-11ea-885f-ec28c2f61454.PNG" width="300" height="auto"/>|<img src="https://user-images.githubusercontent.com/20549024/76143630-5dada280-60bc-11ea-8121-45d24aa03601.gif" width="500" height="auto"/>|
+|ダイアログ<br>DialogSample2|<img src="https://user-images.githubusercontent.com/20549024/76143695-f5ab8c00-60bc-11ea-8cdb-8002f8765cd9.PNG" width="300" height="auto"/>|<img src="https://user-images.githubusercontent.com/20549024/76143631-5e463900-60bc-11ea-9698-975443962aa5.gif" width="500" height="auto"/>|
+|縦スクロールリスト<br>VerticalListSample|<img src="https://user-images.githubusercontent.com/20549024/76143701-f6dcb900-60bc-11ea-98bd-0d49d8a6d77d.png" width="300" height="auto"/>|<img src="https://user-images.githubusercontent.com/20549024/76143628-5d150c00-60bc-11ea-9a93-9541c55e8190.gif" width="500" height="auto"/>|
+|文字入力<br>InputFieldSample|<img src="https://user-images.githubusercontent.com/20549024/76143696-f5ab8c00-60bc-11ea-9d8f-9acf72188b8e.PNG" width="300" height="auto"/>|<img src="https://user-images.githubusercontent.com/20549024/76143624-5ab2b200-60bc-11ea-820a-b25755c6433c.gif" width="500" height="auto"/>|
+|トグル・ラジオボタン<br>ToggleGroupSample|<img src="https://user-images.githubusercontent.com/20549024/76143700-f6dcb900-60bc-11ea-9ea3-4af279919544.PNG" width="300" height="auto"/>|<img src="https://user-images.githubusercontent.com/20549024/76143627-5c7c7580-60bc-11ea-8a86-ae4890365330.gif" width="500" height="auto"/>|
+|スクロール<br>ScrollSample|<img src="https://user-images.githubusercontent.com/20549024/76143697-f6442280-60bc-11ea-9214-00ca42075c22.PNG" width="300" height="auto"/>|<img src="https://user-images.githubusercontent.com/20549024/76143626-5be3df00-60bc-11ea-8236-0838d1e575b0.gif" width="500" height="auto"/>|
+|テキストウィンドウ<br>WindowSample|<img src="https://user-images.githubusercontent.com/20549024/76143702-f7754f80-60bc-11ea-8c02-9cf9b46b77f2.PNG" width="300" height="auto"/>|<img src="https://user-images.githubusercontent.com/20549024/76143629-5dada280-60bc-11ea-80d5-541f8d97317a.gif" width="500" height="auto"/>|
+
 
 ## インストール
 
@@ -49,6 +63,10 @@
      - できた Prefab を Canvas 以下に配置します。
 
 ## ChangeLog
+
+### [v0.5] - 2020-03-07 
+- InputField 変換を整備
+- README_JP.md サンプル画像追加
 
 ### [v0.4] - 2020-03-04 
 - README.md 英語化
@@ -90,6 +108,7 @@
     - 出力画像は、指定が無い限りスライス処理されます。
 - 出力ファイルを Unity プロジェクト、XdUnityUI/Import フォルダに書き込むことで Unity でのコンバート処理が行われます。
 - 指定されたフォルダに Prefab と Sprite が出力されます。
+
 
 ### ルール説明
 

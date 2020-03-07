@@ -31,7 +31,7 @@ namespace XdUnityUI.Editor
             SetAnchor(go, renderer);
 
             var children = RenderChildren(renderer, go);
-            SetupChildImageComponent(go, children);
+            ElementUtil.SetupChildImageComponent(go, children);
 
             // DotsScrollberかどうかの判定に、Toggleがあるかどうかを確認する
             var toggleChild = children.Find(child => child.Item2 is ToggleElement);
@@ -48,7 +48,7 @@ namespace XdUnityUI.Editor
                 dotScrollbar.DotContainer = rect;
                 dotScrollbar.DotPrefab = toggleChild.Item1.GetComponent<Toggle>();
                 // Toggleボタンの並びレイアウト
-                SetupLayoutGroup(go, LayoutParam);
+                ElementUtil.SetupLayoutGroup(go, LayoutParam);
                 dotScrollbar.size = 1; // sizeを1にすることで、Toggleが複数Cloneされることをふせぐ
                 scrollbar = dotScrollbar;
             }
@@ -82,14 +82,14 @@ namespace XdUnityUI.Editor
             var handleClassName = _scrollbar.Get("handle_class");
             if (handleClassName != null)
             {
-                var found = children.Find(child => child.Item2.HasClassName(handleClassName));
+                var found = children.Find(child => child.Item2.HasParsedName(handleClassName));
                 if (found != null)
                 {
                     scrollbar.handleRect = found.Item1.GetComponent<RectTransform>();
                 }
             }
 
-            SetupContentSizeFitter(go, ContentSizeFitterParam);
+            ElementUtil.SetupContentSizeFitter(go, ContentSizeFitterParam);
             return go;
         }
 
