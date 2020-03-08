@@ -1,6 +1,6 @@
 # XdUnityUI
 
-![introduction](https://user-images.githubusercontent.com/20549024/75539439-8e0e9480-5a5d-11ea-8f92-520e6f7b0b3e.gif)
+![introduction](https://user-images.githubusercontent.com/20549024/76156453-0f40e800-613e-11ea-9923-59554aceae3c.gif)
 
 ## Language
 - [日本語](README_JP.md)
