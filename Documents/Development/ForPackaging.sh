@@ -3,7 +3,7 @@
 
 # Unity Assetsフォルダにあるsamples.xdをSampleXdフォルダにコピー
 echo "----- copy samples.xd -----"
-cp UnityProject/Assets/I0plus/XdUnityUI/ForAdobeXD/samples.xd ./SampleXd/samples.xd
+cp UnityProject/Assets/I0plus/XdUnityUI/ForAdobeXD/samples.xd ./XdPlugin/SampleXd/samples.xd
 echo "done.\n"
 
 # AdobeXD developフォルダにあるプラグインソースをリポジトリに同期
