@@ -3682,6 +3682,7 @@ function h(tag, props, ...children) {
   let element = document.createElement(tag)
   if (props) {
     if (props.nodeType || typeof props !== 'object') {
+      // 例えばTextであったりした場合、処理をchildrenに回す
       children.unshift(props)
     } else {
       for (const name in props) {
@@ -3696,9 +3697,14 @@ function h(tag, props, ...children) {
     }
   }
   for (let child of children) {
-    element.appendChild(
-      typeof child === 'object' ? child : document.createTextNode(child),
-    )
+    // 子供がTextであった場合、spanで作成する
+    if (typeof child === 'object') {
+      element.appendChild(child)
+    } else {
+      let e = document.createElement('span')
+      e.innerHTML = child
+      element.appendChild(e)
+    }
   }
   return element
 }
@@ -3710,7 +3716,7 @@ function h(tag, props, ...children) {
  */
 async function alert(message, title) {
   if (title == null) {
-    title = 'XdUnityUI Export'
+    title = 'XdUnityUI export'
   }
   let dialog = h(
     'dialog',
@@ -3724,7 +3730,7 @@ async function alert(message, title) {
       },
       h('h1', title),
       h('hr'),
-      h('span', message),
+      h('div', message),
       h(
         'footer',
         h(
@@ -3786,6 +3792,17 @@ async function exportXdUnityUICommand(selection, root) {
   let checkCheckMarkedForExport
   let checkAllArtboard
   let checkChangeContentOnly
+
+  const divStyle = {
+    style: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      //alignItems: 'middle',
+      //verticalAlign: 'middle',
+      //textAlign: 'middle',
+      //justifyContent: "space-between",
+    },
+  }
   let dialog = h(
     'dialog',
     h(
@@ -3793,24 +3810,17 @@ async function exportXdUnityUICommand(selection, root) {
       {
         method: 'dialog',
         style: {
-          width: 400,
+          width: 500,
         },
       },
-      h('h1', 'XdUnityUI Export'),
+      h('h1', 'XdUnityUI export'),
       h('hr'),
       h(
         'label',
-        {
-          style: {
-            flexDirection: 'row',
-            alignItems: 'center',
-          },
-        },
-        h('span', 'Folder'),
+        divStyle,
+        h('span','Output folder'),
         (inputFolder = h('input', {
-          style: {
-            width: '60%',
-          },
+          width: 280,
           readonly: true,
           border: 0,
         })),
@@ -3828,81 +3838,53 @@ async function exportXdUnityUICommand(selection, root) {
           '...',
         ),
       ),
+      h("br"),
       h(
         'label',
-        {
-          style: {
-            flexDirection: 'row',
-            alignItems: 'center',
-          },
-        },
-        h('span', 'Scale'),
+        divStyle,
+        'Scale',
         (inputScale = h('input', {
           value: '4.0',
         })),
       ),
+      h("br"),
       h(
         'label',
-        {
-          style: {
-            flexDirection: 'row',
-            alignItems: 'center',
-          },
-        },
+        divStyle,
         (checkAllArtboard = h('input', {
           type: 'checkbox',
         })),
-        h('span', getString(strings.ExportDialogOptionAllArtboard)),
+        getString(strings.ExportDialogOptionAllArtboard),
       ),
+      h("br"),
       h(
         'label',
-        {
-          style: {
-            flexDirection: 'row',
-            alignItems: 'center',
-          },
-        },
+        divStyle,
         (checkCheckMarkedForExport = h('input', {
           type: 'checkbox',
         })),
-        h('span', getString(strings.ExportDialogOptionCheckExportMark)),
+        getString(strings.ExportDialogOptionCheckExportMark),
       ),
+      h("br"),
       h(
         'label',
-        {
-          style: {
-            flexDirection: 'row',
-            alignItems: 'center',
-          },
-        },
+        divStyle,
         (checkImageNoExport = h('input', {
           type: 'checkbox',
         })),
-        h('span', getString(strings.ExportDialogOptionNotExportImage)),
+        getString(strings.ExportDialogOptionNotExportImage),
       ),
+      h("br"),
       h(
         'label',
-        {
-          style: {
-            flexDirection: 'row',
-            alignItems: 'center',
-          },
-        },
+        divStyle,
         (checkChangeContentOnly = h('input', {
           type: 'checkbox',
         })),
-        h('span', getString(strings.ExportDialogOptionOnlyCssChangeContent)),
+        getString(strings.ExportDialogOptionOnlyCssChangeContent),
       ),
-      (errorLabel = h(
-        'label',
-        {
-          style: {
-            alignItems: 'center',
-            color: '#f00',
-          },
-        },
-        '',
-      )),
+      h("br"),
+      (errorLabel = h('div', divStyle, '')),
       h(
         'footer',
         h(
@@ -3978,9 +3960,7 @@ async function exportXdUnityUICommand(selection, root) {
   } else {
     const node = await getExportNodeFromSelection(selection)
     if (!node) {
-      await alert(
-        '選択条件\n・選択は１つ\n・出力アートボード直下\n・ロックされていない\n',
-      )
+      await alert(getString(strings.ExportErrorSelection))
       throw 'Selected node is not immediate child.'
     }
     let parent = node.parent

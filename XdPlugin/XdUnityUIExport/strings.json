@@ -1,7 +1,11 @@
 {
   "ExportError": {
-    "en": "Image output failed.\n- Write destination problem (security etc.)\n- Path name is too long\n- Image size is 0px\n- XD Status,Image cannot be output.(try export image.)",
-    "ja": "画像の出力に失敗しました\n以下のような可能性があります\n・書き込み先の問題(セキュリティ等)\n・パス名が長すぎる\n・イメージサイズが0px\n・画像出力ができない状態(参考:https://bit.ly/38mU9vY)"
+    "en": "Image output failed.<br/>- Write destination problem (security etc.)<br/>- Path name is too long<br/>- Image size is 0px<br/>- XD Status,Image cannot be output.(try export image.)",
+    "ja": "画像の出力に失敗しました<br>以下のような可能性があります<br/>・書き込み先の問題(セキュリティ等)<br/>・パス名が長すぎる<br/>・イメージサイズが0px<br/>・画像出力ができない状態(<a href='https://bit.ly/38mU9vY'>参考</a>)"
+  },
+  "ExportErrorSelection": {
+    "en": "Make the following selections: <br/>-One layer immediate child of the output artboard <br/>-Not locked",
+    "ja": "以下のような選択をしてください<br/>・出力アートボード直下のレイヤーを1つ<br/>・ロックされていない"
   },
   "ExportDialogOptionAllArtboard": {
     "en": "Export all artboards.",
@@ -16,7 +20,7 @@
     "ja": "イメージは出力しない"
   },
   "ExportDialogOptionOnlyCssChangeContent": {
-    "en": "Only change content with CSS.",
-    "ja": "CSSによるコンテンツの変更のみ実行"
+    "en": "(experimental) Only change content with CSS.",
+    "ja": "(experimental) CSSによるコンテンツの変更のみ実行"
   }
 }
