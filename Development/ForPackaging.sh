@@ -13,7 +13,7 @@ echo "done.\n"
 
 # リポジトリ内から AdobeXDプラグインファイルを作成する
 echo "----- make AdobeXD plugin .xdx file. -----"
-zip ./XdPlugin/XdUnityUIExport.xdx ./XdPlugin/XdUnityUIExport
+(cd ./XdPlugin && zip -r XdUnityUIExport.xdx XdUnityUIExport)
 echo "done.\n"
 
 # AdobeXDプラグインをUnityプロジェクト内にコピーする

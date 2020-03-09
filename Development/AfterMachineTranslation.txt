@@ -22,6 +22,11 @@ $1 $2
  "width =" 500 "height =" auto "
 " width="500" height="auto" 
 
+○ HTMLの修正
+<img src =" https
+<img src ="https
+
+
 ○ToggleGroupSample手で修正
 
 
@@ -31,19 +36,15 @@ $1 $2
 
 ○ バックスラッシュとアンダーバーの間にスペースがある
 \\ _
-\\_
+\_
 
 ○ リンクの修正
 1.https: //github.com/itouh2-i0plus/XdUnityUI/releases
-1.　https://github.com/itouh2-i0plus/XdUnityUI/releases
+1. https://github.com/itouh2-i0plus/XdUnityUI/releases
 
 ○ Theの削除
-         1. ###### The/Assets/I0plus/XdUnityUI folder is created
-         1. /Assets/I0plus/XdUnityUI folder is created
-
-○ 改行の修正
-1. Launch AdobeXD plugin
-     1. In the artboard Tes
+The/Assets/I0plus/XdUnityUI
+/Assets/I0plus/XdUnityUI
 
 ○ イメージリンクの修正(最後にやると表示がおもくならなくて良い)
 
