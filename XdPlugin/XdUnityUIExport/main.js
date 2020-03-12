@@ -3571,6 +3571,7 @@ async function exportXdUnityUI(roots, outputFolder) {
   globalResponsiveBounds = {}
 
   for (let root of roots) {
+    console.log(`root-node:${root.name} -------`)
     globalCssRules = await loadCssRules(
       await fs.getPluginFolder(),
       'xd-unity.css',
@@ -3585,9 +3586,9 @@ async function exportXdUnityUI(roots, outputFolder) {
         globalCssRules = globalCssRules.concat(artboardCssRoles)
       }
     } catch (e) {
-      console.log(`***error ${artboardCssFilename}の読み込みに失敗しました`)
-      console.log(e.message)
-      console.log(e.stack)
+      console.log(`***error failed to load: ${artboardCssFilename}`)
+      //console.log(e.message)
+      //console.log(e.stack)
     }
     globalCssVars = createCssVars(globalCssRules)
 
@@ -3995,6 +3996,9 @@ async function exportXdUnityUICommand(selection, root) {
     // 全てのアートボードが出力対象になっているか確認
     if (checkAllArtboard.checked) {
       root.children.forEach(node => {
+        if( checkCheckMarkedForExport.checked && !node.markedForExport) {
+          return;
+        }
         exportRoots.push(node)
       })
     } else {
