@@ -66,8 +66,10 @@ namespace XdUnityUI.Editor
             // TextureUtil.SliceSprite(fullName);
             var unityPath = EditorUtil.ToUnityPath(fullName);
             var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(unityPath);
-            Assert.IsNotNull(sprite,
-                $"[XdUnityUI] sprite \"{fileInfo.FullName}\" is not found fullPath:{fullName}");
+            if (sprite == null)
+            {
+                Debug.LogError($"[XdUnityUI] sprite \"{fileInfo.FullName}\" is not found.");
+            }
             return sprite;
         }
 
