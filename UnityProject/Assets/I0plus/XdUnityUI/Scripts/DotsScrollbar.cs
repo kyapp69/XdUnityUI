@@ -2,6 +2,7 @@
  * @author Kazuma Kuwabara
  */
 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -177,10 +178,24 @@ namespace Baum2
                 dots[i].SetIsOnWithoutNotify(i == step);
         }
 
+        private bool scrolling = false;
+        private IEnumerator ChangeValue(float targetValue)
+        {
+            scrolling = true;
+            var nowValue = value;
+            for (float i = 1; i <= 10; i++)
+            {
+                value = nowValue + (targetValue-nowValue) * (i/10);
+                yield return null;
+            }
+            scrolling = false;
+        }
+
         private void OnToggleValueChange(bool input)
         {
+            if (scrolling) return;
             var step = dots.FindIndex(x => x.isOn);
-            value = step / (dots.Count - 1.0f);
+            StartCoroutine(ChangeValue(step / (dots.Count - 1.0f)));
         }
 
 #if UNITY_EDITOR
