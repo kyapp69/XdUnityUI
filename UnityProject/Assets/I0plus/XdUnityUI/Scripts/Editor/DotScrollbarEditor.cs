@@ -7,7 +7,7 @@ namespace XdUnityUI.Editor
     /// <summary>
     /// @author Kazuma Kuwabara
     /// </summary>
-    [CustomEditor(typeof(DotScrollbar), true)]
+    [CustomEditor(typeof(DotsScrollbar), true)]
     public sealed class DotScrollbarEditor : ScrollbarEditor
     {
         private SerializedProperty dotContainer;

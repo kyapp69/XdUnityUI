@@ -2,6 +2,7 @@
  * @author Kazuma Kuwabara
  */
 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +10,7 @@ using UnityEngine.UI;
 namespace Baum2
 {
     [RequireComponent(typeof(ToggleGroup))]
-    public sealed class DotScrollbar : Scrollbar
+    public sealed class DotsScrollbar : Scrollbar
     {
         [SerializeField] private Transform dotContainer = default;
 
@@ -84,7 +85,7 @@ namespace Baum2
             SetupHandleRect();
 
             if (!IsValid)
-                Debug.unityLogger.LogWarning(nameof(DotScrollbar), $"Invalid Serialize Field");
+                Debug.unityLogger.LogWarning(nameof(DotsScrollbar), $"Invalid Serialize Field");
         }
 
         private void SetupDotContainer()
@@ -177,10 +178,24 @@ namespace Baum2
                 dots[i].SetIsOnWithoutNotify(i == step);
         }
 
+        private bool scrolling = false;
+        private IEnumerator ChangeValue(float targetValue)
+        {
+            scrolling = true;
+            var nowValue = value;
+            for (float i = 1; i <= 10; i++)
+            {
+                value = nowValue + (targetValue-nowValue) * (i/10);
+                yield return null;
+            }
+            scrolling = false;
+        }
+
         private void OnToggleValueChange(bool input)
         {
+            if (scrolling) return;
             var step = dots.FindIndex(x => x.isOn);
-            value = step / (dots.Count - 1.0f);
+            StartCoroutine(ChangeValue(step / (dots.Count - 1.0f)));
         }
 
 #if UNITY_EDITOR
@@ -214,7 +229,7 @@ namespace Baum2
         [UnityEditor.MenuItem("CONTEXT/DotScrollbar/Reset dot instances")]
         private static void ClearDotInstances(UnityEditor.MenuCommand menuCommand)
         {
-            var self = menuCommand.context as DotScrollbar;
+            var self = menuCommand.context as DotsScrollbar;
             if (self != null)
                 self.ClearDotInstances();
         }
