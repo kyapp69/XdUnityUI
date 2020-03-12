@@ -43,7 +43,7 @@ namespace XdUnityUI.Editor
             else
             {
                 // DotScrollbarとなる
-                var dotScrollbar = go.AddComponent<DotScrollbar>();
+                var dotScrollbar = go.AddComponent<DotsScrollbar>();
                 dotScrollbar.isAutoLayoutEnableOnEditMode = false;
                 dotScrollbar.DotContainer = rect;
                 dotScrollbar.DotPrefab = toggleChild.Item1.GetComponent<Toggle>();

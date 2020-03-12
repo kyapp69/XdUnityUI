@@ -10,7 +10,7 @@ using UnityEngine.UI;
 namespace Baum2
 {
     [RequireComponent(typeof(ToggleGroup))]
-    public sealed class DotScrollbar : Scrollbar
+    public sealed class DotsScrollbar : Scrollbar
     {
         [SerializeField] private Transform dotContainer = default;
 
@@ -85,7 +85,7 @@ namespace Baum2
             SetupHandleRect();
 
             if (!IsValid)
-                Debug.unityLogger.LogWarning(nameof(DotScrollbar), $"Invalid Serialize Field");
+                Debug.unityLogger.LogWarning(nameof(DotsScrollbar), $"Invalid Serialize Field");
         }
 
         private void SetupDotContainer()
@@ -229,7 +229,7 @@ namespace Baum2
         [UnityEditor.MenuItem("CONTEXT/DotScrollbar/Reset dot instances")]
         private static void ClearDotInstances(UnityEditor.MenuCommand menuCommand)
         {
-            var self = menuCommand.context as DotScrollbar;
+            var self = menuCommand.context as DotsScrollbar;
             if (self != null)
                 self.ClearDotInstances();
         }
