@@ -4,5 +4,5 @@ FILE=$1
 
 FILENAME=`echo ${FILE} | sed 's/\.[^\.]*$//'`
 echo ${FILENAME}
-${FFMPEG} -i ${FILENAME}.mp4 -filter_complex "[0:v] fps=15,split [a][b];[a] palettegen [p];[b][p] paletteuse" ${FILENAME}.gif -y
+${FFMPEG} -i ${FILENAME}.mp4 -filter_complex "[0:v] fps=15,scale=64:64,split [a][b];[a] palettegen [p];[b][p] paletteuse" ${FILENAME}-64x64.gif -y
 

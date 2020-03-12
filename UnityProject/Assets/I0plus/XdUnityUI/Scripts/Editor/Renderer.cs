@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine.UI;
 #if TMP_PRESENT
 using TMPro;
+
 #endif
 
 namespace XdUnityUI.Editor
@@ -65,8 +66,10 @@ namespace XdUnityUI.Editor
             // TextureUtil.SliceSprite(fullName);
             var unityPath = EditorUtil.ToUnityPath(fullName);
             var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(unityPath);
-            Assert.IsNotNull(sprite,
-                $"[XdUnityUI] sprite \"{fileInfo.FullName}\" is not found fullPath:{fullName}");
+            if (sprite == null)
+            {
+                Debug.LogError($"[XdUnityUI] sprite \"{fileInfo.FullName}\" is not found.");
+            }
             return sprite;
         }
 
@@ -84,7 +87,11 @@ namespace XdUnityUI.Editor
         {
             var fontFileName = Path.Combine(fontRootPath, fontName) + "-" + style + " SDF.asset";
             var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(fontFileName);
-            Assert.IsNotNull(font, string.Format("[XdUnityUI] TMP_FontAsset \"{0}\" is not found", fontFileName));
+            if (font == null)
+            {
+                Debug.LogError(string.Format($"[XdUnityUI] TMP_FontAsset {fontFileName} is not found"));
+            }
+
             return font;
         }
 #endif

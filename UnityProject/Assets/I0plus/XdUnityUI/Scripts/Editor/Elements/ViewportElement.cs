@@ -84,7 +84,7 @@ namespace XdUnityUI.Editor
 
             ElementUtil.SetupRectMask2D(go, RectMask2DParam);
             // ScrollRectを設定した時点ではみでたContentがアジャストされる　PivotがViewport内に入っていればOK
-            SetupScrollRect(go, goContent, _scrollRect);
+            ElementUtil.SetupScrollRect(go, goContent, _scrollRect);
 
             return go;
         }
@@ -120,36 +120,6 @@ namespace XdUnityUI.Editor
             });
         }
 
-
-        /**
-         * Scrollオブションの対応
-         * ViewportとContentを結びつける
-         */
-        private static void SetupScrollRect(GameObject goViewport, GameObject goContent,
-            Dictionary<string, object> scrollRect)
-        {
-            if (scrollRect == null)
-            {
-                return;
-            }
-
-            var scrollRectComponent = goViewport.AddComponent<ScrollRect>();
-            scrollRectComponent.content = goContent.GetComponent<RectTransform>(); // Content
-            scrollRectComponent.viewport = goViewport.GetComponent<RectTransform>(); // 自分自身がViewportになる
-            scrollRectComponent.vertical = false;
-            scrollRectComponent.horizontal = false;
-
-            bool? b;
-            if ((b = scrollRect.GetBool("horizontal")) != null)
-            {
-                scrollRectComponent.horizontal = b.Value;
-            }
-
-            if ((b = scrollRect.GetBool("vertical")) != null)
-            {
-                scrollRectComponent.vertical = b.Value;
-            }
-        }
 
         public override Area CalcArea()
         {

@@ -25,6 +25,7 @@
   image: true;
 }
 
+
 /*
  リピードグリッドの子は、Layout-elementを持つ
  */
@@ -251,4 +252,9 @@
   input-target-graphic-name: ".target-image"; /* ONのときのチェック画像 */
   input-text-component-name: ".text";
   input-placeholder-name: ".placeholder";
+}
+
+.mask-image {
+  image: true;
+  component: true;
 }
