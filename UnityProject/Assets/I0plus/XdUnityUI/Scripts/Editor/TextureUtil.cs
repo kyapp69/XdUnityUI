@@ -107,7 +107,7 @@ namespace XdUnityUI.Editor
             if (imageHashMap.ContainsKey(hashStr))
             {
                 var name = imageHashMap[hashStr];
-                Debug.Log($"この画像は同じものがあります{newPath}=={name}");
+                Debug.Log($"shared texture {Path.GetFileName(newPath)}=={Path.GetFileName(name)}");
                 imagePathMap[newPath] = name;
                 return "shared texture";
             }

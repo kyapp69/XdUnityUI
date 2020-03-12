@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine.UI;
 #if TMP_PRESENT
 using TMPro;
+
 #endif
 
 namespace XdUnityUI.Editor
@@ -84,7 +85,11 @@ namespace XdUnityUI.Editor
         {
             var fontFileName = Path.Combine(fontRootPath, fontName) + "-" + style + " SDF.asset";
             var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(fontFileName);
-            Assert.IsNotNull(font, string.Format("[XdUnityUI] TMP_FontAsset \"{0}\" is not found", fontFileName));
+            if (font == null)
+            {
+                Debug.LogError(string.Format($"[XdUnityUI] TMP_FontAsset {fontFileName} is not found"));
+            }
+
             return font;
         }
 #endif

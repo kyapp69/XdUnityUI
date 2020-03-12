@@ -169,6 +169,7 @@ const STYLE_VIEWPORT = 'viewport'
 const STYLE_VIEWPORT_CREATE_CONTENT = 'viewport-create-content'
 const STYLE_V_ALIGN = 'v-align' //テキストの縦方向のアライメント XDの設定に追記される
 const STYLE_ADD_COMPONENT = 'add-component'
+const STYLE_MASK = 'mask'
 
 const appLanguage = application.appLanguage
 
@@ -518,10 +519,10 @@ class GlobalBounds {
   constructor(node) {
     this.visible = node.visible
     this.bounds = getGlobalDrawBounds(node) // TODO: あいまいに使用されているため削除する
-    this.virtual_global_draw_bounds = this.global_draw_bounds = getGlobalDrawBounds(
-      node,
-    )
-    this.virtual_global_bounds = this.global_bounds = getGlobalBounds(node)
+    this.global_draw_bounds = getGlobalDrawBounds(node)
+    this.global_bounds = getGlobalBounds(node)
+    this.masked_global_draw_bounds = null
+    this.masked_global_bounds = null
     if (node.mask) {
       //** @type {Group}
       let group = node
@@ -538,8 +539,8 @@ class GlobalBounds {
         childrenCalcBounds.addBounds(node.globalBounds)
         childrenCalcDrawBounds.addBounds(node.globalDrawBounds)
       })
-      this.virtual_global_bounds = childrenCalcBounds.bounds
-      this.virtual_global_draw_bounds = childrenCalcDrawBounds.bounds
+      this.masked_global_bounds = childrenCalcBounds.bounds
+      this.masked_global_draw_bounds = childrenCalcDrawBounds.bounds
     }
   }
 }
@@ -1339,13 +1340,13 @@ function calcRectTransform(node, hashBounds, calcDrawBounds = true) {
 
   const parentBounds = hashBounds[node.parent.guid]
   if (!parentBounds || !parentBounds.before || !parentBounds.after) return null
-  //virtual_global_boundsは、親がマスク持ちグループである場合、グループ全体のBoundsになる
+  //masked_global_boundsは、親がマスク持ちグループである場合、グループ全体のBoundsになる
   const parentBeforeBounds = calcDrawBounds
-    ? parentBounds.before.virtual_global_draw_bounds
-    : parentBounds.before.virtual_global_bounds
+    ? parentBounds.before.global_draw_bounds
+    : parentBounds.before.global_bounds
   const parentAfterBounds = calcDrawBounds
-    ? parentBounds.after.virtual_global_draw_bounds
-    : parentBounds.after.virtual_global_bounds
+    ? parentBounds.after.global_draw_bounds
+    : parentBounds.after.global_bounds
 
   // fix を取得するため
   // TODO: anchor スタイルのパラメータはとるべきでは
@@ -1376,9 +1377,6 @@ function calcRectTransform(node, hashBounds, calcDrawBounds = true) {
   // console.log(beforeBounds.width, afterBounds.width)
   if (styleFixWidth == null) {
     styleFixWidth = approxEqual(beforeBounds.width, afterBounds.width, 0.001)
-    console.log('-----------width----------------', calcDrawBounds)
-    console.log(node.name)
-    console.log(beforeBounds.width, afterBounds.width)
   }
 
   if (styleFixLeft == null) {
@@ -1551,6 +1549,7 @@ function calcRectTransform(node, hashBounds, calcDrawBounds = true) {
 
   if (
     style.hasValue(STYLE_MARGIN_FIX, 'c', 'center') ||
+    // 横幅が固定され、左右も固定されている
     (styleFixWidth === true && styleFixLeft === true && styleFixRight === true)
   ) {
     const beforeCenter = beforeBounds.x + beforeBounds.width / 2
@@ -1564,15 +1563,17 @@ function calcRectTransform(node, hashBounds, calcDrawBounds = true) {
   }
 
   if (
-    style.hasValue(STYLE_MARGIN_FIX, 'm', 'middle')
-    //|| (styleFixHeight === true && styleFixTop === true && styleFixBottom === true)
+    style.hasValue(STYLE_MARGIN_FIX, 'm', 'middle') ||
+    // 横幅が固定され、左右も固定されている
+    (styleFixHeight === true && styleFixTop === true && styleFixBottom === true)
   ) {
-    const middle = beforeBounds.y + beforeBounds.height / 2
-    const parentMiddle = parentBeforeBounds.y + parentBeforeBounds.height / 2
+    const beforeMiddle = beforeBounds.y + beforeBounds.height / 2
+    const parentBeforeMiddle =
+      parentBeforeBounds.y + parentBeforeBounds.height / 2
     anchorMin.y = anchorMax.y =
-      (middle - parentMiddle) / (parentBeforeBounds.height / 2) + 0.5
-    offsetMin.y = -(middle - parentMiddle) - beforeBounds.height / 2
-    offsetMax.y = -(middle - parentMiddle) + beforeBounds.height / 2
+      -(beforeMiddle - parentBeforeMiddle) / parentBeforeBounds.height + 0.5
+    offsetMin.y = -beforeBounds.height / 2
+    offsetMax.y = +beforeBounds.height / 2
   }
 
   return {
@@ -2083,6 +2084,20 @@ function addCanvasGroup(json, node, style) {
 }
 
 /**
+ * add Mask component info
+ * @param json
+ * @param style
+ */
+function addMask(json, style) {
+  let mask = style ? style.first(STYLE_MASK) : null
+  if (!style || mask) {
+    Object.assign(json, {
+      mask: { show_mask_graphic: false },
+    })
+  }
+}
+
+/**
  * 指定のAnchorパラメータを設定する
  * @param json
  * @param style
@@ -2244,7 +2259,8 @@ async function addImage(json, node, root, outputFolder, renditions) {
 
   let hashStringLength = 5
   // ファイル名が長すぎるとエラーになる可能性もある
-  let fileName = convertToFileName(parentName + '+' + node_name, true)
+  // let fileName = convertToFileName(parentName + "+" + node_name, true)
+  let fileName = convertToFileName(node_name, true)
   while (true) {
     const guidStr = '+' + node.guid.slice(0, hashStringLength)
     // すでに同じものがあるか検索
@@ -2379,6 +2395,13 @@ async function addImage(json, node, root, outputFolder, renditions) {
       const file = await outputFolder.createFile(fileName + fileExtension, {
         overwrite: true,
       })
+
+      // mask イメージを出力する場合、maskをそのままRenditionできないため
+      // Maskグループそのものイメージを出力している
+      if (renditionNode.parent && renditionNode.parent.mask == renditionNode) {
+        renditionNode = renditionNode.parent
+      }
+
       renditions.push({
         fileName: fileName,
         node: renditionNode,
@@ -2887,14 +2910,15 @@ async function createGroup(json, node, root, funcForEachChild) {
   Object.assign(json, {
     type: type,
     name: getUnityName(node),
-    x: boundsCM.cx, // Baum2では使わないが､　VGROUPなど､レイアウトの情報としてもつ
-    y: boundsCM.cy, // Baum2では使わないが､ VGroupなど､レイアウトの情報としてもつ
-    w: boundsCM.width, // Baum2ではつかわないが､情報としていれる RectElementで使用
-    h: boundsCM.height, // Baum2ではつかわないが､情報としていれる RectElementで使用
+    x: boundsCM.cx, // XdUnityUIでは使わないが､　VGROUPなど､レイアウトの情報としてもつ
+    y: boundsCM.cy, // XdUnityUIでは使わないが､ VGroupなど､レイアウトの情報としてもつ
+    w: boundsCM.width, // XdUnityUIではつかわないが､情報としていれる RectElementで使用
+    h: boundsCM.height, // XdUnityUIではつかわないが､情報としていれる RectElementで使用
     elements: [], // Groupは空でもelementsをもっていないといけない
   })
   await funcForEachChild()
 
+  // おそらく以下のコードはつかわれていない
   const styleAddContent = style.first('add-content')
   if (styleAddContent) {
     const sourceNode = searchNode(styleAddContent)
@@ -2904,6 +2928,10 @@ async function createGroup(json, node, root, funcForEachChild) {
     duplicated.removeFromParent()
     nodeGroup.addChildAfter(duplicated, nodeGroup.children.at(0))
     SetGlobalBounds(duplicated, nodeBounds)
+  }
+
+  if (node.mask) {
+    addMask(json)
   }
 
   // 基本
@@ -3818,7 +3846,7 @@ async function exportXdUnityUICommand(selection, root) {
       h(
         'label',
         divStyle,
-        h('span','Output folder'),
+        h('span', 'Output folder'),
         (inputFolder = h('input', {
           width: 280,
           readonly: true,
@@ -3838,7 +3866,7 @@ async function exportXdUnityUICommand(selection, root) {
           '...',
         ),
       ),
-      h("br"),
+      h('br'),
       h(
         'label',
         divStyle,
@@ -3847,7 +3875,7 @@ async function exportXdUnityUICommand(selection, root) {
           value: '4.0',
         })),
       ),
-      h("br"),
+      h('br'),
       h(
         'label',
         divStyle,
@@ -3856,7 +3884,7 @@ async function exportXdUnityUICommand(selection, root) {
         })),
         getString(strings.ExportDialogOptionAllArtboard),
       ),
-      h("br"),
+      h('br'),
       h(
         'label',
         divStyle,
@@ -3865,7 +3893,7 @@ async function exportXdUnityUICommand(selection, root) {
         })),
         getString(strings.ExportDialogOptionCheckExportMark),
       ),
-      h("br"),
+      h('br'),
       h(
         'label',
         divStyle,
@@ -3874,7 +3902,7 @@ async function exportXdUnityUICommand(selection, root) {
         })),
         getString(strings.ExportDialogOptionNotExportImage),
       ),
-      h("br"),
+      h('br'),
       h(
         'label',
         divStyle,
@@ -3883,7 +3911,7 @@ async function exportXdUnityUICommand(selection, root) {
         })),
         getString(strings.ExportDialogOptionOnlyCssChangeContent),
       ),
-      h("br"),
+      h('br'),
       (errorLabel = h('div', divStyle, '')),
       h(
         'footer',
@@ -4243,7 +4271,7 @@ class CssSelector {
   }
 
   /**
-   * @param {{name:string, parent:*}} node
+   * @param {{name:string, parent:*}} node マスクチェックのために node.maskとすることがある
    * @param {{type:string, classNames:string[], id:string, tagName:string, attrs:*[], pseudos:*[], nestingOperator:string, rule:*, selectors:*[] }|null} rule
    * @return {boolean}
    */
@@ -4252,7 +4280,7 @@ class CssSelector {
     const nodeName = node.name.trim()
     const parsedNodeName = parseNodeName(nodeName)
     if (verboseLog) {
-      console.log('ルール check ----------')
+      console.log('rule check ----------')
       console.log(node)
       console.log(parsedNodeName)
       console.log('以下のruleと照らし合わせる')
@@ -4330,6 +4358,10 @@ class CssSelector {
             )
               return false
             break
+          }
+          // maskをもっているか判定
+          case 'mask': {
+            return !!node.mask
           }
           default:
             console.log('***error 未対応の要素名です:', attr.name)
@@ -4430,10 +4462,40 @@ async function testParse(selection, root) {
   console.log(result)
 }
 
+
+/**
+ * 全てのInteractionと、選択にあるTriggeredInteractionsを取得する プラグイン
+ * manifest.json uiEntryPointsに以下を追加する
+ * {
+ *     "type": "menu",
+ *     "label": "get interactions",
+ *     "commandId": "getInteractionsCommand"
+ * }
+ * @param {Selection} selection
+ * @param {RootNode} root
+ * @return {Promise<void>}
+ */
+async function getInteractionsCommand(selection, root) {
+  let allInteractions = require("interactions").allInteractions;
+  console.log(allInteractions)
+
+  let node = selection.items[0]
+  if(node) {
+    // Print all the interactions triggered by a node
+    node.triggeredInteractions.forEach(interaction => {
+      console.log("Trigger: " + interaction.trigger.type + " -> Action: " + interaction.action.type);
+    });
+  }
+  console.log("done.")
+}
+
+
+
 module.exports = {
   // コマンドIDとファンクションの紐付け
   commands: {
     exportXdUnityUICommand: exportXdUnityUICommand,
+    getInteractionsCommand: getInteractionsCommand,
     /*
     addResponsiveParam: pluginResponsiveParamName,
     addImageSizeFix: pluginAddImageSizeFix,
