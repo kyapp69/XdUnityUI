@@ -164,12 +164,12 @@ namespace XdUnityUI.Editor
                 var verticalFit = contentSizeFitter.Get("vertical_fit");
                 if (verticalFit.Contains("preferred"))
                 {
-                    componentContentSizeFitter.verticalFit = UnityEngine.UI.ContentSizeFitter.FitMode.PreferredSize;
+                    componentContentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
                 }
 
                 if (verticalFit.Contains("min"))
                 {
-                    componentContentSizeFitter.verticalFit = UnityEngine.UI.ContentSizeFitter.FitMode.MinSize;
+                    componentContentSizeFitter.verticalFit = ContentSizeFitter.FitMode.MinSize;
                 }
             }
 
@@ -178,12 +178,12 @@ namespace XdUnityUI.Editor
                 var verticalFit = contentSizeFitter.Get("horizontal_fit");
                 if (verticalFit.Contains("preferred"))
                 {
-                    componentContentSizeFitter.horizontalFit = UnityEngine.UI.ContentSizeFitter.FitMode.PreferredSize;
+                    componentContentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
                 }
 
                 if (verticalFit.Contains("min"))
                 {
-                    componentContentSizeFitter.horizontalFit = UnityEngine.UI.ContentSizeFitter.FitMode.MinSize;
+                    componentContentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.MinSize;
                 }
             }
 
@@ -623,6 +623,53 @@ namespace XdUnityUI.Editor
             if (param != null && param.Value)
             {
                 go.AddComponent<RectMask2D>(); // setupMask
+            }
+        }
+        
+        public static void SetupMask(GameObject go, Dictionary<string, object> param)
+        {
+            if (param != null)
+            {
+                var mask = go.AddComponent<Mask>(); // setupMask
+                var showMaskGraphic = param.GetBool("show_mask_graphic");
+                if (showMaskGraphic != null)
+                {
+                    mask.showMaskGraphic = showMaskGraphic.Value;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Scrollオブションの対応
+        /// ViewportとContentを結びつける  
+        /// </summary>
+        /// <param name="goViewport"></param>
+        /// <param name="goContent"></param>
+        /// <param name="scrollRect"></param>
+        public static void SetupScrollRect(GameObject goViewport, GameObject goContent,
+            Dictionary<string, object> scrollRect)
+        {
+            if (scrollRect == null)
+            {
+                return;
+            }
+
+            var scrollRectComponent = goViewport.AddComponent<ScrollRect>();
+            scrollRectComponent.content = goContent.GetComponent<RectTransform>(); // Content
+            scrollRectComponent.viewport = goViewport.GetComponent<RectTransform>(); // 自分自身がViewportになる
+            scrollRectComponent.vertical = false;
+            scrollRectComponent.horizontal = false;
+
+            bool? b;
+            if ((b = scrollRect.GetBool("horizontal")) != null)
+            {
+                scrollRectComponent.horizontal = b.Value;
+            }
+
+            if ((b = scrollRect.GetBool("vertical")) != null)
+            {
+                scrollRectComponent.vertical = b.Value;
             }
         }
     }

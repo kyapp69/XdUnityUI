@@ -19,6 +19,7 @@ namespace XdUnityUI.Editor
         protected Dictionary<string, object> LayoutParam;
         protected Dictionary<string, object> ContentSizeFitterParam;
         protected Dictionary<string, object> LayoutElementParam;
+        protected Dictionary<string, object> MaskParam;
         protected bool? RectMask2DParam;
         protected string FillColorParam;
         protected Dictionary<string, object> addComponentJson;
@@ -40,6 +41,7 @@ namespace XdUnityUI.Editor
             LayoutParam = json.GetDic("layout");
             ContentSizeFitterParam = json.GetDic("content_size_fitter");
             LayoutElementParam = json.GetDic("layout_element");
+            MaskParam = json.GetDic("mask");
             RectMask2DParam = json.GetBool("rect_mask_2d");
             FillColorParam = json.Get("fill_color");
             addComponentJson = json.GetDic("add_component");
@@ -67,6 +69,7 @@ namespace XdUnityUI.Editor
             ElementUtil.SetupLayoutGroup(go, LayoutParam);
             ElementUtil.SetupLayoutElement(go, LayoutElementParam);
             ElementUtil.SetupComponents(go, componentsJson);
+            ElementUtil.SetupMask(go, MaskParam);
 
             SetAnchor(go, renderer);
             return go;
@@ -82,7 +85,7 @@ namespace XdUnityUI.Editor
             //rect.sizeDelta = area.Size;
             //rect.anchoredPosition = renderer.CalcPosition(area.Min, area.Size);
 
-            SetMaskImage(renderer, go);
+            //SetMaskImage(renderer, go);
             return go;
         }
 
