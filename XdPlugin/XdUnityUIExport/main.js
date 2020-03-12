@@ -3679,6 +3679,24 @@ async function exportXdUnityUI(roots, outputFolder) {
   }
 }
 
+async function checkLatestVersion() {
+  let xhr = new XMLHttpRequest()
+  xhr.open('GET', 'http://i0pl.us/XdUnityUI', true)
+  xhr.onload = function(e) {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        console.log(xhr.responseText)
+      } else {
+        console.error(xhr.statusText)
+      }
+    }
+  }
+  xhr.onerror = function(e) {
+    console.error(xhr.statusText)
+  }
+  xhr.send(null)
+}
+
 /**
  * 選択されたものがExportに適しているかチェックし
  * 適しているノードならば返す
@@ -3814,6 +3832,8 @@ async function getExportArtboards(selection) {
  * @returns {Promise<void>}
  */
 async function exportXdUnityUICommand(selection, root) {
+  checkLatestVersion()
+
   let inputFolder
   let inputScale
   let errorLabel
@@ -3996,8 +4016,8 @@ async function exportXdUnityUICommand(selection, root) {
     // 全てのアートボードが出力対象になっているか確認
     if (checkAllArtboard.checked) {
       root.children.forEach(node => {
-        if( checkCheckMarkedForExport.checked && !node.markedForExport) {
-          return;
+        if (checkCheckMarkedForExport.checked && !node.markedForExport) {
+          return
         }
         exportRoots.push(node)
       })
@@ -4466,7 +4486,6 @@ async function testParse(selection, root) {
   console.log(result)
 }
 
-
 /**
  * 全てのInteractionと、選択にあるTriggeredInteractionsを取得する プラグイン
  * manifest.json uiEntryPointsに以下を追加する
@@ -4480,20 +4499,23 @@ async function testParse(selection, root) {
  * @return {Promise<void>}
  */
 async function getInteractionsCommand(selection, root) {
-  let allInteractions = require("interactions").allInteractions;
+  let allInteractions = require('interactions').allInteractions
   console.log(allInteractions)
 
   let node = selection.items[0]
-  if(node) {
+  if (node) {
     // Print all the interactions triggered by a node
     node.triggeredInteractions.forEach(interaction => {
-      console.log("Trigger: " + interaction.trigger.type + " -> Action: " + interaction.action.type);
-    });
+      console.log(
+        'Trigger: ' +
+          interaction.trigger.type +
+          ' -> Action: ' +
+          interaction.action.type,
+      )
+    })
   }
-  console.log("done.")
+  console.log('done.')
 }
-
-
 
 module.exports = {
   // コマンドIDとファンクションの紐付け
