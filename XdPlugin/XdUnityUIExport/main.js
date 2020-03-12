@@ -1377,9 +1377,6 @@ function calcRectTransform(node, hashBounds, calcDrawBounds = true) {
   // console.log(beforeBounds.width, afterBounds.width)
   if (styleFixWidth == null) {
     styleFixWidth = approxEqual(beforeBounds.width, afterBounds.width, 0.001)
-    console.log('-----------width----------------', calcDrawBounds)
-    console.log(node.name)
-    console.log(beforeBounds.width, afterBounds.width)
   }
 
   if (styleFixLeft == null) {
@@ -4283,7 +4280,7 @@ class CssSelector {
     const nodeName = node.name.trim()
     const parsedNodeName = parseNodeName(nodeName)
     if (verboseLog) {
-      console.log('ルール check ----------')
+      console.log('rule check ----------')
       console.log(node)
       console.log(parsedNodeName)
       console.log('以下のruleと照らし合わせる')
@@ -4465,10 +4462,40 @@ async function testParse(selection, root) {
   console.log(result)
 }
 
+
+/**
+ * 全てのInteractionと、選択にあるTriggeredInteractionsを取得する プラグイン
+ * manifest.json uiEntryPointsに以下を追加する
+ * {
+ *     "type": "menu",
+ *     "label": "get interactions",
+ *     "commandId": "getInteractionsCommand"
+ * }
+ * @param {Selection} selection
+ * @param {RootNode} root
+ * @return {Promise<void>}
+ */
+async function getInteractionsCommand(selection, root) {
+  let allInteractions = require("interactions").allInteractions;
+  console.log(allInteractions)
+
+  let node = selection.items[0]
+  if(node) {
+    // Print all the interactions triggered by a node
+    node.triggeredInteractions.forEach(interaction => {
+      console.log("Trigger: " + interaction.trigger.type + " -> Action: " + interaction.action.type);
+    });
+  }
+  console.log("done.")
+}
+
+
+
 module.exports = {
   // コマンドIDとファンクションの紐付け
   commands: {
     exportXdUnityUICommand: exportXdUnityUICommand,
+    getInteractionsCommand: getInteractionsCommand,
     /*
     addResponsiveParam: pluginResponsiveParamName,
     addImageSizeFix: pluginAddImageSizeFix,
