@@ -1,85 +1,86 @@
-# <img src="https://user-images.githubusercontent.com/20549024/76211417-8616d780-6249-11ea-8e94-2f337664f595.gif" width=25> XdUnityUI
+# <img src="https://user-images.githubusercontent.com/20549024/76211417-8616d780-6249-11ea-8e94-2f337664f595.gif" width = 25> XdUnityUI - AdobeXD to Unity UI
+
+## AdobeXD to Unity UI
 
 ![introduction](https://user-images.githubusercontent.com/20549024/76156453-0f40e800-613e-11ea-9923-59554aceae3c.gif)
 
 ## Language
 
 - [日本語](README_JP.md)
-- [English (Machine Translation)](README.md)
+- [English](README.md)
 
 ## Overview
 
-- Convert AdobeXD artboards to UI Prefab for Unity.
-- [GitHub](https://github.com/itouh2-i0plus/XdUnityUI)
+- Convert AdobeXD artboards to Unity UI Prefab.
 
-## Samples
+## sample
 
-### Dots Scrollbar/ Horizontal layout scroll (Test)
+### Dots Scrollbar/Horizontal layout scroll
 
-| AdobeXD                                                                                                                                             | Unity                                                                                                                                         |
-| --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src = "https://user-images.githubusercontent.com/20549024/76518275-27986600-64a2-11ea-9292-e3d058bf2468.png" width = "300" height = " auto "/> | <img src ="https://user-images.githubusercontent.com/20549024/76518784-12700700-64a3-11ea-9407-9bca8449b070.gif" width="500" height="auto" /> |
+| AdobeXD | Unity |
+| --------------------------------------------------------------------------------------------------------------------------------------------------- |--------------------------------------------------------------------------------------------------------------------------------------------- |
+<img src="https://user-images.githubusercontent.com/20549024/76518275-27986600-64a2-11ea-9292-e3d058bf2468.png" width="300" height="auto" /> | <img src="https://user-images.githubusercontent.com/20549024/76518784-12700700-64a3-11ea-9407-9bca8449b070.gif" width="500" height="auto" /> |
 
-### Image switch button
+### Image switching button
 
-| AdobeXD                                                                                                                                             | Unity                                                                                                                                         |
-| --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src = "https://user-images.githubusercontent.com/20549024/76143694-f47a5f00-60bc-11ea-885f-ec28c2f61454.PNG" width = "300" height = " auto "/> | <img src ="https://user-images.githubusercontent.com/20549024/76143630-5dada280-60bc-11ea-8121-45d24aa03601.gif" width="500" height="auto" /> |
+| AdobeXD | Unity |
+| ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+<img src="https://user-images.githubusercontent.com/20549024/76143694-f47a5f00-60bc-11ea-885f-ec28c2f61454.PNG" width="300" height="auto" /> | <img src="https://user-images.githubusercontent.com/20549024/76143630-5dada280-60bc-11ea-8121-45d24aa03601.gif" width="500" height="auto" /> |
 
 ### Dialog
 
-| AdobeXD                                                                                                                                            | Unity                                                                                                                                              |
-| -------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src = "https://user-images.githubusercontent.com/20549024/76143695-f5ab8c00-60bc-11ea-8cdb-8002f8765cd9.PNG" width = "300" height = "auto" /> | <img src = "https://user-images.githubusercontent.com/20549024/76143631-5e463900-60bc-11ea-9698-975443962aa5.gif" width = "500" height = "auto" /> |
+| AdobeXD | Unity |
+| ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+<img src="https://user-images.githubusercontent.com/20549024/76143695-f5ab8c00-60bc-11ea-8cdb-8002f8765cd9.PNG" width="300" height="auto" /> | <img src="https://user-images.githubusercontent.com/20549024/76143631-5e463900-60bc-11ea-9698-975443962aa5.gif" width="500" height="auto" /> |
 
 ### Vertical scroll list
 
-| AdobeXD                                                                                                                                             | Unity                                                                                                                                         |
-| --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src = "https://user-images.githubusercontent.com/20549024/76143701-f6dcb900-60bc-11ea-98bd-0d49d8a6d77d.png" width = "300" height = " auto "/> | <img src ="https://user-images.githubusercontent.com/20549024/76143628-5d150c00-60bc-11ea-9a93-9541c55e8190.gif" width="500" height="auto" /> |
+| AdobeXD | Unity |
+| ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+<img src="https://user-images.githubusercontent.com/20549024/76143701-f6dcb900-60bc-11ea-98bd-0d49d8a6d77d.png" width="300" height="auto" /> | <img src="https://user-images.githubusercontent.com/20549024/76143628-5d150c00-60bc-11ea-9a93-9541c55e8190.gif" width="500" height="auto" /> |
 
 ### Character input
 
-| AdobeXD                                                                                                                                            | Unity                                                                                                                                         |
-| -------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src = "https://user-images.githubusercontent.com/20549024/76143696-f5ab8c00-60bc-11ea-9d8f-9acf72188b8e.PNG" width = "300" height = "auto "/> | <img src ="https://user-images.githubusercontent.com/20549024/76143624-5ab2b200-60bc-11ea-820a-b25755c6433c.gif" width="500" height="auto" /> |
+| AdobeXD | Unity |
+| ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+<img src="https://user-images.githubusercontent.com/20549024/76143696-f5ab8c00-60bc-11ea-9d8f-9acf72188b8e.PNG" width="300" height="auto" /> | <img src="https://user-images.githubusercontent.com/20549024/76143624-5ab2b200-60bc-11ea-820a-b25755c6433c.gif" width="500" height="auto" /> |
 
-### Toggle radio button
+### Toggle/Radio button
 
-| AdobeXD                                                                                                                                          | Unity                                                                                                                                              |
-| ------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://user-images.githubusercontent.com/20549024/76143700-f6dcb900-60bc-11ea-9ea3-4af279919544.PNG" width = "300" height = "auto" /> | <img src = "https://user-images.githubusercontent.com/20549024/76143627-5c7c7580-60bc-11ea-8a86-ae4890365330.gif" width = "500" height = "auto" /> |
+| AdobeXD | Unity |
+| ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+<img src="https://user-images.githubusercontent.com/20549024/76143700-f6dcb900-60bc-11ea-9ea3-4af279919544.PNG" width="300" height="auto" /> | <img src="https://user-images.githubusercontent.com/20549024/76143627-5c7c7580-60bc-11ea-8a86-ae4890365330.gif" width="500" height="auto" /> |
 
-### Scroll
+### scroll
 
-| AdobeXD                                                                                                                                            | Unity                                                                                                                                              |
-| -------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src = "https://user-images.githubusercontent.com/20549024/76143697-f6442280-60bc-11ea-9214-00ca42075c22.PNG" width = "300" height = "auto" /> | <img src = "https://user-images.githubusercontent.com/20549024/76143626-5be3df00-60bc-11ea-8236-0838d1e575b0.gif" width = "500" height = "auto" /> |
+| AdobeXD | Unity |
+| ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+<img src="https://user-images.githubusercontent.com/20549024/76143697-f6442280-60bc-11ea-9214-00ca42075c22.PNG" width="300" height="auto" /> | <img src="https://user-images.githubusercontent.com/20549024/76143626-5be3df00-60bc-11ea-8236-0838d1e575b0.gif" width="500" height="auto" /> |
 
 ### Text window
 
-| AdobeXD                                                                                                                                            | Unity                                                                                                                                         |
-| -------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src = "https://user-images.githubusercontent.com/20549024/76143702-f7754f80-60bc-11ea-8c02-9cf9b46b77f2.PNG" width = "300" height = "auto "/> | <img src ="https://user-images.githubusercontent.com/20549024/76143629-5dada280-60bc-11ea-80d5-541f8d97317a.gif" width="500" height="auto" /> |
+| AdobeXD | Unity |
+| ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+<img src="https://user-images.githubusercontent.com/20549024/76143702-f7754f80-60bc-11ea-8c02-9cf9b46b77f2.PNG" width="300" height="auto" /> | <img src="https://user-images.githubusercontent.com/20549024/76143629-5dada280-60bc-11ea-80d5-541f8d97317a.gif" width="500" height="auto" /> |
 
 ## Installation
 
 - When downloading
-  1.  https://github.com/itouh2-i0plus/XdUnityUI/releases
-  1.  Click the latest version of “▶ Assets” to download XdUnityUI.unitypackage.
-  1.  Import XdUnityUI.unitypackage into Unity.
-  1.  /Assets/I0plus/XdUnityUI folder is created.
-  1.  Install AdobeXD plugin.
+  1. https: //github.com/itouh2-i0plus/XdUnityUI/releases
+  1. Click the latest version of “▶ Assets” to download XdUnityUI.unitypackage.
+  1. Import XdUnityUI.unitypackage into Unity.
+  1. The/Assets/I0plus/XdUnityUI folder is created
+  1. Install AdobeXD plugin
       - Double-click /Assets/I0plus/XdUnityUI/ForAdobeXD/XdUnityUIExport.xdx.
 - When cloning from a Git repository
   1. Clone the Git repository
-     - https://github.com/itouh2-i0plus/XdUnityUI
-       - LFS is used. Some Git clients require configuration.
+      - https://github.com/itouh2-i0plus/XdUnityUI
+        - LFS is used. Some Git clients require configuration.
   1. Open (Clone folder)/UnityProject in Unity
-     - Plug-in folder below Assets/I0plus/XdUnityUI
-     - Currently a Unity2019.3, UniversalRenderPipeline project.
+      - Plug-in folder below Assets/I0plus/XdUnityUI
+      - Currently a Unity2019.3, UniversalRenderPipeline project.
   1. Install AdobeXD plugin
-     - Double-click /Assets/I0plus/XdUnityUI/ForAdobeXD/XdUnityUIExport.xdx.
+      - Double-click /Assets/I0plus/XdUnityUI/ForAdobeXD/XdUnityUIExport.xdx.
 
 ## quick start
 
@@ -89,13 +90,13 @@
 
 1. Launch AdobeXD plugin
 
-   1. In the artboard TestButton, select the layer immediately below the root (for example, yellow-button).
-      - This operation is always required for this plugin.
-      - Reference: [Edit Context rules · Adobe XD Plugin Reference](https://adobexdplatform.com/plugin-docs/reference/core/edit-context.html)
+   1. In the artboard TestButton, select the layer immediately below the root (for example, yellow-button). 
+       - This operation is always required for this plugin
+       - Reference: [Edit Context rules · Adobe XD Plugin Reference](https://adobexdplatform.com/plugin-docs/reference/core/edit-context.html)
    1. From the plugin menu, click "XdUnityUI export plugin" to launch.
    1. "Folder" is the output folder. Select (Cloned folder)/UnityProject/I0plus/XdUnityUI/Import folder.
    1. Click Export.
-      -Please refer to this article "When a problem occurs" regarding the case where an error occurs during output.
+       - Please refer to this article "When a problem occurs" regarding the case where an error occurs during output.
 
 1. Unity conversion
    - The conversion will start when the Unity window is activated.
@@ -106,6 +107,13 @@
 
 ## ChangeLog
 
+### [v0.7.2] - 2020-03-13
+
+- Testing DotsScrollbar
+- Fixed mask processing
+
+<details><summary>details</summary><div>
+
 ### [v0.5]-2020-03-07
 
 - Improved InputField conversion
@@ -114,7 +122,7 @@
 ### [v0.4]-2020-03-04
 
 - README.md English translation
-- XD plug-in English supported
+- XD plug-in English support
 
 ### [v0.3.2]-2020-03-03
 
@@ -133,6 +141,8 @@
 
 - Create unitypackage
 - Added installation method from unitypackage
+
+</div></details>
 
 ## Operating conditions
 
@@ -198,7 +208,7 @@
 - Description
   - By giving the text layer a name like the above, a text component will be added on Unity.
 - Note
-  - The font used in AdobeXD must exist in the Unity project, under Assets/I0plus/XdUnityUI/Fonts /, in .ttf or .otf.
+  - The fonts used in AdobeXD must exist in the Unity project, under Assets/I0plus/XdUnityUI/Fonts /, in .ttf or .otf.
   - There is a design difference between AdobeXD and Unity. (Example: kerning)
 
 #### textmp
@@ -226,7 +236,7 @@
 
   - Scrollable vertical layout.
   - Refer to samples.xd VerticalListSample artboard. (With scroll bar)
-  - <img src = "https://user-images.githubusercontent.com/20549024/75763061-ff608700-5d7e-11ea-985c-88feb3a2de70.png" width = "30%">
+  - <img src="https://user-images.githubusercontent.com/20549024/75763061-ff608700-5d7e-11ea-985c-88feb3a2de70.png" width="30%">
   - Will be added
 
 - Will be added
@@ -341,9 +351,6 @@
       - Evacuation of additional work in Prefab Variant.
         - Work disappears due to name change.
         - Some work remains in the Variant file (we are investigating whether it can be restored).
-  - Too many same Sprite images.
-    - During correspondence
-      - We are developing a tool to compare Sprite images and combine them if they are the same.
   - 9Slice
     - During correspondence
   - Component state
@@ -353,6 +360,19 @@
   - investigating
     - Can you convert to UXML?
     - Can the UI for DOTS mode be created?
+
+## License
+
+- XdUnityUI is free (MIT license).
+- Open source on GitHub.
+    - https://github.com/itouh2-i0plus/XdUnityUI
+- License of the image used in the sample
+  - "Vector graphic for Fishdom Playrix" by Daria Volkova is licensed under [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/?ref=ccsearch&atype=rich)
+  - https://www.behance.net/gallery/10239443/Vector-graphic-for-Fishdom-Playrix
+
+## Support Forum
+
+- https://forum.unity.com/threads/xdunityui-adobexd-to-unity.843730/
 
 ## Acknowledgments
 
