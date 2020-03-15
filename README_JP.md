@@ -1,16 +1,27 @@
 # <img src="https://user-images.githubusercontent.com/20549024/76211417-8616d780-6249-11ea-8e94-2f337664f595.gif" width=25> XdUnityUI
 
+## AdobeXD to Unity UI
+
 ![introduction](https://user-images.githubusercontent.com/20549024/76156453-0f40e800-613e-11ea-9923-59554aceae3c.gif)
 
 ## 言語
 
 - [日本語](README_JP.md)
-- [English(Machine Translation)](README.md)
+- [English](README.md)
 
 ## 概要
 
 - AdobeXD アートボードを Unity UI Prefab にコンバートします。
-- [GitHub](https://github.com/itouh2-i0plus/XdUnityUI)
+
+## ライセンス
+
+- XdUnityUIはフリーです（MITライセンス）。
+- GitHub上にオープンソースとして公開しています。
+    - https://github.com/itouh2-i0plus/XdUnityUI
+
+## サポートフォーラム
+
+- https://forum.unity.com/threads/xdunityui-adobexd-to-unity.843730/
 
 ## サンプル
 
@@ -44,7 +55,7 @@
 | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | <img src="https://user-images.githubusercontent.com/20549024/76143696-f5ab8c00-60bc-11ea-9d8f-9acf72188b8e.PNG" width="300" height="auto"/> | <img src="https://user-images.githubusercontent.com/20549024/76143624-5ab2b200-60bc-11ea-820a-b25755c6433c.gif" width="500" height="auto"/> |
 
-### トグル・ラジオボタン
+### トグル/ラジオボタン
 
 | AdobeXD                                                                                                                                     | Unity                                                                                                                                       |
 | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -355,5 +366,6 @@
 
 - @kyubuns 様 (https://kyubuns.dev)
 - Baum2 (https://github.com/kyubuns/Baum2)
+
 
 ### お世話になっております ありがとうございます
