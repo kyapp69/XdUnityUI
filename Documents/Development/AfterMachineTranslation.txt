@@ -2,33 +2,41 @@ https://translate.google.co.jp/?#view=home&op=translate&sl=ja&tl=en
 Google翻訳したあとの置換
 VisualStudioコード用
 
-○ -の後ろのスペース修正
-(^ *-)(\S)
-$1 $2
+VSCodeでPrettierによるコード整形が効かないようにする
+Fire > Preferences > Settings
+Prettierで検索
+Disable languageに markdown
+
+○ HTMLの修正 スペースの削除
+([a-z]+)\s*=\s*"\s*
+$1="
 
 ○ !と[の間、スペースが入ってしまう
-\! \[
+!\s*\[
 ![
+
+○ 次の処理をやるまえに手で修正 箇条書きになっていない
+Launch AdobeXD plugin以下のところ
+
+○ -の後ろのスペースがない
+(^ *-)(\S)
+$1 $2
 
 ○ ]と(の間、スペースが入ってしまう
 \] \(
 ](
 
+○ 表 -にスペースがはいってしまう
+- ----
+-----
+
+○ 箇条書きが改行されない 例：1.http
+(^\s*1\.)(\S)
+$1 $2
+
 ○ スラッシュ前後、スペースがある
  / 
 /
-
-○ HTMLの修正
- "width =" 500 "height =" auto "
-" width="500" height="auto" 
-
-○ HTMLの修正
-<img src =" https
-<img src ="https
-
-
-○ToggleGroupSample手で修正
-
 
 ○ コード範囲の修正
 `` `
@@ -38,15 +46,9 @@ $1 $2
 \\ _
 \_
 
-○ リンクの修正
-1.https: //github.com/itouh2-i0plus/XdUnityUI/releases
-1. https://github.com/itouh2-i0plus/XdUnityUI/releases
-
 ○ Theの削除
 The/Assets/I0plus/XdUnityUI
 /Assets/I0plus/XdUnityUI
-
-○ イメージリンクの修正(最後にやると表示がおもくならなくて良い)
 
 ○ Japaneseを日本語に
 \[Japanese\]
