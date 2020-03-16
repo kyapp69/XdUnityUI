@@ -9,7 +9,7 @@ namespace XdUnityUI.Editor
     /// </summary>
     public class RootElement : GroupElement
     {
-        private Vector2 sizeDelta = default;
+        private Vector2 sizeDelta;
 
         public RootElement(Dictionary<string, object> json, Element parent) : base(json, parent)
         {

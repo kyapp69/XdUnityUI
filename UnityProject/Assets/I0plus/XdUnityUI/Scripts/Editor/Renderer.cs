@@ -1,9 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEditor;
 using UnityEngine.UI;
+
 #if TMP_PRESENT
 using TMPro;
 
@@ -68,8 +70,9 @@ namespace XdUnityUI.Editor
             var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(unityPath);
             if (sprite == null)
             {
-                Debug.LogError($"[XdUnityUI] sprite \"{fileInfo.FullName}\" is not found.");
+                Debug.LogError(string.Format("[XdUnityUI] sprite \"{0}\" is not found.", fileInfo.FullName));
             }
+
             return sprite;
         }
 
@@ -78,7 +81,7 @@ namespace XdUnityUI.Editor
             var font = AssetDatabase.LoadAssetAtPath<Font>(Path.Combine(fontRootPath, fontName) + ".ttf");
             if (font == null) font = AssetDatabase.LoadAssetAtPath<Font>(Path.Combine(fontRootPath, fontName) + ".otf");
             if (font == null) font = Resources.GetBuiltinResource<Font>(fontName + ".ttf");
-            Assert.IsNotNull(font, $"[XdUnityUI] font \"{fontName}\" is not found");
+            Assert.IsNotNull(font, "[XdUnityUI] font \"" + fontName + "\" is not found");
             return font;
         }
 

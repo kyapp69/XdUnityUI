@@ -78,12 +78,14 @@ namespace XdUnityUI.Editor
                         Object.DestroyImmediate(image.gameObject);
                     }
 
+#if UNITY_2019_1_OR_NEWER
                     image = ElementUtil.FindComponentByClassName<Image>(children, spriteStateJson.Get("selected_sprite_class"));
                     if (image != null)
                     {
                         spriteState.selectedSprite = image.sprite;
                         Object.DestroyImmediate(image.gameObject);
                     }
+#endif
 
                     image = ElementUtil.FindComponentByClassName<Image>(children, spriteStateJson.Get("disabled_sprite_class"));
                     if (image != null)

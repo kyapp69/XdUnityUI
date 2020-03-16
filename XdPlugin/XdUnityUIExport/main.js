@@ -32,8 +32,11 @@ let globalScale = 1.0
  */
 let outputFolder = null
 
+// 全てのアートボードを出力対象にするか
+let ooptionCheckAllArtboard = false
+
 // エキスポートフラグを見るかどうか
-let optionCheckMarkedForExport = true
+let optionCheckMarkedForExport = false
 
 // 画像を出力するかどうか
 let optionImageNoExport = false
@@ -172,8 +175,7 @@ const STYLE_ADD_COMPONENT = 'add-component'
 const STYLE_MASK = 'mask'
 
 const appLanguage = application.appLanguage
-
-//const appLanguage = "en"
+//const appLanguage = 'en'
 
 /**
  *
@@ -715,7 +717,8 @@ function getBeforeGlobalDrawBounds(node) {
   }
   if (bounds) return bounds
   // throw 'リサイズ前のGlobalDrawBoundsの情報がありません'+node.name
-  return null
+  // リサイズされなかったので、そのままの値を返す
+  return node.globalDrawBounds
 }
 
 /**
@@ -3557,6 +3560,20 @@ async function nodeRoot(renditions, outputFolder, root) {
 }
 
 /**
+ *
+ * @param node {SceneNodeClass}
+ * @returns {string}
+ * @constructor
+ */
+function nodeToFilename(node) {
+  let nodeNameAndStyle = getNodeNameAndStyle(node)
+  let subFolderName = nodeNameAndStyle.node_name
+  // フォルダ名に使えない文字を'_'に変換
+  subFolderName = convertToFileName(subFolderName, false)
+  return subFolderName
+}
+
+/**
  * XdUnityUI export
  * @param {SceneNodeClass[]} roots
  * @param outputFolder
@@ -3574,7 +3591,7 @@ async function exportXdUnityUI(roots, outputFolder) {
     console.log(`root-node:${root.name} -------`)
     globalCssRules = await loadCssRules(
       await fs.getPluginFolder(),
-      'xd-unity.css',
+      'index.css',
     )
     const artboardCssFilename = convertToFileName(root.name) + '.css'
     try {
@@ -3594,10 +3611,8 @@ async function exportXdUnityUI(roots, outputFolder) {
 
     globalResponsiveBounds = makeResponsiveBounds(root)
 
-    let nodeNameAndStyle = getNodeNameAndStyle(root)
-    let subFolderName = nodeNameAndStyle.node_name
     // フォルダ名に使えない文字を'_'に変換
-    subFolderName = convertToFileName(subFolderName, false)
+    let subFolderName = nodeToFilename(root)
 
     let subFolder
     // アートボード毎にフォルダを作成する
@@ -3685,7 +3700,7 @@ async function checkLatestVersion() {
   xhr.onload = function(e) {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
-        console.log(xhr.responseText)
+        // console.log(xhr.responseText)
       } else {
         console.error(xhr.statusText)
       }
@@ -3834,9 +3849,13 @@ async function getExportArtboards(selection) {
 async function exportXdUnityUICommand(selection, root) {
   checkLatestVersion()
 
+  // エキスポートマークがついたものだけ出力するオプションは、毎回オフにする
+  optionCheckMarkedForExport = false
+
   let inputFolder
   let inputScale
   let errorLabel
+  let exportMessage
   let checkImageNoExport
   let checkCheckMarkedForExport
   let checkAllArtboard
@@ -3846,6 +3865,7 @@ async function exportXdUnityUICommand(selection, root) {
     style: {
       flexDirection: 'row',
       alignItems: 'center',
+      paddingLeft: '2em',
       //alignItems: 'middle',
       //verticalAlign: 'middle',
       //textAlign: 'middle',
@@ -3864,12 +3884,39 @@ async function exportXdUnityUICommand(selection, root) {
       },
       h('h1', 'XdUnityUI export'),
       h('hr'),
+      h('label', getString(strings.ExportDialogSelected)),
+      h('br'),
       h(
         'label',
         divStyle,
-        h('span', 'Output folder'),
+        (exportMessage = h(
+          'textarea',
+          { width: '400px', height: 140, readonly: true, userSelect: 'none' },
+          getExportRoots(selection.items).message,
+        )),
+      ),
+      h('br'),
+      h(
+        'label',
+        divStyle,
+        (checkCheckMarkedForExport = h('input', {
+          type: 'checkbox',
+          async onclick(e) {
+            optionCheckMarkedForExport = checkCheckMarkedForExport.checked
+            exportMessage.value = getExportRoots(selection.items).message
+          },
+        })),
+        getString(strings.ExportDialogOptionCheckExportMark),
+      ),
+      h('hr'),
+      h('label', getString(strings.ExportDialogOutput)),
+      h('br'),
+      h(
+        'label',
+        divStyle,
+        h('span', { width: '70' }, 'Folder'),
         (inputFolder = h('input', {
-          width: 280,
+          width: '250',
           readonly: true,
           border: 0,
         })),
@@ -3891,29 +3938,13 @@ async function exportXdUnityUICommand(selection, root) {
       h(
         'label',
         divStyle,
-        'Scale',
+        h('span', { width: '70' }, 'Scale'),
         (inputScale = h('input', {
           value: '4.0',
         })),
       ),
-      h('br'),
-      h(
-        'label',
-        divStyle,
-        (checkAllArtboard = h('input', {
-          type: 'checkbox',
-        })),
-        getString(strings.ExportDialogOptionAllArtboard),
-      ),
-      h('br'),
-      h(
-        'label',
-        divStyle,
-        (checkCheckMarkedForExport = h('input', {
-          type: 'checkbox',
-        })),
-        getString(strings.ExportDialogOptionCheckExportMark),
-      ),
+      h('hr'),
+      h('label', getString(strings.ExportDialogUnderDevelopmentOptions)),
       h('br'),
       h(
         'label',
@@ -3999,35 +4030,10 @@ async function exportXdUnityUICommand(selection, root) {
   // Dialogの結果チェック 出力しないのなら終了
   if (result !== 'export') return
 
-  /**
-   * @type {SceneNodeClass[]|SceneNodeList}
-   */
-  let exportRoots = []
-
-  if (optionChangeContentOnly) {
-    exportRoots = [getArtboard(selection.items[0])]
-  } else {
-    const node = await getExportNodeFromSelection(selection)
-    if (!node) {
-      await alert(getString(strings.ExportErrorSelection))
-      throw 'Selected node is not immediate child.'
-    }
-    let parent = node.parent
-    // 全てのアートボードが出力対象になっているか確認
-    if (checkAllArtboard.checked) {
-      root.children.forEach(node => {
-        if (checkCheckMarkedForExport.checked && !node.markedForExport) {
-          return
-        }
-        exportRoots.push(node)
-      })
-    } else {
-      exportRoots.push(parent)
-    }
-  }
+  let { exportRoots } = await getExportRoots(selection.items)
 
   if (exportRoots.length === 0) {
-    await alert('対象が見つかりません')
+    await alert(getString(strings.ExportErrorNoTarget))
     return
   }
 
@@ -4046,6 +4052,60 @@ async function exportXdUnityUICommand(selection, root) {
   // データをもとに戻すため､意図的にエラーをスローする
   if (!optionChangeContentOnly) {
     throw 'throw error for UNDO'
+  }
+}
+
+/**
+ *
+ * @param selectionItems {SceneNodeClass[]}
+ * @returns {{exportRoots: SceneNodeClass[]}|null}
+ */
+function getExportRoots(selectionItems) {
+  if (!selectionItems) return null
+
+  /**
+   * @type {SceneNodeClass[]|SceneNodeList}
+   */
+  let exportRoots = []
+
+  // 出力するアートボートの名前リスト
+  let artboards = []
+  // 出力するレイヤーの名前リスト
+  let layers = []
+
+  function addMessage(node) {
+    if (node.constructor.name === 'Artboard') {
+      artboards.push(node.name)
+    } else {
+      layers.push(node.name)
+    }
+  }
+
+  for (let selectionItem of selectionItems) {
+    if (optionCheckMarkedForExport) {
+      if (selectionItem.markedForExport) {
+        exportRoots.push(selectionItem)
+        addMessage(selectionItem)
+      }
+    } else {
+      exportRoots.push(selectionItem)
+      addMessage(selectionItem)
+    }
+  }
+
+  // 名前でソート
+  artboards.sort()
+  layers.sort()
+
+  let message = ''
+
+  message +=
+    artboards.length > 0 ? '--- artboards ---\n' + artboards.join('\n') : ''
+  message += layers > 0 ? '--- layers ---\n' + layers.join('\n') : ''
+
+  return {
+    exportRoots,
+    message,
   }
 }
 
@@ -4470,7 +4530,7 @@ cssSelectorParser.enableSubstitutes()
  */
 async function testParse(selection, root) {
   const folder = await fs.getPluginFolder()
-  const file = await folder.getEntry('xd-unity.css')
+  const file = await folder.getEntry('index.css')
   let text = await file.read()
 
   const selector =
