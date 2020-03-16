@@ -2,6 +2,7 @@
  * @author Kazuma Kuwabara
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,26 +13,29 @@ namespace Baum2
     [RequireComponent(typeof(ToggleGroup))]
     public sealed class DotsScrollbar : Scrollbar
     {
-        [SerializeField] private Transform dotContainer = default;
+        [SerializeField] private Transform dotContainer;
 
-        [SerializeField] private Toggle dotPrefab = default;
+        [SerializeField] private Toggle dotPrefab;
 
-        [SerializeField] private List<Toggle> dots = default;
+        [SerializeField] private List<Toggle> dots = null;
 
         private ToggleGroup dotGroup;
 
-        public bool IsValid => dotContainer != null && dotPrefab != null;
+        public bool IsValid
+        {
+            get { return dotContainer != null && dotPrefab != null; }
+        }
 
         public Transform DotContainer
         {
-            set => dotContainer = value;
-            get => dotContainer;
+            set { dotContainer = value; }
+            get { return dotContainer; }
         }
 
         public Toggle DotPrefab
         {
-            set => dotPrefab = value;
-            get => dotPrefab;
+            set { dotPrefab = value; }
+            get { return dotPrefab; }
         }
 
         protected override void Start()
@@ -64,10 +68,8 @@ namespace Baum2
             }
         }
 
-        protected override void Update()
+        private void FixedUpdate()
         {
-            base.Update();
-
             if (IsValid)
                 UpdateDots();
         }
@@ -78,14 +80,14 @@ namespace Baum2
             {
                 dotPrefab.gameObject.SetActive(false);
             }
-            
+
             numberOfSteps = 0;
             SetupDotContainer();
             SetupDotGroup();
             SetupHandleRect();
 
             if (!IsValid)
-                Debug.unityLogger.LogWarning(nameof(DotsScrollbar), $"Invalid Serialize Field");
+                Debug.unityLogger.LogWarning("DotsScrollbar", "Invalid Serialize Field");
         }
 
         private void SetupDotContainer()
@@ -175,19 +177,35 @@ namespace Baum2
         {
             var step = Mathf.RoundToInt(input / StepSize());
             for (var i = 0; i < dots.Count; i++)
-                dots[i].SetIsOnWithoutNotify(i == step);
+            {
+                var dot = dots[i];
+#if Unity_2019_1_NEWER
+                dot.SetIsOnWithoutNotify(i == step);
+#else
+                var isOn = i == step;
+                if (dot.isOn != isOn)
+                {
+                    var tmp = dots[i].onValueChanged;
+                    dot.onValueChanged = new Toggle.ToggleEvent();
+                    dot.isOn = isOn;
+                    dot.onValueChanged = tmp;
+                }
+#endif
+            }
         }
 
         private bool scrolling = false;
+
         private IEnumerator ChangeValue(float targetValue)
         {
             scrolling = true;
             var nowValue = value;
             for (float i = 1; i <= 10; i++)
             {
-                value = nowValue + (targetValue-nowValue) * (i/10);
+                value = nowValue + (targetValue - nowValue) * (i / 10);
                 yield return null;
             }
+
             scrolling = false;
         }
 

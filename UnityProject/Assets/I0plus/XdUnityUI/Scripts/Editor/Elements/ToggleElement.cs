@@ -30,7 +30,8 @@ namespace XdUnityUI.Editor
 
             var toggle = go.AddComponent<Toggle>();
 
-            var targetImage = ElementUtil.FindComponentByClassName<Image>(children, _toggleJson.Get("target_graphic_class"));
+            var targetImage =
+                ElementUtil.FindComponentByClassName<Image>(children, _toggleJson.Get("target_graphic_class"));
             if (targetImage != null)
             {
                 toggle.targetGraphic = targetImage;
@@ -46,28 +47,34 @@ namespace XdUnityUI.Editor
             if (spriteStateJson != null)
             {
                 var spriteState = new SpriteState();
-                var image = ElementUtil.FindComponentByClassName<Image>(children, spriteStateJson.Get("highlighted_sprite_class"));
+                var image = ElementUtil.FindComponentByClassName<Image>(children,
+                    spriteStateJson.Get("highlighted_sprite_class"));
                 if (image != null)
                 {
                     spriteState.highlightedSprite = image.sprite;
                     Object.DestroyImmediate(image.gameObject);
                 }
 
-                image = ElementUtil.FindComponentByClassName<Image>(children, spriteStateJson.Get("pressed_sprite_class"));
+                image = ElementUtil.FindComponentByClassName<Image>(children,
+                    spriteStateJson.Get("pressed_sprite_class"));
                 if (image != null)
                 {
                     spriteState.pressedSprite = image.sprite;
                     Object.DestroyImmediate(image.gameObject);
                 }
 
-                image = ElementUtil.FindComponentByClassName<Image>(children, spriteStateJson.Get("selected_sprite_class"));
+                image = ElementUtil.FindComponentByClassName<Image>(children,
+                    spriteStateJson.Get("selected_sprite_class"));
                 if (image != null)
                 {
+#if UNITY_2019_1_OR_NEWER
                     spriteState.selectedSprite = image.sprite;
                     Object.DestroyImmediate(image.gameObject);
+#endif
                 }
 
-                image = ElementUtil.FindComponentByClassName<Image>(children, spriteStateJson.Get("disabled_sprite_class"));
+                image = ElementUtil.FindComponentByClassName<Image>(children,
+                    spriteStateJson.Get("disabled_sprite_class"));
                 if (image != null)
                 {
                     spriteState.disabledSprite = image.sprite;

@@ -5,7 +5,11 @@
  * http://tsubakit1.hateblo.jp/entry/2019/10/30/235150
  */
 [RequireComponent(typeof(RectTransform))]
+#if UNITY_2018_3_OR_NEWER
 [ExecuteAlways]
+#else
+[ExecuteInEditMode]
+#endif
 public class SafeAreaPadding : MonoBehaviour
 {
     private DeviceOrientation postOrientation;

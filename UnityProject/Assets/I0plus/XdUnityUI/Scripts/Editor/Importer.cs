@@ -50,7 +50,8 @@ namespace XdUnityUI.Editor
         {
             if (progressTotal > 1)
             {
-                EditorUtility.DisplayProgressBar("XdUnitUI Import", $"{progressCount}/{progressTotal} {message}",
+                EditorUtility.DisplayProgressBar("XdUnitUI Import",
+                    string.Format("{0}/{1} {2}", progressCount, progressTotal, message),
                     ((float) progressCount / progressTotal));
             }
         }
@@ -131,6 +132,7 @@ namespace XdUnityUI.Editor
                         TextureUtil.ClearImageMap();
                         clearedImageMap = true;
                     }
+
                     // スライス処理
                     var message = TextureUtil.SliceSprite(importedAsset);
                     // 元画像を削除する
@@ -180,15 +182,15 @@ namespace XdUnityUI.Editor
                         var go = creator.Create();
                         var savePath =
                             EditorUtil.ToUnityPath(Path.Combine(EditorUtil.GetOutputPrefabsPath(), name + ".prefab"));
-                        GameObject savedAsset;
                         try
                         {
 #if UNITY_2018_3_OR_NEWER
-                            savedAsset = PrefabUtility.SaveAsPrefabAsset(go, savePath);
+                            var savedAsset = PrefabUtility.SaveAsPrefabAsset(go, savePath);
+                            Debug.Log("[XdUnityUI] Create Prefab: "+savePath, savedAsset);
 #else
-                    Object originalPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(savePath);
-                    if (originalPrefab == null) originalPrefab = PrefabUtility.CreateEmptyPrefab(savePath);
-                    PrefabUtility.ReplacePrefab(go, originalPrefab, ReplacePrefabOptions.ReplaceNameBased);
+                            Object originalPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(savePath);
+                            if (originalPrefab == null) originalPrefab = PrefabUtility.CreateEmptyPrefab(savePath);
+                            PrefabUtility.ReplacePrefab(go, originalPrefab, ReplacePrefabOptions.ReplaceNameBased);
 #endif
                         }
                         catch
@@ -201,7 +203,6 @@ namespace XdUnityUI.Editor
 
                         // 作成に成功した
                         Object.DestroyImmediate(go);
-                        Debug.Log($"[XdUnityUI] Create Prefab: {savePath}", savedAsset);
                         // layout.jsonを削除する
                         AssetDatabase.DeleteAsset(EditorUtil.ToUnityPath(asset));
                     }
@@ -241,6 +242,7 @@ namespace XdUnityUI.Editor
             return Path.Combine(directoryPath, fileName);
         }
 
+#if UNITY_2019_1_OR_NEWER
         private static void CreateAtlas(string name, List<string> importPaths)
         {
             var filename = Path.Combine(EditorUtil.GetBaumAtlasPath(), name + ".spriteatlas");
@@ -267,9 +269,7 @@ namespace XdUnityUI.Editor
             // ASTCに固定してしまいっている　これらの設定を記述できるようにしたい
             textureImporterPlatformSettings.overridden = true;
             textureImporterPlatformSettings.name = "iPhone";
-#if UNITY_2019_1_OR_NEWER
             textureImporterPlatformSettings.format = TextureImporterFormat.ASTC_4x4;
-#endif
             atlas.SetPlatformSettings(textureImporterPlatformSettings);
 
             // アセットの生成
@@ -279,5 +279,6 @@ namespace XdUnityUI.Editor
             // var iconsDirectory = AssetDatabase.LoadAssetAtPath<Object>("Assets/ExternalAssets/Baum2/CreatedSprites/UIESMessenger");
             // atlas.Add(new Object[]{iconsDirectory});
         }
+#endif
     }
 }

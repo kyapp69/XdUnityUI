@@ -41,7 +41,7 @@ namespace Baum2
 
         public string GroupName
         {
-            get => groupName;
+            get { return groupName; }
         }
 
         public void SetGroupName(string name)
