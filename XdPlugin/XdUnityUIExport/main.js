@@ -174,9 +174,8 @@ const STYLE_V_ALIGN = 'v-align' //テキストの縦方向のアライメント 
 const STYLE_ADD_COMPONENT = 'add-component'
 const STYLE_MASK = 'mask'
 
-//const appLanguage = application.appLanguage
-
-const appLanguage = 'en'
+const appLanguage = application.appLanguage
+//const appLanguage = 'en'
 
 /**
  *
