@@ -7,6 +7,18 @@
     "en": "Make the following selections: <br/>-One layer immediate child of the output artboard <br/>-Not locked",
     "ja": "以下のような選択をしてください<br/>・出力アートボード直下のレイヤーを1つ<br/>・ロックされていない"
   },
+  "ExportDialogSelected": {
+    "en": "Selected layers/artboards",
+    "ja": "選択 レイヤー/アートボード"
+  },
+  "ExportDialogOutput": {
+    "en": "Output",
+    "ja": "出力"
+  },
+  "ExportDialogUnderDevelopmentOptions": {
+    "en": "Under development",
+    "ja": "開発中オプション"
+  },
   "ExportDialogOptionAllArtboard": {
     "en": "Export all artboards.",
     "ja": "全てのアートボードを対象とする"
@@ -20,7 +32,11 @@
     "ja": "イメージは出力しない"
   },
   "ExportDialogOptionOnlyCssChangeContent": {
-    "en": "(experimental) Only change content with CSS.",
-    "ja": "(experimental) CSSによるコンテンツの変更のみ実行"
+    "en": "Only change content with CSS.",
+    "ja": "CSSによるコンテンツの変更のみ実行"
+  },
+  "ExportErrorNoTarget": {
+    "en": "No output target",
+    "jp": "出力対象がありません"
   }
 }
