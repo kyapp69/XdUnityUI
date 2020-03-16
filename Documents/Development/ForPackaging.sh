@@ -3,8 +3,8 @@
 
 # Samples.xdの同期をする
 echo "----- sync samples.xd -----"
-SAMPLE1=UnityProject/Assets/I0plus/XdUnityUI ForAdobeXD/samples.xd
-SAMPLE2=./XdPlugin/SampleXd/samples.xd
+SAMPLE1=UnityProject/Assets/I0plus/XdUnityUI-ForAdobeXD/Samples
+SAMPLE2=./XdPlugin/Samples
 rsync --update --existing ${SAMPLE1} ${SAMPLE2}
 rsync --update --existing ${SAMPLE2} ${SAMPLE1}
 echo "done.\n"
@@ -21,5 +21,5 @@ echo "done.\n"
 
 # AdobeXDプラグインをUnityプロジェクト内にコピーする
 echo "----- copy .xdx file to Unity Assets. -----"
-cp ./XdPlugin/XdUnityUIExport.xdx ./UnityProject/Assets/I0plus/XdUnityUI/ForAdobeXD/XdUnityUIExport.xdx
+cp ./XdPlugin/XdUnityUIExport.xdx ./UnityProject/Assets/I0plus/XdUnityUI-ForAdobeXD/XdUnityUIExport.xdx
 echo "done.\n"
