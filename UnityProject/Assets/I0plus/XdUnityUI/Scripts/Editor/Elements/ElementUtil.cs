@@ -111,7 +111,8 @@ namespace XdUnityUI.Editor
             foreach (var createdChild in createdChildren)
             {
                 //TODO: item1がDestroyされていれば、コンティニューの処理が必要
-                if (!(createdChild.Item2 is ImageElement imageElement)) continue;
+                if (!(createdChild.Item2 is ImageElement)) continue;
+                var imageElement = (ImageElement) createdChild.Item2;
                 if (imageElement.component == null) continue;
                 childImageBeComponent = createdChild;
             }
@@ -377,26 +378,6 @@ namespace XdUnityUI.Editor
 #endif
         }
 
-        public static void SetMemberValueDirect(MemberInfo member, object obj, TypedReference typedReference,
-            object value)
-        {
-            switch (member)
-            {
-                case FieldInfo info:
-                    //(member as FieldInfo).SetValue(obj, value);
-                    info.SetValueDirect(typedReference, value);
-                    break;
-                case PropertyInfo info:
-                    var setMethod = info.GetSetMethod(true);
-                    if (setMethod == null)
-                        throw new ArgumentException("Property " + info.Name + " has no setter");
-                    setMethod.Invoke(obj, new object[1] {value});
-                    break;
-                default:
-                    throw new ArgumentException("Can't set the value of a " + member.GetType().Name);
-            }
-        }
-
         public static HorizontalOrVerticalLayoutGroup SetupLayoutGroupParam(GameObject go,
             Dictionary<string, object> layoutJson)
         {
@@ -475,10 +456,12 @@ namespace XdUnityUI.Editor
             var controlChildScale = layoutJson.Get("use_child_scale");
             if (!String.IsNullOrEmpty(controlChildScale))
             {
+#if UNITY_2019_1_OR_NEWER
                 if (controlChildScale.Contains("width"))
                     layoutGroup.childScaleWidth = true;
                 if (controlChildScale.Contains("height"))
                     layoutGroup.childScaleHeight = true;
+#endif
             }
 
             var childForceExpand = layoutJson.Get("child_force_expand");
@@ -591,22 +574,25 @@ namespace XdUnityUI.Editor
         {
             if (layout == null) return;
 
-            var method = (layout["method"] as string)?.ToLower();
-            switch (method)
+            if (layout["method"] is string)
             {
-                case "vertical":
-                case "horizontal":
+                var method = (layout["method"] as string).ToLower();
+                switch (method)
                 {
-                    var layoutGroup = SetupLayoutGroupParam(go, layout);
-                    break;
+                    case "vertical":
+                    case "horizontal":
+                    {
+                        var layoutGroup = SetupLayoutGroupParam(go, layout);
+                        break;
+                    }
+                    case "grid":
+                    {
+                        var gridLayoutGroup = SetupGridLayoutGroupParam(go, layout);
+                        break;
+                    }
+                    default:
+                        break;
                 }
-                case "grid":
-                {
-                    var gridLayoutGroup = SetupGridLayoutGroupParam(go, layout);
-                    break;
-                }
-                default:
-                    break;
             }
         }
 
@@ -625,7 +611,7 @@ namespace XdUnityUI.Editor
                 go.AddComponent<RectMask2D>(); // setupMask
             }
         }
-        
+
         public static void SetupMask(GameObject go, Dictionary<string, object> param)
         {
             if (param != null)

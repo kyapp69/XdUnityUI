@@ -16,12 +16,16 @@ namespace XdUnityUI.Editor
         {
             if (json == null || !json.ContainsKey(key)) return null;
             var value = json[key];
-            switch (value)
+
+            if (value is bool)
             {
-                case bool b:
-                    return b;
-                case string str:
-                    return str != "null" && str != "false" && str != "0";
+                return (bool) value;
+            }
+
+            var str = value as string;
+            if (str != null)
+            {
+                return str != "null" && str != "false" && str != "0";
             }
 
             return true;

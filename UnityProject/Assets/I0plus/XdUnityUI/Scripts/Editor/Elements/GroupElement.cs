@@ -120,7 +120,10 @@ namespace XdUnityUI.Editor
                 }
 
                 list.Add(new Tuple<GameObject, Element>(go, element));
-                callback?.Invoke(go, element);
+                if (callback != null)
+                {
+                    callback.Invoke(go, element);
+                }
             }
 
             foreach (var element in Elements)
