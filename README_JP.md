@@ -11,6 +11,51 @@
 
 - AdobeXD アートボードを Unity UI Prefab にコンバートします。
 
+## インストール
+
+- ダウンロードする場合
+  1. https://github.com/itouh2-i0plus/XdUnityUI/releases
+  1. 最新バージョンの 「▶Assets」をクリックし XdUnityUI.unitypackage をダウンロードします。
+  1. XdUnityUI.unitypackage を Unity にインポートしてください。
+  1. /Assets/I0plus/XdUnityUI フォルダが作成されます
+  1. AdobeXD プラグインをインストール
+     - /Assets/I0plus/XdUnityUI-ForAdobeXD/XdUnityUIExport.xdx をダブルクリックします。
+- Git リポジトリからクローンする場合
+  1. Git リポジトリをクローン
+        - https://github.com/itouh2-i0plus/XdUnityUI
+          - LFS を利用しています。Git クライアントによっては設定が必要となります。
+  1. (クローンフォルダ)/UnityProject を Unity で開きます
+        - Assets/I0plus/XdUnityUI 以下が、プラグインフォルダになっています
+        - 現在 Unity2019.3、UniversalRenderPipeline のプロジェクトとなっています。
+  1. AdobeXD プラグインをインストール
+        - /Assets/I0plus/XdUnityUI-ForAdobeXD/XdUnityUIExport.xdx をダブルクリックします。
+
+## クイックスタート
+
+1. AdobeXD サンプルを 開く
+    - /Assets/I0plus/XdUnityUI-ForAdobeXD/samples.xd にあります。
+
+2. AdobeXD エキスポート
+    1. アートボード名をクリックし、アートボードを選択します
+    1. プラグインメニューから、「XdUnityUI export plugin」をクリック、起動します。
+    2. 「Folder」の項目が出力フォルダ先指定です。(インストールフォルダ)/UnityProject/I0plus/XdUnityUI/Import フォルダを選択。
+    3. 「Export」をクリック。 - 出力時にエラーで止まるケースについて、当記事「問題が起こったとき」を参考にしてください。
+
+<img src="https://user-images.githubusercontent.com/20549024/76756957-0bf6cd80-67ca-11ea-9504-7ef273613a36.gif" width="640" />
+
+3. Unity コンバート
+    - Unity ウィンドウをアクティブにするとコンバートが開始されます。
+    - 作成された Prefab は Assets/I0plus/CreatedPrefabs に配置されます。
+    - 作成された UI 画像は Assets/I0plus/CreatedSprites に配置されます。
+      - UI画像は Slice 処理されます。
+
+<img src="https://user-images.githubusercontent.com/20549024/76759838-d3f28900-67cf-11ea-9721-31c221cfe63a.gif" width="640" />
+
+4. Prefab を Canvas 以下に配置します。
+
+<img src="https://user-images.githubusercontent.com/20549024/76759902-f5ec0b80-67cf-11ea-9dd5-5ca556222c40.gif" width="640" />
+
+
 ## サンプル
 
 ### Dots Scrollbar/ Horizontal layout scroll
@@ -61,50 +106,19 @@
 |---|---|
 | <img src="https://user-images.githubusercontent.com/20549024/76143702-f7754f80-60bc-11ea-8c02-9cf9b46b77f2.PNG" width="300" height="auto"/> | <img src="https://user-images.githubusercontent.com/20549024/76143629-5dada280-60bc-11ea-80d5-541f8d97317a.gif" width="500" height="auto"/> |
 
-## インストール
-
-- ダウンロードする場合
-  1. https://github.com/itouh2-i0plus/XdUnityUI/releases
-  1. 最新バージョンの 「▶Assets」をクリックし XdUnityUI.unitypackage をダウンロードします。
-  1. XdUnityUI.unitypackage を Unity にインポートしてください。
-  1. /Assets/I0plus/XdUnityUI フォルダが作成されます
-  1. AdobeXD プラグインをインストール
-     - /Assets/I0plus/XdUnityUI/ForAdobeXD/XdUnityUIExport.xdx をダブルクリックします。
-- Git リポジトリからクローンする場合
-  1. Git リポジトリをクローン
-        - https://github.com/itouh2-i0plus/XdUnityUI
-          - LFS を利用しています。Git クライアントによっては設定が必要となります。
-  1. (クローンフォルダ)/UnityProject を Unity で開きます
-        - Assets/I0plus/XdUnityUI 以下が、プラグインフォルダになっています
-        - 現在 Unity2019.3、UniversalRenderPipeline のプロジェクトとなっています。
-  1. AdobeXD プラグインをインストール
-        - /Assets/I0plus/XdUnityUI/ForAdobeXD/XdUnityUIExport.xdx をダブルクリックします。
-
-## クイックスタート
-
-1. AdobeXD サンプルを 開く
-    - /Assets/I0plus/XdUnityUI/ForAdobeXD/samples.xd にあります。
-
-1. AdobeXD プラグイン起動
-    1. アートボード TestButton 内、ルート直下のレイヤー(例えば yellow-button)を選択状態にします。 - 当プラグインは出力時にこの操作が必ず必要になります。 - 参考：[Edit Context rules · Adobe XD Plugin Reference](https://adobexdplatform.com/plugin-docs/reference/core/edit-context.html)
-    1. プラグインメニューから、「XdUnityUI export plugin」をクリック、起動します。
-    1. 「Folder」の項目が出力フォルダ先指定です。(クローンしたフォルダ)/UnityProject/I0plus/XdUnityUI/Import フォルダを選択。
-    1. 「Export」をクリック。 - 出力時にエラーで止まるケースについて、当記事「問題が起こったとき」を参考にしてください。
-
-1. Unity コンバート
-    - Unity ウィンドウをアクティブにするとコンバートが開始されます。
-    - 作成された Prefab は Assets/I0plus/CreatedPrefabs に配置されます。
-    - 作成された UI 画像は Assets/I0plus/CreatedSprites に配置されます。
-      - Slice 処理されています。
-    - できた Prefab を Canvas 以下に配置します。
 
 ## ChangeLog
 
+### [v0.8] - 2020-03-16
+- XD:選択したものを出力するようにした
+- Unity:Unity2018で動作するようにした
+- Unity:Unity2017で動作するようにした
+- Unity:asmdefファイルを削除した
+
+<details><summary>詳細</summary><div>
 ### [v0.7.2] - 2020-03-13
 - DotsScrollbarのテスト
 - マスク処理の修正
-
-<details><summary>詳細</summary><div>
 
 ### [v0.5] - 2020-03-07
 
@@ -141,7 +155,6 @@
   - Mac での動作確認は現在不十分です。
 - Unity2019.3 で開発しています。
 - AdobeXD は最新版でテストしています。
-  - バージョン：27.1.12.4
 
 ## コンバートについて
 
