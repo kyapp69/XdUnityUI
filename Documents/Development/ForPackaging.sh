@@ -3,7 +3,7 @@
 
 # Samples.xdの同期をする
 echo "----- sync samples.xd -----"
-SAMPLE1=UnityProject/Assets/I0plus/XdUnityUI/ForAdobeXD/samples.xd
+SAMPLE1=UnityProject/Assets/I0plus/XdUnityUI ForAdobeXD/samples.xd
 SAMPLE2=./XdPlugin/SampleXd/samples.xd
 rsync --update --existing ${SAMPLE1} ${SAMPLE2}
 rsync --update --existing ${SAMPLE2} ${SAMPLE1}
