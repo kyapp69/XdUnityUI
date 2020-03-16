@@ -715,7 +715,8 @@ function getBeforeGlobalDrawBounds(node) {
   }
   if (bounds) return bounds
   // throw 'リサイズ前のGlobalDrawBoundsの情報がありません'+node.name
-  return null
+  // リサイズされなかったので、そのままの値を返す
+  return node.globalDrawBounds
 }
 
 /**
@@ -748,6 +749,8 @@ function getBeforeGlobalBounds(node) {
 function getDrawBoundsCMInBase(node, base) {
   const nodeDrawBounds = getBeforeGlobalDrawBounds(node)
   const baseBounds = getBeforeGlobalDrawBounds(base)
+  console.log('node.name:', node.name)
+  console.log('base.name:', base.name)
   return {
     cx: nodeDrawBounds.x - baseBounds.x + nodeDrawBounds.width / 2,
     cy: nodeDrawBounds.y - baseBounds.y + nodeDrawBounds.height / 2,
@@ -4007,14 +4010,14 @@ async function exportXdUnityUICommand(selection, root) {
   if (optionChangeContentOnly) {
     exportRoots = [getArtboard(selection.items[0])]
   } else {
-    const node = await getExportNodeFromSelection(selection)
-    if (!node) {
-      await alert(getString(strings.ExportErrorSelection))
-      throw 'Selected node is not immediate child.'
-    }
-    let parent = node.parent
     // 全てのアートボードが出力対象になっているか確認
     if (checkAllArtboard.checked) {
+      // 全てのアートボードが出力対象の場合、ルートの子供であるかどうかチェック
+      const node = await getExportNodeFromSelection(selection)
+      if (!node) {
+        await alert(getString(strings.ExportErrorSelection))
+        throw 'Selected node is not immediate child.'
+      }
       root.children.forEach(node => {
         if (checkCheckMarkedForExport.checked && !node.markedForExport) {
           return
@@ -4022,7 +4025,7 @@ async function exportXdUnityUICommand(selection, root) {
         exportRoots.push(node)
       })
     } else {
-      exportRoots.push(parent)
+      exportRoots = selection.items.concat()
     }
   }
 
