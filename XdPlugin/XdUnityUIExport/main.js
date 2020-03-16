@@ -752,8 +752,6 @@ function getBeforeGlobalBounds(node) {
 function getDrawBoundsCMInBase(node, base) {
   const nodeDrawBounds = getBeforeGlobalDrawBounds(node)
   const baseBounds = getBeforeGlobalDrawBounds(base)
-  console.log('node.name:', node.name)
-  console.log('base.name:', base.name)
   return {
     cx: nodeDrawBounds.x - baseBounds.x + nodeDrawBounds.width / 2,
     cy: nodeDrawBounds.y - baseBounds.y + nodeDrawBounds.height / 2,
@@ -3594,7 +3592,7 @@ async function exportXdUnityUI(roots, outputFolder) {
     console.log(`root-node:${root.name} -------`)
     globalCssRules = await loadCssRules(
       await fs.getPluginFolder(),
-      'xd-unity.css',
+      'index.css',
     )
     const artboardCssFilename = convertToFileName(root.name) + '.css'
     try {
