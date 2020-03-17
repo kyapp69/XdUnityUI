@@ -51,9 +51,9 @@ namespace XdUnityUI.Editor
             virtualHeight = json.GetFloat("vh");
         }
 
-        public override GameObject Render(Renderer renderer, GameObject parentObject)
+        public override GameObject Render(RenderContext renderContext, GameObject parentObject)
         {
-            var go = CreateUIGameObject(renderer);
+            var go = CreateUIGameObject(renderContext);
 
             var rect = go.GetComponent<RectTransform>();
             if (parentObject)
@@ -78,7 +78,7 @@ namespace XdUnityUI.Editor
                 fontFilename += "-" + style;
             }
 
-            text.font = renderer.GetFont(fontFilename);
+            text.font = renderContext.GetFont(fontFilename);
             text.fontSize = Mathf.RoundToInt(fontSize.Value);
             text.color = fontColor;
             text.verticalOverflow = VerticalWrapMode.Truncate;
@@ -179,7 +179,7 @@ namespace XdUnityUI.Editor
             }
 
             //SetStretch(go, renderer);
-            SetAnchor(go, renderer);
+            SetAnchor(go, renderContext);
             return go;
         }
 

@@ -1,15 +1,8 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
-using OnionRing;
-using UnityEditor.U2D;
-using UnityEngine.U2D;
-using UnityEngine.UI;
-using Match = System.Text.RegularExpressions.Match;
 using Object = UnityEngine.Object;
 
 namespace XdUnityUI.Editor
@@ -56,12 +49,70 @@ namespace XdUnityUI.Editor
             }
         }
 
+        private const string FolderLookMenuPath = "Assets/XdUnityUI/Auto Import Enable";
+        private static bool _autoEnableFlag = false; // デフォルトがチェック済みの時には true にする
+
         public static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets,
             string[] movedFromAssetPaths)
         {
-            var importedDirectoryPath = EditorUtil.ToUnityPath(EditorUtil.GetImportDirectoryPath());
+            if (_autoEnableFlag)
+                Import(importedAssets, movedAssets);
+        }
 
-            progressTotal = importedAssets.Length + movedAssets.Length;
+        [MenuItem(FolderLookMenuPath)]
+        public static void SampleMenu()
+        {
+            _autoEnableFlag = !_autoEnableFlag;
+            Menu.SetChecked(FolderLookMenuPath, _autoEnableFlag);
+        }
+
+        [MenuItem(FolderLookMenuPath, true)]
+        public static bool TestMenuValidate()
+        {
+            Menu.SetChecked(FolderLookMenuPath, _autoEnableFlag);
+            return true;
+        }
+
+        [MenuItem("Assets/XdUnityUI/Import")]
+        public static void MenuImport()
+        {
+            var importDirectoryPath = EditorUtil.GetImportDirectoryPath();
+            var importDirectoryMark = EditorUtil.GetImportDirectoryMark();
+
+            var files = System.IO.Directory.EnumerateFiles(
+                importDirectoryPath, "*", System.IO.SearchOption.AllDirectories);
+
+            var importedAssets = new List<string>();
+            foreach (var file in files)
+            {
+                if (Path.GetExtension(file) == ".meta" || Path.GetFileName(file) == importDirectoryMark) continue;
+                Debug.Log(file);
+                importedAssets.Add(EditorUtil.ToUnityPath(file));
+            }
+
+            var dirs = System.IO.Directory.EnumerateDirectories(
+                importDirectoryPath, "*", System.IO.SearchOption.AllDirectories);
+
+            foreach (var dir in dirs)
+            {
+                Debug.Log(dir);
+                importedAssets.Add(EditorUtil.ToUnityPath(dir));
+            }
+
+            Import(importedAssets, new List<string>());
+        }
+
+
+        /// <summary>
+        /// Assetディレクトリに追加されたファイルを確認、インポート処理を行う
+        /// </summary>
+        /// <param name="importedAssets"></param>
+        /// <param name="movedAssets"></param>
+        private static void Import(IReadOnlyCollection<string> importedAssets, IReadOnlyCollection<string> movedAssets)
+        {
+            var importDirectoryPath = EditorUtil.ToUnityPath(EditorUtil.GetImportDirectoryPath());
+
+            progressTotal = importedAssets.Count + movedAssets.Count;
             if (progressTotal == 0) return;
             progressCount = 0;
 
@@ -71,7 +122,7 @@ namespace XdUnityUI.Editor
             foreach (var importedAsset in importedAssets)
             {
                 // 入力アセットがインポートフォルダ内あるか
-                if (!importedAsset.Contains(importedDirectoryPath)) continue;
+                if (!importedAsset.Contains(importDirectoryPath)) continue;
                 // 拡張子をもっているかどうかでディレクトリインポートかどうかを判定する
                 if (!string.IsNullOrEmpty(Path.GetExtension(importedAsset))) continue;
                 // 拡張子が無いのでディレクトリ
@@ -124,7 +175,7 @@ namespace XdUnityUI.Editor
                 // 画像コンバート　スライス処理
                 foreach (var importedAsset in importedAssets)
                 {
-                    if (!importedAsset.Contains(importedDirectoryPath)) continue;
+                    if (!importedAsset.Contains(importDirectoryPath)) continue;
                     if (!importedAsset.EndsWith(".png", System.StringComparison.Ordinal)) continue;
                     //
                     if (!clearedImageMap)
@@ -154,7 +205,7 @@ namespace XdUnityUI.Editor
                     // import ディレクトリ削除
                     foreach (var asset in importedAssets)
                     {
-                        if (!asset.Contains(importedDirectoryPath)) continue;
+                        if (!asset.Contains(importDirectoryPath)) continue;
                         // 拡張子がなければ、ディレクトリと判定する
                         if (!string.IsNullOrEmpty(Path.GetExtension(asset))) continue;
                         var fullPath = Path.GetFullPath(asset);
@@ -171,7 +222,7 @@ namespace XdUnityUI.Editor
                     {
                         UpdateDisplayProgressBar("layout");
                         progressCount += 1;
-                        if (!asset.Contains(importedDirectoryPath)) continue;
+                        if (!asset.Contains(importDirectoryPath)) continue;
                         if (!asset.EndsWith(".layout.json", System.StringComparison.Ordinal)) continue;
 
                         var name = Path.GetFileName(asset).Replace(".layout.json", "");
@@ -186,7 +237,7 @@ namespace XdUnityUI.Editor
                         {
 #if UNITY_2018_3_OR_NEWER
                             var savedAsset = PrefabUtility.SaveAsPrefabAsset(go, savePath);
-                            Debug.Log("[XdUnityUI] Create Prefab: "+savePath, savedAsset);
+                            Debug.Log("[XdUnityUI] Create Prefab: " + savePath, savedAsset);
 #else
                             Object originalPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(savePath);
                             if (originalPrefab == null) originalPrefab = PrefabUtility.CreateEmptyPrefab(savePath);

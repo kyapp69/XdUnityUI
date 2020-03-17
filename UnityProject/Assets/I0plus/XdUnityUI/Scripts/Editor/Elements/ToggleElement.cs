@@ -16,9 +16,9 @@ namespace XdUnityUI.Editor
             _toggleJson = json.GetDic("toggle");
         }
 
-        public override GameObject Render(Renderer renderer, GameObject parentObject)
+        public override GameObject Render(RenderContext renderContext, GameObject parentObject)
         {
-            var go = CreateSelf(renderer);
+            var go = CreateSelf(renderContext);
             var rect = go.GetComponent<RectTransform>();
             if (parentObject)
             {
@@ -26,7 +26,7 @@ namespace XdUnityUI.Editor
                 rect.SetParent(parentObject.transform);
             }
 
-            var children = RenderChildren(renderer, go);
+            var children = RenderChildren(renderContext, go);
 
             var toggle = go.AddComponent<Toggle>();
 
@@ -88,13 +88,13 @@ namespace XdUnityUI.Editor
             var group = _toggleJson.Get("group");
             if (group != null)
             {
-                var toggleGroup = renderer.GetToggleGroup(group);
+                var toggleGroup = renderContext.GetToggleGroup(group);
                 //Debug.Log("toggleGroup:" + toggleGroup);
                 toggle.group = toggleGroup;
             }
 
             ElementUtil.SetupLayoutElement(go, LayoutElementParam);
-            SetAnchor(go, renderer);
+            SetAnchor(go, renderContext);
 
             return go;
         }

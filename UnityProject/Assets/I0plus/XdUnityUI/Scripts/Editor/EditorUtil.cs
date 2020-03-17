@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using System.Linq;
@@ -11,6 +13,47 @@ namespace XdUnityUI.Editor
     /// </summary>
     public static class EditorUtil
     {
+        /// <summary>
+        /// 【C#】ドライブ直下からのファイルリスト取得について - Qiita
+        ///  https://qiita.com/OneK/items/8b0d02817a9f2a2fbeb0#%E8%A7%A3%E8%AA%AC
+        /// </summary>
+        /// <param name="dirPath"></param>
+        /// <returns></returns>
+        public static List<string> GetAllFiles(string dirPath)
+        {
+            var lstStr = new List<string>();
+
+            try
+            {
+                // ファイル取得
+                var strBuff = Directory.GetFiles(dirPath);
+                lstStr.AddRange(strBuff);
+
+                // ディレクトリの取得
+                strBuff = Directory.GetDirectories(dirPath);
+                foreach (var s in strBuff)
+                {
+                    var lstBuff = GetAllFiles(s);
+                    lstBuff.ForEach(delegate(string str)
+                    {
+                        lstStr.Add(str);
+                    });
+                }
+            }
+            catch(UnauthorizedAccessException)
+            {
+                // アクセスできなかったので無視
+            }
+
+            return lstStr;
+        }
+        
+        /// <summary>
+        /// Assets以下のパスにする
+        /// \を/におきかえる
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static string ToUnityPath(string path)
         {
             path = path.Substring(path.IndexOf("Assets", System.StringComparison.Ordinal));
@@ -19,37 +62,59 @@ namespace XdUnityUI.Editor
             return path.Replace("\\", "/");
         }
 
+        private const string ImportDirectoryMark = "_XdUnityUIImport";
+
         public static string GetImportDirectoryPath()
         {
-            var path= GetPath("_XdUnityUIImport1", false);
+            var path = GetPath(ImportDirectoryMark + "1", false);
             if (path != null) return path;
-            return GetPath("_XdUnityUIImport");
+            return GetPath(ImportDirectoryMark);
         }
+
+        /// <summary>
+        /// 優先順位に基づき、みつかったマークファイル名を返す
+        /// </summary>
+        /// <returns></returns>
+        public static string GetImportDirectoryMark()
+        {
+            var marks = new []
+            {
+                ImportDirectoryMark + "1",
+                ImportDirectoryMark
+            };
+            foreach (var mark in marks)
+            {
+                var path = GetPath(mark, false);
+                if (path != null) return mark;
+            }
+            return null;
+        }
+
 
         public static string GetOutputSpritesPath()
         {
-            var path= GetPath("_XdUnityUISprites1", false);
+            var path = GetPath("_XdUnityUISprites1", false);
             if (path != null) return path;
             return GetPath("_XdUnityUISprites");
         }
 
         public static string GetOutputPrefabsPath()
         {
-            var path= GetPath("_XdUnityUIPrefabs1", false);
+            var path = GetPath("_XdUnityUIPrefabs1", false);
             if (path != null) return path;
             return GetPath("_XdUnityUIPrefabs");
         }
 
         public static string GetFontsPath()
         {
-            var path= GetPath("_XdUnityUIFonts1", false);
+            var path = GetPath("_XdUnityUIFonts1", false);
             if (path != null) return path;
             return GetPath("_XdUnityUIFonts");
         }
 
         public static string GetBaumAtlasPath()
         {
-            var path= GetPath("_XdUnityUIAtlas1", false);
+            var path = GetPath("_XdUnityUIAtlas1", false);
             if (path != null) return path;
             return GetPath("_XdUnityUIAtlas");
         }

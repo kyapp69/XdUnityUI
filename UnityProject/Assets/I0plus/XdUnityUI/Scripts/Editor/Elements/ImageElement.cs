@@ -32,9 +32,9 @@ namespace XdUnityUI.Editor
             imageJson = json.GetDic("image");
         }
 
-        public override GameObject Render(Renderer renderer, GameObject parentObject)
+        public override GameObject Render(RenderContext renderContext, GameObject parentObject)
         {
-            var go = CreateUIGameObject(renderer);
+            var go = CreateUIGameObject(renderContext);
 
             var rect = go.GetComponent<RectTransform>();
             if (parentObject)
@@ -45,7 +45,7 @@ namespace XdUnityUI.Editor
 
             var image = go.AddComponent<Image>();
             if (spriteName != null)
-                image.sprite = renderer.GetSprite(spriteName);
+                image.sprite = renderContext.GetSprite(spriteName);
             
             image.color = new Color(1.0f, 1.0f, 1.0f, opacity != null ? opacity.Value / 100.0f : 0);
             var raycastTarget = imageJson.GetBool("raycast_target");
@@ -84,7 +84,7 @@ namespace XdUnityUI.Editor
                 image.preserveAspect = true;
             }
 
-            SetAnchor(go, renderer);
+            SetAnchor(go, renderContext);
 
             return go;
         }
