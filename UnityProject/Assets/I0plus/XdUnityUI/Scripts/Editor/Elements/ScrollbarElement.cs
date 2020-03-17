@@ -18,9 +18,9 @@ namespace XdUnityUI.Editor
             _scrollbar = json.GetDic("scrollbar");
         }
 
-        public override GameObject Render(Renderer renderer, GameObject parentObject)
+        public override GameObject Render(RenderContext renderContext, GameObject parentObject)
         {
-            var go = CreateSelf(renderer);
+            var go = CreateSelf(renderContext);
             var rect = go.GetComponent<RectTransform>();
             if (parentObject)
             {
@@ -28,9 +28,9 @@ namespace XdUnityUI.Editor
                 rect.SetParent(parentObject.transform);
             }
 
-            SetAnchor(go, renderer);
+            SetAnchor(go, renderContext);
 
-            var children = RenderChildren(renderer, go);
+            var children = RenderChildren(renderContext, go);
             ElementUtil.SetupChildImageComponent(go, children);
 
             // DotsScrollberかどうかの判定に、Toggleがあるかどうかを確認する

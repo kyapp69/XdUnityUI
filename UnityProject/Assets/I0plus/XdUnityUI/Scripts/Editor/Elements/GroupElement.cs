@@ -32,7 +32,9 @@ namespace XdUnityUI.Editor
             var jsonElements = json.Get<List<object>>("elements");
             foreach (var jsonElement in jsonElements)
             {
-                Elements.Add(ElementFactory.Generate(jsonElement as Dictionary<string, object>, this));
+                var elem = ElementFactory.Generate(jsonElement as Dictionary<string, object>, this);
+                if (elem != null)
+                    Elements.Add(elem);
             }
 
             Elements.Reverse();
@@ -51,9 +53,9 @@ namespace XdUnityUI.Editor
 
         public List<Tuple<GameObject, Element>> RenderedChildren { get; private set; }
 
-        public override GameObject Render(Renderer renderer, GameObject parentObject)
+        public override GameObject Render(RenderContext renderContext, GameObject parentObject)
         {
-            var go = CreateSelf(renderer);
+            var go = CreateSelf(renderContext);
             var rect = go.GetComponent<RectTransform>();
             if (parentObject)
             {
@@ -61,7 +63,7 @@ namespace XdUnityUI.Editor
                 rect.SetParent(parentObject.transform);
             }
 
-            RenderedChildren = RenderChildren(renderer, go);
+            RenderedChildren = RenderChildren(renderContext, go);
             ElementUtil.SetupCanvasGroup(go, _canvasGroupParam);
             ElementUtil.SetupChildImageComponent(go, RenderedChildren);
             ElementUtil.SetupFillColor(go, FillColorParam);
@@ -71,14 +73,14 @@ namespace XdUnityUI.Editor
             ElementUtil.SetupComponents(go, componentsJson);
             ElementUtil.SetupMask(go, MaskParam);
 
-            SetAnchor(go, renderer);
+            SetAnchor(go, renderContext);
             return go;
         }
 
 
-        protected virtual GameObject CreateSelf(Renderer renderer)
+        protected virtual GameObject CreateSelf(RenderContext renderContext)
         {
-            var go = CreateUIGameObject(renderer);
+            var go = CreateUIGameObject(renderContext);
 
             var rect = go.GetComponent<RectTransform>();
             var area = CalcArea();
@@ -89,7 +91,7 @@ namespace XdUnityUI.Editor
             return go;
         }
 
-        protected void SetMaskImage(Renderer renderer, GameObject go)
+        protected void SetMaskImage(RenderContext renderContext, GameObject go)
         {
             var maskSource = Elements.Find(x => x is MaskElement);
             if (maskSource == null) return;
@@ -98,7 +100,7 @@ namespace XdUnityUI.Editor
             var maskImage = go.AddComponent<Image>();
             maskImage.raycastTarget = false;
 
-            var dummyMaskImage = maskSource.Render(renderer, null);
+            var dummyMaskImage = maskSource.Render(renderContext, null);
             dummyMaskImage.transform.SetParent(go.transform);
             dummyMaskImage.GetComponent<Image>().CopyTo(maskImage);
             Object.DestroyImmediate(dummyMaskImage);
@@ -107,13 +109,13 @@ namespace XdUnityUI.Editor
             mask.showMaskGraphic = false;
         }
 
-        protected List<Tuple<GameObject, Element>> RenderChildren(Renderer renderer, GameObject parent,
+        protected List<Tuple<GameObject, Element>> RenderChildren(RenderContext renderContext, GameObject parent,
             Action<GameObject, Element> callback = null)
         {
             var list = new List<Tuple<GameObject, Element>>();
             foreach (var element in Elements)
             {
-                var go = element.Render(renderer, parent);
+                var go = element.Render(renderContext, parent);
                 if (go.transform.parent != parent.transform)
                 {
                     Debug.Log("親が設定されていない" + go.name);

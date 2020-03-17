@@ -15,9 +15,9 @@ namespace XdUnityUI.Editor
         {
         }
 
-        public override GameObject Render(Renderer renderer, GameObject parentObject)
+        public override GameObject Render(RenderContext renderContext, GameObject parentObject)
         {
-            var go = CreateSelf(renderer);
+            var go = CreateSelf(renderContext);
             var rect = go.GetComponent<RectTransform>();
             if (parentObject)
             {
@@ -27,7 +27,7 @@ namespace XdUnityUI.Editor
 
             RectTransform fillRect = null;
             RectTransform handleRect = null;
-            RenderChildren(renderer, go, (g, element) =>
+            RenderChildren(renderContext, go, (g, element) =>
             {
                 var name = element.name.ToLower();
 
@@ -66,7 +66,7 @@ namespace XdUnityUI.Editor
             }
 
             // SetStretch(go, renderer);
-            SetAnchor(go, renderer);
+            SetAnchor(go, renderContext);
             return go;
         }
     }

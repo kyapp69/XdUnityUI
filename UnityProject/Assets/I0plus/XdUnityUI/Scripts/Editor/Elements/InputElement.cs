@@ -19,16 +19,16 @@ namespace XdUnityUI.Editor
             _layoutElement = json.GetDic("layout_element");
         }
 
-        public override GameObject Render(Renderer renderer, GameObject parentObject)
+        public override GameObject Render(RenderContext renderContext, GameObject parentObject)
         {
-            var go = CreateUIGameObject(renderer);
+            var go = CreateUIGameObject(renderContext);
             var rect = go.GetComponent<RectTransform>();
             if (parentObject)
             {
                 //親のパラメータがある場合､親にする 後のAnchor定義のため
                 rect.SetParent(parentObject.transform);
             }
-            var children  = RenderChildren(renderer, go);
+            var children  = RenderChildren(renderContext, go);
             
             var inputField = go.AddComponent<InputField>();
             inputField.transition = Selectable.Transition.None;
@@ -52,7 +52,7 @@ namespace XdUnityUI.Editor
             }
 
             SetLayer(go, layer);
-            SetAnchor(go, renderer);
+            SetAnchor(go, renderContext);
             
             return go;
         }

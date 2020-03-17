@@ -8,12 +8,11 @@ using UnityEngine.UI;
 
 #if TMP_PRESENT
 using TMPro;
-
 #endif
 
 namespace XdUnityUI.Editor
 {
-    public class Renderer
+    public class RenderContext
     {
         private readonly string spriteRootPath;
         private readonly string fontRootPath;
@@ -49,7 +48,7 @@ namespace XdUnityUI.Editor
         }
 
 
-        public Renderer(string spriteRootPath, string fontRootPath, Vector2 imageSize, Vector2 canvasSize,
+        public RenderContext(string spriteRootPath, string fontRootPath, Vector2 imageSize, Vector2 canvasSize,
             Vector2 basePosition)
         {
             this.spriteRootPath = spriteRootPath;

@@ -27,9 +27,9 @@ namespace XdUnityUI.Editor
             parentElement = parent;
         }
 
-        public override GameObject Render(Renderer renderer, GameObject parentObject)
+        public override GameObject Render(RenderContext renderContext, GameObject parentObject)
         {
-            var go = CreateSelf(renderer);
+            var go = CreateSelf(renderContext);
             var rect = go.GetComponent<RectTransform>();
             if (parentObject)
             {
@@ -39,7 +39,7 @@ namespace XdUnityUI.Editor
             }
 
             SetLayer(go, layer);
-            SetAnchor(go, renderer);
+            SetAnchor(go, renderContext);
 
             // タッチイベントを取得するイメージコンポーネントになる
             ElementUtil.SetupFillColor(go, FillColorParam);
@@ -80,7 +80,7 @@ namespace XdUnityUI.Editor
             }
 
             //Viewportのチャイルドはもとより、content向けのAnchor・Offsetを持っている
-            RenderChildren(renderer, goContent);
+            RenderChildren(renderContext, goContent);
 
             ElementUtil.SetupRectMask2D(go, RectMask2DParam);
             // ScrollRectを設定した時点ではみでたContentがアジャストされる　PivotがViewport内に入っていればOK

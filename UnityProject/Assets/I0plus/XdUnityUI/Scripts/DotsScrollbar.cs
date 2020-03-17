@@ -86,8 +86,10 @@ namespace Baum2
             SetupDotGroup();
             SetupHandleRect();
 
+            /*
             if (!IsValid)
                 Debug.unityLogger.LogWarning("DotsScrollbar", "Invalid Serialize Field");
+                */
         }
 
         private void SetupDotContainer()
