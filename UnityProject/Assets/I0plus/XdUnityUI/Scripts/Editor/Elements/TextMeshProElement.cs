@@ -50,7 +50,7 @@ namespace XdUnityUI.Editor
         }
 
 
-        public override GameObject Render(Renderer renderer, GameObject parentObject)
+        public override GameObject Render(RenderContext renderer, GameObject parentObject)
         {
             var go = CreateUIGameObject(renderer);
 

@@ -3,6 +3,10 @@ using UnityEditor;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+#if UNITY_2019_1_OR_NEWER
+using UnityEditor.U2D;
+using UnityEngine.U2D;
+#endif
 using Object = UnityEngine.Object;
 
 namespace XdUnityUI.Editor
@@ -51,14 +55,6 @@ namespace XdUnityUI.Editor
 
         private const string FolderLookMenuPath = "Assets/XdUnityUI/Auto Import Enable";
         private static bool _autoEnableFlag = false; // デフォルトがチェック済みの時には true にする
-
-        public static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets,
-            string[] movedFromAssetPaths)
-        {
-            if (_autoEnableFlag)
-                Import(importedAssets, movedAssets);
-        }
-
         [MenuItem(FolderLookMenuPath)]
         public static void SampleMenu()
         {
@@ -73,29 +69,37 @@ namespace XdUnityUI.Editor
             return true;
         }
 
+        public static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets,
+            string[] movedFromAssetPaths)
+        {
+            if (_autoEnableFlag)
+                Import(importedAssets, movedAssets);
+        }
+
         [MenuItem("Assets/XdUnityUI/Import")]
         public static void MenuImport()
         {
+            var importedAssets = new List<string>();
+
             var importDirectoryPath = EditorUtil.GetImportDirectoryPath();
             var importDirectoryMark = EditorUtil.GetImportDirectoryMark();
 
-            var files = System.IO.Directory.EnumerateFiles(
+            // ファイルの追加
+            var files = Directory.EnumerateFiles(
                 importDirectoryPath, "*", System.IO.SearchOption.AllDirectories);
 
-            var importedAssets = new List<string>();
             foreach (var file in files)
             {
                 if (Path.GetExtension(file) == ".meta" || Path.GetFileName(file) == importDirectoryMark) continue;
-                Debug.Log(file);
                 importedAssets.Add(EditorUtil.ToUnityPath(file));
             }
 
-            var dirs = System.IO.Directory.EnumerateDirectories(
-                importDirectoryPath, "*", System.IO.SearchOption.AllDirectories);
+            // ディレクトリの追加
+            var dirs = Directory.EnumerateDirectories(
+                importDirectoryPath, "*", SearchOption.AllDirectories);
 
             foreach (var dir in dirs)
             {
-                Debug.Log(dir);
                 importedAssets.Add(EditorUtil.ToUnityPath(dir));
             }
 
@@ -146,7 +150,9 @@ namespace XdUnityUI.Editor
 
                     foreach (var fileInfo in list3)
                     {
+                        var deleteFileName = fileInfo.FullName;
                         fileInfo.Delete();
+                        File.Delete(deleteFileName + ".meta");
                         changed = true;
                     }
                 }
@@ -188,6 +194,7 @@ namespace XdUnityUI.Editor
                     var message = TextureUtil.SliceSprite(importedAsset);
                     // 元画像を削除する
                     File.Delete(Path.GetFullPath(importedAsset));
+                    File.Delete(Path.GetFullPath(importedAsset) + ".meta");
                     // AssetDatabase.DeleteAsset(EditorUtil.ToUnityPath(asset));
                     changed = true;
                     progressCount += 1;
@@ -299,7 +306,7 @@ namespace XdUnityUI.Editor
             var filename = Path.Combine(EditorUtil.GetBaumAtlasPath(), name + ".spriteatlas");
 
             var atlas = new SpriteAtlas();
-            var settings = new SpriteAtlasPackingSettings
+            var settings = new SpriteAtlasPackingSettings()
             {
                 padding = 8,
                 enableTightPacking = false
