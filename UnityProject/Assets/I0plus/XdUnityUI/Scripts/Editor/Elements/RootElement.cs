@@ -9,20 +9,20 @@ namespace XdUnityUI.Editor
     /// </summary>
     public class RootElement : GroupElement
     {
-        private Vector2 sizeDelta;
+        private Vector2 sizeDelta = Vector2.zero;
 
         public RootElement(Dictionary<string, object> json, Element parent) : base(json, parent)
         {
         }
 
-        protected override GameObject CreateSelf(Renderer renderer)
+        protected override GameObject CreateSelf(RenderContext renderContext)
         {
-            var go = CreateUIGameObject(renderer);
+            var go = CreateUIGameObject(renderContext);
 
             var rect = go.GetComponent<RectTransform>();
-            SetAnchor(go, renderer);
+            SetAnchor(go, renderContext);
             SetLayer(go, layer);
-            SetMaskImage(renderer, go);
+            SetMaskImage(renderContext, go);
             return go;
         }
 

@@ -21,7 +21,7 @@ namespace XdUnityUI.Editor
         protected Vector2? offsetMax;
         protected Element parent;
 
-        public abstract GameObject Render(Renderer renderer, GameObject parentObject);
+        public abstract GameObject Render(RenderContext renderContext, GameObject parentObject);
 
         public virtual void RenderPass2(List<Tuple<GameObject, Element>> selfAndSiblings)
         {
@@ -51,7 +51,7 @@ namespace XdUnityUI.Editor
             return found != null;
         }
 
-        protected GameObject CreateUIGameObject(Renderer renderer)
+        protected GameObject CreateUIGameObject(RenderContext renderContext)
         {
             var go = new GameObject(name);
             go.AddComponent<RectTransform>();
@@ -64,7 +64,7 @@ namespace XdUnityUI.Editor
             return go;
         }
 
-        protected void SetAnchor(GameObject root, Renderer renderer)
+        protected void SetAnchor(GameObject root, RenderContext renderContext)
         {
             if (string.IsNullOrEmpty(pivot)) pivot = "none";
             var rect = root.GetComponent<RectTransform>();

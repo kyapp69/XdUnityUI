@@ -17,16 +17,16 @@ namespace XdUnityUI.Editor
             sizeDelta = json.GetVector2("w", "h");
         }
 
-        public override GameObject Render(Renderer renderer, GameObject parentObject)
+        public override GameObject Render(RenderContext renderContext, GameObject parentObject)
         {
-            var go = CreateUIGameObject(renderer);
+            var go = CreateUIGameObject(renderContext);
             var rect = go.GetComponent<RectTransform>();
             if (parentObject)
             {
                 //親のパラメータがある場合､親にする 後のAnchor定義のため
                 rect.SetParent(parentObject.transform);
             }
-            SetAnchor(go, renderer);
+            SetAnchor(go, renderContext);
             return go;
         }
 

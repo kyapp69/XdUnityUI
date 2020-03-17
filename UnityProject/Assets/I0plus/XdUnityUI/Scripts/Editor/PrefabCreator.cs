@@ -44,7 +44,7 @@ namespace XdUnityUI.Editor
             var imageSize = canvas.GetDic("image");
             var canvasSize = canvas.GetDic("size");
             var baseSize = canvas.GetDic("base");
-            var renderer = new Renderer(spriteRootPath, fontRootPath, imageSize.GetVector2("w", "h").Value,
+            var renderer = new RenderContext(spriteRootPath, fontRootPath, imageSize.GetVector2("w", "h").Value,
                 canvasSize.GetVector2("w", "h").Value, baseSize.GetVector2("x", "y").Value);
             var rootElement = ElementFactory.Generate(json.GetDic("root"), null);
             var root = rootElement.Render(renderer, null);

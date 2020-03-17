@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace XdUnityUI.Editor
@@ -10,7 +11,7 @@ namespace XdUnityUI.Editor
     /// </summary>
     public static class ElementFactory
     {
-        public static readonly Dictionary<string, Func<Dictionary<string, object>, Element, Element>> Generator =
+        private static readonly Dictionary<string, Func<Dictionary<string, object>, Element, Element>> Generator =
             new Dictionary<string, Func<Dictionary<string, object>, Element, Element>>()
             {
                 {"Root", (d, p) => new RootElement(d, p)},
@@ -36,7 +37,12 @@ namespace XdUnityUI.Editor
         public static Element Generate(Dictionary<string, object> json, Element parent)
         {
             var type = json.Get("type");
-            Assert.IsTrue(Generator.ContainsKey(type), "[XdUnityUI] Unknown type: " + type);
+            if (!Generator.ContainsKey(type))
+            {
+                Debug.LogError("[XdUnityUI] Unknown type: " + type);
+                return null;
+            }
+
             return Generator[type](json, parent);
         }
     }

@@ -3589,10 +3589,7 @@ async function exportXdUnityUI(roots, outputFolder) {
 
   for (let root of roots) {
     console.log(`root-node:${root.name} -------`)
-    globalCssRules = await loadCssRules(
-      await fs.getPluginFolder(),
-      'index.css',
-    )
+    globalCssRules = await loadCssRules(await fs.getPluginFolder(), 'index.css')
     const artboardCssFilename = convertToFileName(root.name) + '.css'
     try {
       const artboardCssRoles = await loadCssRules(
@@ -4101,7 +4098,7 @@ function getExportRoots(selectionItems) {
 
   message +=
     artboards.length > 0 ? '--- artboards ---\n' + artboards.join('\n') : ''
-  message += layers > 0 ? '--- layers ---\n' + layers.join('\n') : ''
+  message += layers.length > 0 ? '--- layers ---\n' + layers.join('\n') : ''
 
   return {
     exportRoots,
