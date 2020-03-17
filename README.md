@@ -99,7 +99,7 @@
        - Please refer to this article "When a problem occurs" regarding the case where an error occurs during output.
 
 1. Unity conversion
-   - The conversion will start when the Unity window is activated.
+   - Unity Menu > Assets > XdUnityUI > Import select,The conversion will start.
    - The created Prefab is placed in Assets/I0plus/CreatedPrefabs.
    - The created UI image is placed in Assets/I0plus/CreatedSprites.
      - Slice processing.

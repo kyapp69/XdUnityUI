@@ -44,14 +44,14 @@
 <img src="https://user-images.githubusercontent.com/20549024/76756957-0bf6cd80-67ca-11ea-9504-7ef273613a36.gif" width="640" />
 
 3. Unity コンバート
-    - Unity ウィンドウをアクティブにするとコンバートが開始されます。
+    - Unity メニュー > Assets > XdUnityUI > Import でコンバートが開始されます。
     - 作成された Prefab は Assets/I0plus/CreatedPrefabs に配置されます。
     - 作成された UI 画像は Assets/I0plus/CreatedSprites に配置されます。
       - UI画像は Slice 処理されます。
 
 <img src="https://user-images.githubusercontent.com/20549024/76759838-d3f28900-67cf-11ea-9721-31c221cfe63a.gif" width="640" />
 
-4. Prefab を Canvas 以下に配置します。
+1. Prefab を Canvas 以下に配置します。
 
 <img src="https://user-images.githubusercontent.com/20549024/76759902-f5ec0b80-67cf-11ea-9dd5-5ca556222c40.gif" width="640" />
 
