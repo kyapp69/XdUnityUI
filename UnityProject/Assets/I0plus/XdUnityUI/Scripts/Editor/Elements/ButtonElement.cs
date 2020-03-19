@@ -13,7 +13,7 @@ namespace XdUnityUI.Editor
     {
         private Dictionary<string, object> _button;
         private Dictionary<string, object> _layoutElement;
-        
+
         public ButtonElement(Dictionary<string, object> json, Element parent) : base(json, parent)
         {
             _button = json.GetDic("button");
@@ -29,9 +29,12 @@ namespace XdUnityUI.Editor
                 //親のパラメータがある場合､親にする 後のAnchor定義のため
                 rect.SetParent(parentObject.transform);
             }
+
             var children = RenderChildren(renderContext, go);
 
             var button = go.AddComponent<Button>();
+            GameObject targetImageObject = null;
+            var deleteObjects = new Dictionary<GameObject, bool>();
             if (_button != null)
             {
                 var type = _button.Get("transition");
@@ -54,48 +57,60 @@ namespace XdUnityUI.Editor
                         break;
                 }
 
-                var targetImage = ElementUtil.FindComponentByClassName<Image>(children, _button.Get("target_graphic_class"));
+                var targetImage =
+                    ElementUtil.FindComponentByClassName<Image>(children, _button.Get("target_graphic_class"));
                 if (targetImage != null)
                 {
                     button.targetGraphic = targetImage;
+                    targetImageObject = targetImage.gameObject;
                 }
 
                 var spriteStateJson = _button.GetDic("sprite_state");
                 if (spriteStateJson != null)
                 {
                     var spriteState = new SpriteState();
-                    var image = ElementUtil.FindComponentByClassName<Image>(children, spriteStateJson.Get("highlighted_sprite_class"));
+                    var image = ElementUtil.FindComponentByClassName<Image>(children,
+                        spriteStateJson.Get("highlighted_sprite_class"));
                     if (image != null)
                     {
                         spriteState.highlightedSprite = image.sprite;
-                        Object.DestroyImmediate(image.gameObject);
+                        deleteObjects[image.gameObject] = true;
                     }
 
-                    image = ElementUtil.FindComponentByClassName<Image>(children, spriteStateJson.Get("pressed_sprite_class"));
+                    image = ElementUtil.FindComponentByClassName<Image>(children,
+                        spriteStateJson.Get("pressed_sprite_class"));
                     if (image != null)
                     {
                         spriteState.pressedSprite = image.sprite;
-                        Object.DestroyImmediate(image.gameObject);
+                        deleteObjects[image.gameObject] = true;
                     }
 
 #if UNITY_2019_1_OR_NEWER
-                    image = ElementUtil.FindComponentByClassName<Image>(children, spriteStateJson.Get("selected_sprite_class"));
+                    image = ElementUtil.FindComponentByClassName<Image>(children,
+                        spriteStateJson.Get("selected_sprite_class"));
                     if (image != null)
                     {
                         spriteState.selectedSprite = image.sprite;
-                        Object.DestroyImmediate(image.gameObject);
+                        deleteObjects[image.gameObject] = true;
                     }
 #endif
 
-                    image = ElementUtil.FindComponentByClassName<Image>(children, spriteStateJson.Get("disabled_sprite_class"));
+                    image = ElementUtil.FindComponentByClassName<Image>(children,
+                        spriteStateJson.Get("disabled_sprite_class"));
                     if (image != null)
                     {
                         spriteState.disabledSprite = image.sprite;
-                        Object.DestroyImmediate(image.gameObject);
+                        deleteObjects[image.gameObject] = true;
                     }
 
                     button.spriteState = spriteState;
                 }
+            }
+
+            foreach (var keyValuePair in deleteObjects)
+            {
+                if (keyValuePair.Key != targetImageObject)
+                    Object.DestroyImmediate(keyValuePair.Key);
             }
 
             // TargetGraphicが設定されなかった場合
