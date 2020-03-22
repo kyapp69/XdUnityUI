@@ -13,18 +13,18 @@
 
 ## インストール
 
-- ダウンロードする場合
+- ダウンロードしてインストールする場合
   1. https://github.com/itouh2-i0plus/XdUnityUI/releases
   1. 最新バージョンの 「▶Assets」をクリックし XdUnityUI.unitypackage をダウンロードします。
   1. XdUnityUI.unitypackage を Unity にインポートしてください。
   1. /Assets/I0plus/XdUnityUI フォルダが作成されます
   1. AdobeXD プラグインをインストール
      - /Assets/I0plus/XdUnityUI-ForAdobeXD/XdUnityUIExport.xdx をダブルクリックします。
-- Git リポジトリからクローンする場合
+- Gitリポジトリからクローンする場合
   1. Git リポジトリをクローン
         - https://github.com/itouh2-i0plus/XdUnityUI
           - LFS を利用しています。Git クライアントによっては設定が必要となります。
-  1. (クローンフォルダ)/UnityProject を Unity で開きます
+  1. (クローンフォルダ)/UnityProject をUnityで開きます。
         - Assets/I0plus/XdUnityUI 以下が、プラグインフォルダになっています
         - 現在 Unity2019.3、UniversalRenderPipeline のプロジェクトとなっています。
   1. AdobeXD プラグインをインストール
@@ -32,14 +32,16 @@
 
 ## クイックスタート
 
-1. AdobeXD サンプルを 開く
+1. AdobeXDサンプルを開きます。
     - /Assets/I0plus/XdUnityUI-ForAdobeXD/samples.xd にあります。
 
 2. AdobeXD エキスポート
-    1. アートボード名をクリックし、アートボードを選択します
-    1. プラグインメニューから、「XdUnityUI export plugin」をクリック、起動します。
-    2. 「Folder」の項目が出力フォルダ先指定です。(インストールフォルダ)/UnityProject/I0plus/XdUnityUI/Import フォルダを選択。
-    3. 「Export」をクリック。 - 出力時にエラーで止まるケースについて、当記事「問題が起こったとき」を参考にしてください。
+    1. アートボード名をクリックし、アートボードを選択します。
+    1. プラグインメニューにある「XdUnityUI export plugin」をクリックします。
+    1. 「Folder」が出力フォルダ先指定です。
+        - (インストールフォルダ)/UnityProject/I0plus/XdUnityUI/Import フォルダを選択します。
+    1. 「Export」をクリックで出力が開始されます。 
+        - 出力時にエラーで止まるケースについて、当記事「問題が起こったとき」を参考にしてください。
 
 <img src="https://user-images.githubusercontent.com/20549024/76756957-0bf6cd80-67ca-11ea-9504-7ef273613a36.gif" width="640" />
 
@@ -110,10 +112,10 @@
 ## ChangeLog
 
 ### [v0.8] - 2020-03-16
-- XD:選択したものを出力するようにした
-- Unity:Unity2018で動作するようにした
-- Unity:Unity2017で動作するようにした
-- Unity:asmdefファイルを削除した
+- XD: 選択を出力するように修正。
+- Unity: Unity2018で動作するように修正。
+- Unity: Unity2017で動作するように修正。
+- Unity: asmdefファイルを削除した
 
 <details><summary>詳細</summary><div>
 ### [v0.7.2] - 2020-03-13
@@ -128,7 +130,7 @@
 ### [v0.4] - 2020-03-04
 
 - README.md 英語化
-- XD プラグイン 英語対応
+- XDプラグイン 英語対応
 
 ### [v0.3.2] - 2020-03-03
 
@@ -241,11 +243,13 @@
   - スクロールできる縦方向レイアウト。
   - samples.xd VerticalListSample アートボードを参考にしてください。(スクロールバー 付き)
   - <img src="https://user-images.githubusercontent.com/20549024/75763061-ff608700-5d7e-11ea-985c-88feb3a2de70.png" width="30%">
-  - 追記予定
+  - 追記の予定です。
 
-- 追記予定
-  - scrollbar
-  - toggle
+#### scrollbar
+- 追記の予定です
+
+#### toggle
+- 追記の予定です
 
 ## 問題が起こったとき
 
@@ -254,7 +258,7 @@
 #### 画像の書き出しに失敗する
 
 - 原因
-  - AdobeXD 上の問題かもしれません。調査中です。
+  - AdobeXD上の問題かもしれません。調査中です。
 - 対策
   1. レイヤーを選択し画像出力の操作をする。
   1. 出力先に XdUnityUI/Import フォルダを選択すると、出力不可になっているか確認。
@@ -267,10 +271,9 @@
 #### コンバート処理が実行されない
 
 - 原因
+  - 失敗後のファイルへの上書きでは、Unity側がファイルの更新を検知できないため。
 
-  - 失敗後のファイルへの上書きでは、Unity 側がファイルの更新を検知できないため。
-
-- 対応
+- 対策
   - XdUnityUI/Import 内の\_XdUnityUIImport、\_XdUnityUIImport.meta ファイル以外を削除する。
   - もう一度エキスポートする。
 
@@ -286,6 +289,7 @@
 
 - 原因
   - Scripting Define Symbols に TMP_PRESENT が無い。
+
 - 対策
   - Project Settings > Player > Scripting Define Symbols に TMP_PRESENT を追記します。
      - TextMeshPro パッケージをインストールしても TMP_PRESENT が追記されない場合があるそうです。(v3.0?未確認)
@@ -305,7 +309,7 @@
      - 例: start-button {margin-fix: t b l r}
   - AdobeXD Plugin API で、レスポンシブパラメータが取得できるようになりましたら対応します。
 
-#### 背景のイメージコンポーネントがいらない
+#### アートボード背景のイメージコンポーネントが必要ない
 
 - 原因
   - アートボードの背景が設定してある。
@@ -318,30 +322,30 @@
 
 - 変換ルール CSS の編集
   - XDX ファイルを変更する場合
-     1. XdUnityUIExport.xdx を XdUnityUIExport.zip とリネーム
-     1. 解凍し xd-unity.css ファイルを編集する
-     1. 再び ZIP 圧縮、拡張子を xdx に変更
-     1. プラグイン再インストール
+     1. XdUnityUIExport.xdx を XdUnityUIExport.zip とリネーム。
+     1. 解凍し index.css ファイルを編集する。
+     1. 再び ZIP 圧縮、拡張子を xdx に変更。
+     1. プラグイン再インストール。
   - AdobeXD 開発フォルダに展開する場合
-     1. XdUnityUI export プラグインをアンイストール
-     1. XdUnityUIExport.xdx を XdUnityUIExport.zip とリネーム
-     1. 解凍しフォルダを AdobeXD 開発フォルダ(プラグイン>開発版>開発フォルダーを表示)にコピーする
-     1. xd-unity.css を編集
-     1. プラグイン再読み込み(プラグイン>開発版>再読み込み)
+     1. XdUnityUI export プラグインをアンイストール。
+     1. XdUnityUIExport.xdx を XdUnityUIExport.zip とリネーム。
+     1. 解凍しフォルダを AdobeXD 開発フォルダ(プラグイン>開発版>開発フォルダーを表示)にコピーする。
+     1. index.css を編集。
+     1. プラグインの再読み込みをします。(AdobeXD プラグインメニュー>開発版>再読み込み)。
 - 変換ルール CSS の説明
-  - 追記予定
+  - 追記の予定です。
 - アートボード毎の変換ルール
-  - 追記予定
+  - 追記の予定です。
 
 ### コンバート時に自作コンポーネントを追加する
 
-- 追記予定
+- 追記の予定です。
 
 ### 9Slice
 
-- 追記予定
+- 追記の予定です。
 
-## 今後進む方向について
+## 今後の予定
 
 - 目標
   - リリースまで AdobeXD で UI デザインできるようにする。
@@ -384,4 +388,3 @@
 - Baum2 (https://github.com/kyubuns/Baum2)
 
 ### お世話になっております ありがとうございます
-
