@@ -80,7 +80,11 @@ namespace XdUnityUI.Editor
             var font = AssetDatabase.LoadAssetAtPath<Font>(Path.Combine(fontRootPath, fontName) + ".ttf");
             if (font == null) font = AssetDatabase.LoadAssetAtPath<Font>(Path.Combine(fontRootPath, fontName) + ".otf");
             if (font == null) font = Resources.GetBuiltinResource<Font>(fontName + ".ttf");
-            Assert.IsNotNull(font, "[XdUnityUI] font \"" + fontName + "\" is not found");
+            if (font == null)
+            {
+                Debug.LogError(string.Format($"[XdUnityUI] font {fontName}.ttf/.otf is not found"));
+            }
+
             return font;
         }
 
