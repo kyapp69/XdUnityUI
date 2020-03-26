@@ -29,6 +29,11 @@
       "type": "menu",
       "label": "Re-slice. Select sliced groups",
       "commandId": "pluginScaleAdjust"
+    },
+    {
+      "type": "menu",
+      "label": "Rendition children",
+      "commandId": "pluginRenditionChildren"
     }
   ]
 }

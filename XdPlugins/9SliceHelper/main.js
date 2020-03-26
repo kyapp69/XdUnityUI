@@ -7,11 +7,11 @@ const {
   Line,
   Rectangle,
   GraphicNode,
-  selection
-} = require("scenegraph")
-const application = require("application")
-const commands = require("commands")
-const fs = require("uxp").storage.localFileSystem
+  selection,
+} = require('scenegraph')
+const application = require('application')
+const commands = require('commands')
+const fs = require('uxp').storage.localFileSystem
 
 /**
  * Shorthand for creating Elements.
@@ -22,12 +22,12 @@ const fs = require("uxp").storage.localFileSystem
 function h(tag, props, ...children) {
   let element = document.createElement(tag)
   if (props) {
-    if (props.nodeType || typeof props !== "object") {
+    if (props.nodeType || typeof props !== 'object') {
       children.unshift(props)
     } else {
       for (let name in props) {
         let value = props[name]
-        if (name === "style") {
+        if (name === 'style') {
           Object.assign(element.style, value)
         } else {
           element.setAttribute(name, value)
@@ -38,7 +38,7 @@ function h(tag, props, ...children) {
   }
   for (let child of children) {
     element.appendChild(
-      typeof child === "object" ? child : document.createTextNode(child)
+      typeof child === 'object' ? child : document.createTextNode(child),
     )
   }
   return element
@@ -50,35 +50,35 @@ function h(tag, props, ...children) {
  */
 async function alert(message, title) {
   if (title == null) {
-    title = "XD Baum2 Export"
+    title = 'XD Baum2 Export'
   }
   let dialog = h(
-    "dialog",
+    'dialog',
     h(
-      "form",
+      'form',
       {
-        method: "dialog",
+        method: 'dialog',
         style: {
-          width: 400
-        }
+          width: 400,
+        },
       },
-      h("h1", title),
-      h("hr"),
-      h("span", message),
+      h('h1', title),
+      h('hr'),
+      h('span', message),
       h(
-        "footer",
+        'footer',
         h(
-          "button",
+          'button',
           {
-            uxpVariant: "primary",
+            uxpVariant: 'primary',
             onclick(e) {
               dialog.close()
-            }
+            },
           },
-          "Close"
-        )
-      )
-    )
+          'Close',
+        ),
+      ),
+    ),
   )
   document.body.appendChild(dialog)
   return await dialog.showModal()
@@ -103,7 +103,7 @@ function getImageSliceParameters(str) {
   2番目の値が省略された場合には、1番目の値と同じ。
   */
   if (!result || !result.groups.top) {
-    console.log("failed:", str)
+    console.log('failed:', str)
     return null
   } // 一つも値がとれなかったとき
   let top = parseInt(result.groups.top)
@@ -117,7 +117,7 @@ function getImageSliceParameters(str) {
     top,
     right,
     bottom,
-    left
+    left,
   }
 }
 
@@ -142,8 +142,7 @@ function SetGlobalPosition(node, newPosition) {
   node.moveInParentCoordinates(deltaX, deltaY)
 }
 
-function getNaturalSize(node) {
-}
+function getNaturalSize(node) {}
 
 /**
  * スライスノード内のマスクと絵を持つノードを9スライス用にリサイズ
@@ -159,7 +158,7 @@ function resizeMaskAndGraphicNode(
   wholeGlobalBounds,
   mask,
   graphicNode,
-  sliceParameter
+  sliceParameter,
 ) {
   const sliceLeftPx = sliceParameter.left
   const sliceRightPx = sliceParameter.right
@@ -170,11 +169,11 @@ function resizeMaskAndGraphicNode(
   let naturalHeight = null
 
   let imageFill = graphicNode.fill
-  if (imageFill == null || imageFill.constructor.name !== "ImageFill") {
+  if (imageFill == null || imageFill.constructor.name !== 'ImageFill') {
     let parent = graphicNode.parent
     parent.children.forEach(child => {
-      if (child.name === "source") {
-        console.log("find source")
+      if (child.name === 'source') {
+        console.log('find source')
         naturalWidth = child.globalBounds.width
         naturalHeight = child.globalBounds.height
       }
@@ -184,7 +183,7 @@ function resizeMaskAndGraphicNode(
     naturalHeight = imageFill.naturalHeight
   }
   if (naturalWidth == null || naturalHeight == null) {
-    alert("sourceがみつかりません")
+    alert('sourceがみつかりません')
     return false
   }
 
@@ -194,39 +193,39 @@ function resizeMaskAndGraphicNode(
   let newGraphicBounds = null
 
   switch (typeName) {
-    case "top-left":
+    case 'top-left':
       if (sliceTopPx === 0) break
       if (sliceLeftPx === 0) break
       newMaskBounds = {
         x: wholeGlobalBounds.x,
         y: wholeGlobalBounds.y,
         width: sliceLeftPx,
-        height: sliceTopPx
+        height: sliceTopPx,
       }
       newGraphicBounds = {
         x: wholeGlobalBounds.x,
         y: wholeGlobalBounds.y,
         width: naturalWidth,
-        height: naturalHeight
+        height: naturalHeight,
       }
       break
-    case "top-right":
+    case 'top-right':
       if (sliceTopPx === 0) break
       if (sliceRightPx === 0) break
       newMaskBounds = {
         x: wholeGlobalBounds.x + wholeGlobalBounds.width - sliceRightPx,
         y: wholeGlobalBounds.y,
         width: sliceRightPx,
-        height: sliceTopPx
+        height: sliceTopPx,
       }
       newGraphicBounds = {
         x: wholeGlobalBounds.x + wholeGlobalBounds.width - naturalWidth,
         y: wholeGlobalBounds.y,
         width: naturalWidth,
-        height: naturalHeight
+        height: naturalHeight,
       }
       break
-    case "right": {
+    case 'right': {
       if (sliceRightPx === 0) break
       const maskNaturalHeight = naturalHeight - sliceTopPx - sliceBottomPx
       const maskHeight = wholeGlobalBounds.height - sliceTopPx - sliceBottomPx
@@ -235,17 +234,17 @@ function resizeMaskAndGraphicNode(
         x: wholeGlobalBounds.x + wholeGlobalBounds.width - sliceRightPx,
         y: wholeGlobalBounds.y + sliceTopPx,
         width: sliceRightPx,
-        height: maskHeight
+        height: maskHeight,
       }
       newGraphicBounds = {
         x: wholeGlobalBounds.x + wholeGlobalBounds.width - naturalWidth,
         y: wholeGlobalBounds.y + sliceTopPx - sliceTopPx * scaleY,
         width: naturalWidth,
-        height: naturalHeight * scaleY
+        height: naturalHeight * scaleY,
       }
       break
     }
-    case "left": {
+    case 'left': {
       if (sliceLeftPx === 0) break
       const maskNaturalHeight = naturalHeight - sliceTopPx - sliceBottomPx
       const maskHeight = wholeGlobalBounds.height - sliceTopPx - sliceBottomPx
@@ -253,50 +252,50 @@ function resizeMaskAndGraphicNode(
       newMaskBounds = {
         x: wholeGlobalBounds.x,
         y: wholeGlobalBounds.y + sliceTopPx,
-        width: sliceLeftPx ,
-        height: maskHeight
+        width: sliceLeftPx,
+        height: maskHeight,
       }
       newGraphicBounds = {
         x: wholeGlobalBounds.x,
         y: wholeGlobalBounds.y + sliceTopPx - sliceTopPx * scaleY,
         width: naturalWidth,
-        height: naturalHeight * scaleY
+        height: naturalHeight * scaleY,
       }
       break
     }
-    case "bottom-left":
+    case 'bottom-left':
       if (sliceBottomPx === 0) break
       if (sliceLeftPx === 0) break
       newMaskBounds = {
         x: wholeGlobalBounds.x,
         y: wholeGlobalBounds.y + wholeGlobalBounds.height - sliceBottomPx,
         width: sliceLeftPx,
-        height: sliceBottomPx
+        height: sliceBottomPx,
       }
       newGraphicBounds = {
         x: wholeGlobalBounds.x,
         y: wholeGlobalBounds.y + wholeGlobalBounds.height - naturalHeight,
         width: naturalWidth,
-        height: naturalHeight
+        height: naturalHeight,
       }
       break
-    case "bottom-right":
+    case 'bottom-right':
       if (sliceBottomPx === 0) break
       if (sliceRightPx === 0) break
       newMaskBounds = {
         x: wholeGlobalBounds.x + wholeGlobalBounds.width - sliceRightPx,
         y: wholeGlobalBounds.y + wholeGlobalBounds.height - sliceBottomPx,
         width: sliceLeftPx,
-        height: sliceTopPx
+        height: sliceTopPx,
       }
       newGraphicBounds = {
         x: wholeGlobalBounds.x + wholeGlobalBounds.width - naturalWidth,
         y: wholeGlobalBounds.y + wholeGlobalBounds.height - naturalHeight,
         width: naturalWidth,
-        height: naturalHeight
+        height: naturalHeight,
       }
       break
-    case "top": {
+    case 'top': {
       if (sliceTopPx === 0) break
       const maskNaturalWidth = naturalWidth - sliceRightPx - sliceLeftPx
       const maskWidth = wholeGlobalBounds.width - sliceRightPx - sliceLeftPx
@@ -306,17 +305,17 @@ function resizeMaskAndGraphicNode(
         x: wholeGlobalBounds.x + sliceLeftPx,
         y: wholeGlobalBounds.y,
         width: maskWidth,
-        height: maskHeight
+        height: maskHeight,
       }
       newGraphicBounds = {
         x: wholeGlobalBounds.x + sliceLeftPx - sliceLeftPx * scaleX,
         y: wholeGlobalBounds.y,
         width: naturalWidth * scaleX,
-        height: naturalHeight
+        height: naturalHeight,
       }
       break
     }
-    case "bottom": {
+    case 'bottom': {
       if (sliceBottomPx === 0) break
       const maskNaturalWidth = naturalWidth - sliceRightPx - sliceLeftPx
       const maskWidth = wholeGlobalBounds.width - sliceRightPx - sliceLeftPx
@@ -326,17 +325,17 @@ function resizeMaskAndGraphicNode(
         x: wholeGlobalBounds.x + sliceLeftPx,
         y: wholeGlobalBounds.y + wholeGlobalBounds.height - sliceBottomPx,
         width: maskWidth,
-        height: maskHeight
+        height: maskHeight,
       }
       newGraphicBounds = {
         x: wholeGlobalBounds.x + sliceLeftPx - sliceLeftPx * scaleX,
         y: wholeGlobalBounds.y + wholeGlobalBounds.height - naturalHeight,
         width: naturalWidth * scaleX,
-        height: naturalHeight
+        height: naturalHeight,
       }
       break
     }
-    case "center": {
+    case 'center': {
       const maskNaturalWidth = naturalWidth - sliceRightPx - sliceLeftPx
       const maskNaturalHeight = naturalHeight - sliceTopPx - sliceBottomPx
       const maskWidth = wholeGlobalBounds.width - sliceRightPx - sliceLeftPx
@@ -347,13 +346,13 @@ function resizeMaskAndGraphicNode(
         x: wholeGlobalBounds.x + sliceLeftPx,
         y: wholeGlobalBounds.y + sliceTopPx,
         width: maskWidth,
-        height: maskHeight
+        height: maskHeight,
       }
       newGraphicBounds = {
         x: wholeGlobalBounds.x + sliceLeftPx - sliceLeftPx * scaleX,
         y: wholeGlobalBounds.y + sliceTopPx - sliceTopPx * scaleY,
         width: naturalWidth * scaleX,
-        height: naturalHeight * scaleY
+        height: naturalHeight * scaleY,
       }
       break
     }
@@ -380,13 +379,13 @@ function resizeMaskAndGraphicNode(
  * @param sliceParameter
  */
 function resizeSlicedGroup(wholeGlobalBounds, sliceNode, sliceParameter) {
-  if (sliceNode.name === "source") {
+  if (sliceNode.name === 'source') {
     sliceNode.resize(sliceNode.fill.naturalWidth, sliceNode.fill.naturalHeight)
     return
   }
   let mask = sliceNode.mask
   if (!mask) {
-    console.log("*** not found mask")
+    console.log('*** not found mask')
     return
   }
 
@@ -413,7 +412,7 @@ function resizeSlicedGroup(wholeGlobalBounds, sliceNode, sliceParameter) {
       wholeGlobalBounds,
       mask,
       child,
-      sliceParameter
+      sliceParameter,
     )
     if (!result) {
       visible = false
@@ -466,7 +465,7 @@ function pluginResizeSlices(selection, root) {
       let resizedGroup = resizeSlicedGroup(
         parentGlobalBounds,
         item,
-        sliceParameter
+        sliceParameter,
       )
       resizedGroups.push(resizedGroup)
     }
@@ -488,10 +487,10 @@ function pluginResizeSlices(selection, root) {
  */
 function duplicateStretchable(item) {
   let fill = item.fill
-  if (fill != null && item.constructor.name === "Rectangle") {
+  if (fill != null && item.constructor.name === 'Rectangle') {
     // ImageFillをもったRectangleのコピー
     let rect = new Rectangle()
-    rect.name = item.name + "-stretch"
+    rect.name = item.name + '-stretch'
     SetGlobalBounds(rect, item.globalBounds) // 同じ場所に作成
     // 新規に作成することで、元のイメージがCCライブラリのイメージでもSTRETCH変形ができる
     let cloneFill = fill.clone()
@@ -518,30 +517,30 @@ function make9Slice(sourceNode, selection) {
   let itemName = sourceNode.name
   // マスクの作成
   let mask = new Rectangle()
-  mask.name = "top-left-mask"
+  mask.name = 'top-left-mask'
   selection.insertionParent.addChild(mask)
   SetGlobalBounds(mask, sourceNode.globalBounds)
   // 画像をコピーして、CCライブラリのものでも変形できるようにする
   let rectImage = duplicateStretchable(sourceNode)
-  rectImage.name = "top-left-copy"
+  rectImage.name = 'top-left-copy'
   // 位置をソースと同じ場所にする
   SetGlobalBounds(rectImage, sourceNode.globalBounds)
   // マスクグループの作成
   selection.items = [rectImage, mask]
   commands.createMaskGroup()
   let slicedGroups = [selection.items[0]]
-  selection.items[0].name = "top-left"
+  selection.items[0].name = 'top-left'
 
   // 他のスライスも作成する
   const names = [
-    "top",
-    "top-right",
-    "left",
-    "center",
-    "right",
-    "bottom-left",
-    "bottom",
-    "bottom-right"
+    'top',
+    'top-right',
+    'left',
+    'center',
+    'right',
+    'bottom-left',
+    'bottom',
+    'bottom-right',
   ]
   names.forEach(name => {
     commands.duplicate()
@@ -560,7 +559,7 @@ function make9Slice(sourceNode, selection) {
 
   // バラバラになってしまうので、最後にもう一度まとめる
   // ソースは見えないようにする
-  sourceNode.name = "source"
+  sourceNode.name = 'source'
   sourceNode.visible = false
   groups.push(sourceNode)
   selection.items = groups
@@ -578,7 +577,7 @@ async function pluginMake9Slice(selection, root) {
     make9Slice(item, selection)
   })
 
-  console.log("done")
+  console.log('done')
 }
 
 function pluginDuplicateStretch(slection, root) {
@@ -590,11 +589,54 @@ function pluginDuplicateStretch(slection, root) {
   })
 }
 
+/**
+ * 選択したグループの子供を画像出力する
+ * @param selection
+ * @param root
+ * @returns {Promise<void>}
+ */
+async function pluginRenditionChildren(selection, root) {
+  const outputFolder = await fs.getFolder()
+
+  if (!outputFolder) return console.log('User canceled folder picker.')
+
+  let renditionOptions = []
+  const length = selection.items[0].children.length
+  for (let i = 0; i < length; i++) {
+    const item = selection.items[0].children.at(i)
+    const fileName = item.name + '.png'
+    const file = await outputFolder.createFile(fileName, {
+      overwrite: true,
+    })
+    renditionOptions.push({
+      fileName: fileName,
+      node: item,
+      outputFile: file,
+      type: application.RenditionType.PNG,
+      scale: 1,
+    })
+    console.log(fileName)
+  }
+
+  const results = await application
+    .createRenditions(renditionOptions)
+    .catch(error => {
+      console.log('error:' + error)
+      // https://forums.adobexdplatform.com/t/details-for-io-failed/1185/14
+      // https://helpx.adobe.com/xd/kb/import-export-issues.html
+      console.log(
+        '1)access denied (disk permission)\n2)readonly folder\n3)not enough disk space\n4)maximum path\n5)image size 0px',
+      )
+    })
+  console.log('done.')
+}
+
 module.exports = {
   // コマンドIDとファンクションの紐付け
   commands: {
     pluginMake9Slice: pluginMake9Slice,
-    pluginScaleAdjust: pluginResizeSlices
+    pluginScaleAdjust: pluginResizeSlices,
     //pluginDuplicateStretch: pluginDuplicateStretch,
-  }
+    pluginRenditionChildren,
+  },
 }
