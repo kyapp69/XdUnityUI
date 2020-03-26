@@ -106,6 +106,11 @@ namespace XdUnityUI.Editor
             Import(importedAssets, new List<string>());
         }
 
+        private static bool IsDirectory(string path)
+        {
+            return File.GetAttributes(path).HasFlag(FileAttributes.Directory);
+        }
+
 
         /// <summary>
         /// Assetディレクトリに追加されたファイルを確認、インポート処理を行う
@@ -128,8 +133,8 @@ namespace XdUnityUI.Editor
                 // 入力アセットがインポートフォルダ内あるか
                 if (!importedAsset.Contains(importDirectoryPath)) continue;
                 // 拡張子をもっているかどうかでディレクトリインポートかどうかを判定する
-                if (!string.IsNullOrEmpty(Path.GetExtension(importedAsset))) continue;
-                // 拡張子が無いのでディレクトリ
+                if (!IsDirectory(importedAsset)) continue;
+                // ディレクトリ
                 var exportPath = EditorUtil.GetBaumSpritesFullPath(importedAsset);
                 var importPath = Path.GetFullPath(importedAsset);
                 if (Directory.Exists(exportPath))
@@ -214,7 +219,7 @@ namespace XdUnityUI.Editor
                     {
                         if (!asset.Contains(importDirectoryPath)) continue;
                         // 拡張子がなければ、ディレクトリと判定する
-                        if (!string.IsNullOrEmpty(Path.GetExtension(asset))) continue;
+                        if (!IsDirectory(asset)) continue;
                         var fullPath = Path.GetFullPath(asset);
                         // ディレクトリが空っぽかどうか調べる　コンバート用PNGファイルがはいっていた場合、
                         // 変換後削除されるため、すべて変換された場合、空になる
